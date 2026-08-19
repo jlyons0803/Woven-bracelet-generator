@@ -53,7 +53,7 @@ Once hosted and opened in Safari, use <b>Share → Add to Home Screen</b> to ins
 
 <main>
 <h1>Wrapped Woven Bracelet Generator</h1>
-<div class="sub">Name patterns now auto-size their width based on the name length. You can still choose the graph rows and optional side padding, or draw your own pattern square-by-square.</div>
+<div class="sub">Generate a name, then send it directly into Draw My Own Pattern to customize it. Name patterns still auto-size to fit the screen.</div>
 
 <div class="tabs">
   <button type="button" id="tabName" class="tab active">Name Generator</button>
@@ -71,6 +71,10 @@ Once hosted and opened in Safari, use <b>Share → Add to Home Screen</b> to ins
     <div><label>Background color</label><input id="nameBgColor" type="color" value="#d9f3e8"></div>
   </div>
   <div id="nameSizeNote" class="note"></div>
+  <div class="actions">
+    <button type="button" id="sendToDraw" class="primary">Add Name to Draw My Own Pattern</button>
+  </div>
+  <div class="note">This copies the generated name into the custom editor so you can draw around it, add symbols, borders, extra colors, or resize the graph.</div>
 </section>
 
 <section id="drawPanel" class="card hidden">
@@ -214,6 +218,30 @@ function activeColors(){
   return mode==="name"
     ? [$("nameLetterColor").value,$("nameBgColor").value]
     : [$("drawLetterColor").value,$("drawBgColor").value];
+}
+
+
+function sendNameToDraw(){
+  // Build a fresh name matrix using the current name settings.
+  nameMatrix=makeNameMatrix();
+
+  // Copy it into the editable custom grid.
+  drawMatrix=clone(nameMatrix);
+
+  // Update the custom grid size controls to match what was copied.
+  $("drawRows").value=drawMatrix.length;
+  $("drawCols").value=drawMatrix[0]?.length || 1;
+
+  // Keep the same colors so the pattern looks identical when transferred.
+  $("drawLetterColor").value=$("nameLetterColor").value;
+  $("drawBgColor").value=$("nameBgColor").value;
+
+  history=[];
+  switchMode("draw");
+  $("patternTitle").textContent=($("name").value.toUpperCase() || "NAME") + " — EDITABLE";
+  if($("fitNote")){
+    $("fitNote").textContent="Your generated name is now editable. Tap or drag on any square to add to the design or erase parts of it.";
+  }
 }
 
 function switchMode(next){
@@ -414,6 +442,7 @@ $("tabDraw").addEventListener("click",()=>switchMode("draw"));
 
 // Name controls
 ["name","nameRows","namePad","spacing","nameLetterColor","nameBgColor"].forEach(id=>$(id).addEventListener("input",updateName));
+$("sendToDraw").addEventListener("click",sendNameToDraw);
 
 // Draw controls/actions
 $("resizeGraph").addEventListener("click",resizeCustomGraph);
