@@ -53,7 +53,7 @@ Once hosted and opened in Safari, use <b>Share → Add to Home Screen</b> to ins
 
 <main>
 <h1>Wrapped Woven Bracelet Generator</h1>
-<div class="sub">Make a name pattern automatically or draw your own pattern square-by-square.</div>
+<div class="sub">Choose exactly how many rows and columns you want, generate a name, or draw your own pattern square-by-square.</div>
 
 <div class="tabs">
   <button type="button" id="tabName" class="tab active">Name Generator</button>
@@ -64,21 +64,23 @@ Once hosted and opened in Safari, use <b>Share → Add to Home Screen</b> to ins
   <h2>Name Generator</h2>
   <div class="controls">
     <div><label>Name</label><input id="name" value="EMERSYN" maxlength="24"></div>
+    <div><label>Graph rows</label><input id="nameRows" type="number" min="7" max="60" value="9"></div>
+    <div><label>Graph columns</label><input id="nameCols" type="number" min="10" max="200" value="60"></div>
     <div><label>Space between letters</label><select id="spacing"><option>1</option><option>2</option><option>3</option></select></div>
-    <div><label>Blank columns at each end</label><input id="edge" type="number" min="0" max="30" value="4"></div>
     <div><label>Pattern color</label><input id="nameLetterColor" type="color" value="#183d7a"></div>
     <div><label>Background color</label><input id="nameBgColor" type="color" value="#d9f3e8"></div>
   </div>
+  <div id="nameSizeNote" class="note"></div>
 </section>
 
 <section id="drawPanel" class="card hidden">
   <h2>Draw My Own Pattern</h2>
   <div class="controls">
-    <div><label>Base strings / graph height</label><input id="drawRows" type="number" min="3" max="60" value="9"></div>
-    <div><label>Wrap passes / graph length</label><input id="drawCols" type="number" min="5" max="200" value="60"></div>
+    <div><label>Graph rows</label><input id="drawRows" type="number" min="3" max="60" value="9"></div>
+    <div><label>Graph columns</label><input id="drawCols" type="number" min="5" max="200" value="60"></div>
     <div><label>Pattern color</label><input id="drawLetterColor" type="color" value="#183d7a"></div>
     <div><label>Background color</label><input id="drawBgColor" type="color" value="#d9f3e8"></div>
-    <div><button type="button" id="newBlank" class="primary">Create Blank Graph</button></div>
+    <div><button type="button" id="resizeGraph" class="primary">Resize Graph</button></div>
   </div>
   <div class="actions">
     <button type="button" id="clearBtn">Clear</button>
@@ -175,17 +177,30 @@ const $=id=>document.getElementById(id);
 function makeNameMatrix(){
   const text=$("name").value.toUpperCase();
   const spacing=Math.max(0,Number($("spacing").value)||1);
-  const edge=Math.max(0,Number($("edge").value)||0);
+  const requestedRows=Math.max(7,Math.min(60,Number($("nameRows").value)||9));
+  const requestedCols=Math.max(10,Math.min(200,Number($("nameCols").value)||60));
   const chars=[...text].filter(ch=>FONT[ch]);
-  const rows=7;
-  const m=Array.from({length:rows},()=>Array(edge).fill(0));
+
+  const artWidth=chars.length ? (chars.length*5)+((chars.length-1)*spacing) : 0;
+  const actualCols=Math.max(requestedCols,artWidth);
+  const m=Array.from({length:requestedRows},()=>Array(actualCols).fill(0));
+  const top=Math.floor((requestedRows-7)/2);
+  const left=Math.max(0,Math.floor((actualCols-artWidth)/2));
+
   chars.forEach((ch,i)=>{
-    for(let r=0;r<rows;r++){
-      m[r].push(...FONT[ch][r].split("").map(Number));
-      if(i<chars.length-1)m[r].push(...Array(spacing).fill(0));
+    const x0=left+i*(5+spacing);
+    for(let r=0;r<7;r++){
+      FONT[ch][r].split("").forEach((bit,c)=>{
+        if(bit==="1" && top+r<requestedRows && x0+c<actualCols) m[top+r][x0+c]=1;
+      });
     }
   });
-  for(let r=0;r<rows;r++)m[r].push(...Array(edge).fill(0));
+
+  if($("nameSizeNote")){
+    $("nameSizeNote").textContent=actualCols>requestedCols
+      ? `The name needs ${artWidth} columns, so the graph expanded from ${requestedCols} to ${actualCols} columns.`
+      : `Graph size: ${requestedRows} rows × ${actualCols} columns. The name is centered automatically.`;
+  }
   return m;
 }
 
@@ -257,11 +272,20 @@ function updateName(){
   renderGrid();
 }
 
-function createBlank(){
+function resizeCustomGraph(){
   const rows=Math.max(3,Math.min(60,Number($("drawRows").value)||9));
   const cols=Math.max(5,Math.min(200,Number($("drawCols").value)||60));
   history.push(clone(drawMatrix));
-  drawMatrix=blank(rows,cols);
+  if(history.length>40)history.shift();
+
+  const old=drawMatrix;
+  const next=blank(rows,cols);
+  const copyRows=Math.min(rows,old.length);
+  const copyCols=old.length ? Math.min(cols,old[0].length) : 0;
+  for(let r=0;r<copyRows;r++){
+    for(let c=0;c<copyCols;c++) next[r][c]=old[r][c];
+  }
+  drawMatrix=next;
   renderGrid();
 }
 function mutate(kind){
@@ -352,10 +376,10 @@ $("tabName").addEventListener("click",()=>switchMode("name"));
 $("tabDraw").addEventListener("click",()=>switchMode("draw"));
 
 // Name controls
-["name","spacing","edge","nameLetterColor","nameBgColor"].forEach(id=>$(id).addEventListener("input",updateName));
+["name","nameRows","nameCols","spacing","nameLetterColor","nameBgColor"].forEach(id=>$(id).addEventListener("input",updateName));
 
 // Draw controls/actions
-$("newBlank").addEventListener("click",createBlank);
+$("resizeGraph").addEventListener("click",resizeCustomGraph);
 $("clearBtn").addEventListener("click",()=>mutate("clear"));
 $("fillBtn").addEventListener("click",()=>mutate("fill"));
 $("invertBtn").addEventListener("click",()=>mutate("invert"));
