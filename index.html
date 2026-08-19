@@ -53,7 +53,7 @@ Once hosted and opened in Safari, use <b>Share → Add to Home Screen</b> to ins
 
 <main>
 <h1>Wrapped Woven Bracelet Generator</h1>
-<div class="sub">Choose exactly how many rows and columns you want, generate a name, or draw your own pattern square-by-square.</div>
+<div class="sub">Name patterns now auto-size their width based on the name length. You can still choose the graph rows and optional side padding, or draw your own pattern square-by-square.</div>
 
 <div class="tabs">
   <button type="button" id="tabName" class="tab active">Name Generator</button>
@@ -65,7 +65,7 @@ Once hosted and opened in Safari, use <b>Share → Add to Home Screen</b> to ins
   <div class="controls">
     <div><label>Name</label><input id="name" value="EMERSYN" maxlength="24"></div>
     <div><label>Graph rows</label><input id="nameRows" type="number" min="7" max="60" value="9"></div>
-    <div><label>Graph columns</label><input id="nameCols" type="number" min="10" max="200" value="60"></div>
+    <div><label>Side padding (columns each side)</label><input id="namePad" type="number" min="0" max="30" value="4"></div>
     <div><label>Space between letters</label><select id="spacing"><option>1</option><option>2</option><option>3</option></select></div>
     <div><label>Pattern color</label><input id="nameLetterColor" type="color" value="#183d7a"></div>
     <div><label>Background color</label><input id="nameBgColor" type="color" value="#d9f3e8"></div>
@@ -178,14 +178,14 @@ function makeNameMatrix(){
   const text=$("name").value.toUpperCase();
   const spacing=Math.max(0,Number($("spacing").value)||1);
   const requestedRows=Math.max(7,Math.min(60,Number($("nameRows").value)||9));
-  const requestedCols=Math.max(10,Math.min(200,Number($("nameCols").value)||60));
+  const sidePadding=Math.max(0,Math.min(30,Number($("namePad").value)||0));
   const chars=[...text].filter(ch=>FONT[ch]);
 
   const artWidth=chars.length ? (chars.length*5)+((chars.length-1)*spacing) : 0;
-  const actualCols=Math.max(requestedCols,artWidth);
+  const actualCols=Math.max(10, artWidth + (sidePadding*2));
   const m=Array.from({length:requestedRows},()=>Array(actualCols).fill(0));
   const top=Math.floor((requestedRows-7)/2);
-  const left=Math.max(0,Math.floor((actualCols-artWidth)/2));
+  const left=chars.length ? Math.floor((actualCols-artWidth)/2) : 0;
 
   chars.forEach((ch,i)=>{
     const x0=left+i*(5+spacing);
@@ -197,9 +197,11 @@ function makeNameMatrix(){
   });
 
   if($("nameSizeNote")){
-    $("nameSizeNote").textContent=actualCols>requestedCols
-      ? `The name needs ${artWidth} columns, so the graph expanded from ${requestedCols} to ${actualCols} columns.`
-      : `Graph size: ${requestedRows} rows × ${actualCols} columns. The name is centered automatically.`;
+    if(chars.length){
+      $("nameSizeNote").textContent=`Graph size: ${requestedRows} rows × ${actualCols} columns. Width auto-adjusted for ${chars.length} letter${chars.length===1?'':'s'} with ${sidePadding} columns of side padding on each side.`;
+    } else {
+      $("nameSizeNote").textContent=`Graph size: ${requestedRows} rows × ${actualCols} columns.`;
+    }
   }
   return m;
 }
@@ -376,7 +378,7 @@ $("tabName").addEventListener("click",()=>switchMode("name"));
 $("tabDraw").addEventListener("click",()=>switchMode("draw"));
 
 // Name controls
-["name","nameRows","nameCols","spacing","nameLetterColor","nameBgColor"].forEach(id=>$(id).addEventListener("input",updateName));
+["name","nameRows","namePad","spacing","nameLetterColor","nameBgColor"].forEach(id=>$(id).addEventListener("input",updateName));
 
 // Draw controls/actions
 $("resizeGraph").addEventListener("click",resizeCustomGraph);
