@@ -53,7 +53,7 @@ Once hosted and opened in Safari, use <b>Share → Add to Home Screen</b> to ins
 
 <main>
 <h1>Wrapped Woven Bracelet Generator</h1>
-<div class="sub">Generate a name, send it into Draw My Own Pattern, and now add small picture stamps like hearts or flowers too.</div>
+<div class="sub">Generate a name and send it into Draw My Own Pattern. The custom graph now automatically resizes to fit the screen, and you can switch to larger squares whenever you want.</div>
 
 <div class="tabs">
   <button type="button" id="tabName" class="tab active">Name Generator</button>
@@ -87,6 +87,8 @@ Once hosted and opened in Safari, use <b>Share → Add to Home Screen</b> to ins
     <div><button type="button" id="resizeGraph" class="primary">Resize Graph</button></div>
   </div>
   <div class="actions">
+    <button type="button" id="fitCustomBtn">Fit Graph to Screen</button>
+    <button type="button" id="largeSquaresBtn">Large Squares</button>
     <button type="button" id="clearBtn">Clear</button>
     <button type="button" id="fillBtn">Fill All</button>
     <button type="button" id="invertBtn">Invert</button>
@@ -260,6 +262,7 @@ const STAMPS={
   ]
 };
 let activeStamp=null;
+let customFitToScreen=true;
 
 function placeStampAt(centerRow,centerCol,stampRows){
   const height=stampRows.length;
@@ -293,6 +296,7 @@ function sendNameToDraw(){
   $("drawBgColor").value=$("nameBgColor").value;
 
   history=[];
+  customFitToScreen=true;
   switchMode("draw");
   $("patternTitle").textContent=($("name").value.toUpperCase() || "NAME") + " — EDITABLE";
   if($("fitNote")){
@@ -332,10 +336,10 @@ function renderGrid(){
 
   const cols=m[0].length;
 
-  // NAME MODE: shrink squares as needed so the entire graph fits the screen.
-  // DRAW MODE: keep larger squares for easy tapping and allow horizontal scrolling.
+  // Name patterns always fit the screen.
+  // Custom patterns can either fit the screen or use larger squares for easier editing.
   let cellSize=20;
-  if(mode==="name" && holder){
+  if(holder && (mode==="name" || customFitToScreen)){
     const available=Math.max(240,holder.clientWidth-26);
     cellSize=Math.floor(available/cols);
     cellSize=Math.max(6,Math.min(20,cellSize));
@@ -385,8 +389,12 @@ function renderGrid(){
       $("fitNote").textContent = cellSize<20
         ? `Graph automatically scaled to ${cellSize}px squares so all ${cols} columns fit on screen.`
         : `Graph fits at full-size squares.`;
+    }else if(customFitToScreen){
+      $("fitNote").textContent = cellSize<20
+        ? `Custom graph scaled to ${cellSize}px squares so all ${cols} columns fit on screen. Tap Large Squares if you want easier editing.`
+        : `Custom graph fits on screen at full-size squares.`;
     }else{
-      $("fitNote").textContent = `Custom drawing keeps larger squares for easier tapping. Scroll sideways if the graph is wider than the screen.`;
+      $("fitNote").textContent = `Custom graph is using large squares for easier editing. Scroll sideways if needed, or tap Fit Graph to Screen.`;
     }
   }
 
@@ -516,6 +524,8 @@ $("sendToDraw").addEventListener("click",sendNameToDraw);
 
 // Draw controls/actions
 $("resizeGraph").addEventListener("click",resizeCustomGraph);
+$("fitCustomBtn").addEventListener("click",()=>{customFitToScreen=true; renderGrid();});
+$("largeSquaresBtn").addEventListener("click",()=>{customFitToScreen=false; renderGrid();});
 $("clearBtn").addEventListener("click",()=>mutate("clear"));
 $("fillBtn").addEventListener("click",()=>mutate("fill"));
 $("invertBtn").addEventListener("click",()=>mutate("invert"));
