@@ -18,6 +18,9 @@ button{cursor:pointer;font-weight:750}
 button.primary,.tab.active{background:var(--accent);color:white;border-color:var(--accent)}
 button.secondary{background:white;color:var(--ink)}
 .controls{display:grid;grid-template-columns:repeat(5,minmax(130px,1fr));gap:12px;align-items:end}
+.stepper{display:grid;grid-template-columns:42px 1fr 42px;gap:6px;align-items:center}
+.stepper button{padding:10px 0;font-size:20px;line-height:1}
+.stepper input{text-align:center}
 label{display:block;font-size:13px;font-weight:750;margin-bottom:5px}
 input,select{width:100%} input[type=color]{height:43px;padding:3px}
 .actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
@@ -53,7 +56,7 @@ Once hosted and opened in Safari, use <b>Share → Add to Home Screen</b> to ins
 
 <main>
 <h1>Wrapped Woven Bracelet Generator</h1>
-<div class="sub">You can now resize the generated name itself — make it taller, wider, or both — while the graph automatically expands to fit.</div>
+<div class="sub">Name height and letter width can now be increased or decreased one row/column at a time with − and + buttons.</div>
 
 <div class="tabs">
   <button type="button" id="tabName" class="tab active">Name Generator</button>
@@ -65,21 +68,19 @@ Once hosted and opened in Safari, use <b>Share → Add to Home Screen</b> to ins
   <div class="controls">
     <div><label>Name</label><input id="name" value="EMERSYN" maxlength="24"></div>
     <div><label>Graph rows</label><input id="nameRows" type="number" min="7" max="60" value="9"></div>
-    <div><label>Name height</label>
-      <select id="nameHeightScale">
-        <option value="1" selected>Normal (7 rows)</option>
-        <option value="2">2× tall (14 rows)</option>
-        <option value="3">3× tall (21 rows)</option>
-        <option value="4">4× tall (28 rows)</option>
-      </select>
+    <div><label>Name height (rows)</label>
+      <div class="stepper">
+        <button type="button" id="nameHeightMinus">−</button>
+        <input id="nameHeight" type="number" min="3" max="40" step="1" value="7">
+        <button type="button" id="nameHeightPlus">+</button>
+      </div>
     </div>
-    <div><label>Name width</label>
-      <select id="nameWidthScale">
-        <option value="1" selected>Normal width</option>
-        <option value="2">2× wide</option>
-        <option value="3">3× wide</option>
-        <option value="4">4× wide</option>
-      </select>
+    <div><label>Letter width (columns)</label>
+      <div class="stepper">
+        <button type="button" id="nameWidthMinus">−</button>
+        <input id="nameWidth" type="number" min="3" max="30" step="1" value="5">
+        <button type="button" id="nameWidthPlus">+</button>
+      </div>
     </div>
     <div><label>Side padding (columns each side)</label><input id="namePad" type="number" min="0" max="30" value="4"></div>
     <div><label>Space between letters</label><select id="spacing"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select></div>
@@ -207,40 +208,35 @@ const $=id=>document.getElementById(id);
 function makeNameMatrix(){
   const text=$("name").value.toUpperCase();
   const spacing=Math.max(0,Number($("spacing").value)||1);
-  const heightScale=Math.max(1,Math.min(4,Number($("nameHeightScale").value)||1));
-  const widthScale=Math.max(1,Math.min(4,Number($("nameWidthScale").value)||1));
+  const nameHeight=Math.max(3,Math.min(40,Math.round(Number($("nameHeight").value)||7)));
+  const letterWidth=Math.max(3,Math.min(30,Math.round(Number($("nameWidth").value)||5)));
   const requestedRows=Math.max(7,Math.min(60,Number($("nameRows").value)||9));
   const sidePadding=Math.max(0,Math.min(30,Number($("namePad").value)||0));
   const chars=[...text].filter(ch=>FONT[ch]);
 
-  const scaledLetterWidth=5*widthScale;
-  const scaledLetterHeight=7*heightScale;
-  const scaledSpacing=spacing;
   const artWidth=chars.length
-    ? (chars.length*scaledLetterWidth)+((chars.length-1)*scaledSpacing)
+    ? (chars.length*letterWidth)+((chars.length-1)*spacing)
     : 0;
 
-  // The graph grows vertically if the requested name height is taller than the selected canvas.
-  const actualRows=Math.max(requestedRows,scaledLetterHeight);
+  const actualRows=Math.max(requestedRows,nameHeight);
   const actualCols=Math.max(10,artWidth+(sidePadding*2));
-
   const m=Array.from({length:actualRows},()=>Array(actualCols).fill(0));
-  const top=Math.floor((actualRows-scaledLetterHeight)/2);
+
+  const top=Math.floor((actualRows-nameHeight)/2);
   const left=chars.length ? Math.floor((actualCols-artWidth)/2) : 0;
 
+  // Resize the original 5×7 letter grid to any whole-number width/height.
+  // Nearest-neighbor mapping keeps the block/pixel look.
   chars.forEach((ch,i)=>{
-    const x0=left+i*(scaledLetterWidth+scaledSpacing);
-    for(let sourceRow=0;sourceRow<7;sourceRow++){
-      for(let sourceCol=0;sourceCol<5;sourceCol++){
-        if(FONT[ch][sourceRow][sourceCol]!=="1") continue;
-
-        // Stretch each original font pixel independently in height and width.
-        for(let vr=0;vr<heightScale;vr++){
-          for(let hc=0;hc<widthScale;hc++){
-            const rr=top+(sourceRow*heightScale)+vr;
-            const cc=x0+(sourceCol*widthScale)+hc;
-            if(rr>=0 && rr<actualRows && cc>=0 && cc<actualCols) m[rr][cc]=1;
-          }
+    const x0=left+i*(letterWidth+spacing);
+    for(let r=0;r<nameHeight;r++){
+      const sourceRow=Math.min(6,Math.floor(r*7/nameHeight));
+      for(let c=0;c<letterWidth;c++){
+        const sourceCol=Math.min(4,Math.floor(c*5/letterWidth));
+        if(FONT[ch][sourceRow][sourceCol]==="1"){
+          const rr=top+r;
+          const cc=x0+c;
+          if(rr>=0 && rr<actualRows && cc>=0 && cc<actualCols) m[rr][cc]=1;
         }
       }
     }
@@ -249,12 +245,12 @@ function makeNameMatrix(){
   if($("nameSizeNote")){
     let extra="";
     if(actualRows>requestedRows){
-      extra=` Graph rows expanded from ${requestedRows} to ${actualRows} so the enlarged name fits.`;
+      extra=` Graph rows expanded from ${requestedRows} to ${actualRows} so the name fits.`;
     }
     $("nameSizeNote").textContent=
       `Graph: ${actualRows} rows × ${actualCols} columns. ` +
-      `Name size: ${scaledLetterHeight} rows tall; ${widthScale}× normal letter width. ` +
-      `Width auto-adjusted for ${chars.length} letter${chars.length===1?'':'s'} with ${sidePadding} side-padding columns.${extra}`;
+      `Each letter is ${nameHeight} rows tall × ${letterWidth} columns wide. ` +
+      `Use the − / + buttons to change either dimension by exactly 1.${extra}`;
   }
   return m;
 }
@@ -579,8 +575,23 @@ $("tabName").addEventListener("click",()=>switchMode("name"));
 $("tabDraw").addEventListener("click",()=>switchMode("draw"));
 
 // Name controls
-["name","nameRows","nameHeightScale","nameWidthScale","namePad","spacing","nameLetterColor","nameBgColor"].forEach(id=>$(id).addEventListener("input",updateName));
+["name","nameRows","nameHeight","nameWidth","namePad","spacing","nameLetterColor","nameBgColor"].forEach(id=>$(id).addEventListener("input",updateName));
 $("sendToDraw").addEventListener("click",sendNameToDraw);
+
+function stepNumber(id,amount){
+  const el=$(id);
+  const min=Number(el.min);
+  const max=Number(el.max);
+  let value=Math.round(Number(el.value)||0)+amount;
+  if(Number.isFinite(min)) value=Math.max(min,value);
+  if(Number.isFinite(max)) value=Math.min(max,value);
+  el.value=value;
+  updateName();
+}
+$("nameHeightMinus").addEventListener("click",()=>stepNumber("nameHeight",-1));
+$("nameHeightPlus").addEventListener("click",()=>stepNumber("nameHeight",1));
+$("nameWidthMinus").addEventListener("click",()=>stepNumber("nameWidth",-1));
+$("nameWidthPlus").addEventListener("click",()=>stepNumber("nameWidth",1));
 
 // Draw controls/actions
 $("resizeGraph").addEventListener("click",resizeCustomGraph);
