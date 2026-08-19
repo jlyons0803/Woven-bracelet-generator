@@ -53,7 +53,7 @@ Once hosted and opened in Safari, use <b>Share → Add to Home Screen</b> to ins
 
 <main>
 <h1>Wrapped Woven Bracelet Generator</h1>
-<div class="sub">Generate a name, then send it directly into Draw My Own Pattern to customize it. Name patterns still auto-size to fit the screen.</div>
+<div class="sub">Generate a name, send it into Draw My Own Pattern, and now add small picture stamps like hearts or flowers too.</div>
 
 <div class="tabs">
   <button type="button" id="tabName" class="tab active">Name Generator</button>
@@ -92,7 +92,14 @@ Once hosted and opened in Safari, use <b>Share → Add to Home Screen</b> to ins
     <button type="button" id="invertBtn">Invert</button>
     <button type="button" id="undoBtn">Undo</button>
   </div>
+  <div class="actions">
+    <button type="button" id="stampHeart">Add Heart</button>
+    <button type="button" id="stampFlower">Add Flower</button>
+    <button type="button" id="stampStar">Add Star</button>
+    <button type="button" id="stampSmiley">Add Smiley</button>
+  </div>
   <div class="note"><b>Draw:</b> tap a square, or press and drag across squares. Start on a blank square to draw; start on a filled square to erase.</div>
+  <div class="note"><b>Picture stamps:</b> tap a stamp button, then tap the grid where you want to place that picture.</div>
 </section>
 
 <section class="card">
@@ -221,6 +228,55 @@ function activeColors(){
 }
 
 
+
+const STAMPS={
+  heart:[
+    "01110",
+    "11111",
+    "11111",
+    "01110",
+    "00100"
+  ],
+  flower:[
+    "00100",
+    "10101",
+    "01110",
+    "10101",
+    "00100"
+  ],
+  star:[
+    "00100",
+    "11111",
+    "01110",
+    "11111",
+    "00100"
+  ],
+  smiley:[
+    "00000",
+    "01010",
+    "00000",
+    "10001",
+    "01110"
+  ]
+};
+let activeStamp=null;
+
+function placeStampAt(centerRow,centerCol,stampRows){
+  const height=stampRows.length;
+  const width=stampRows[0].length;
+  const startRow=centerRow-Math.floor(height/2);
+  const startCol=centerCol-Math.floor(width/2);
+
+  for(let r=0;r<height;r++){
+    for(let c=0;c<width;c++){
+      const rr=startRow+r;
+      const cc=startCol+c;
+      if(rr<0 || cc<0 || rr>=drawMatrix.length || cc>=drawMatrix[0].length) continue;
+      if(stampRows[r][c]==="1") drawMatrix[rr][cc]=1;
+    }
+  }
+}
+
 function sendNameToDraw(){
   // Build a fresh name matrix using the current name settings.
   nameMatrix=makeNameMatrix();
@@ -294,6 +350,20 @@ function renderGrid(){
     if(mode==="draw"){
       cell.addEventListener("pointerdown",e=>{
         e.preventDefault();
+
+        if(activeStamp){
+          history.push(clone(drawMatrix));
+          if(history.length>40)history.shift();
+          placeStampAt(r,c,STAMPS[activeStamp]);
+          const placed=activeStamp;
+          activeStamp=null;
+          renderGrid();
+          if($("fitNote")){
+            $("fitNote").textContent=`Added a ${placed}. You can tap a stamp button again to place another one, or keep drawing normally.`;
+          }
+          return;
+        }
+
         history.push(clone(drawMatrix));
         if(history.length>40)history.shift();
         dragging=true;
@@ -450,6 +520,10 @@ $("clearBtn").addEventListener("click",()=>mutate("clear"));
 $("fillBtn").addEventListener("click",()=>mutate("fill"));
 $("invertBtn").addEventListener("click",()=>mutate("invert"));
 $("undoBtn").addEventListener("click",undo);
+$("stampHeart").addEventListener("click",()=>{activeStamp="heart"; if($("fitNote")) $("fitNote").textContent="Heart selected — now tap the grid where you want to place it.";});
+$("stampFlower").addEventListener("click",()=>{activeStamp="flower"; if($("fitNote")) $("fitNote").textContent="Flower selected — now tap the grid where you want to place it.";});
+$("stampStar").addEventListener("click",()=>{activeStamp="star"; if($("fitNote")) $("fitNote").textContent="Star selected — now tap the grid where you want to place it.";});
+$("stampSmiley").addEventListener("click",()=>{activeStamp="smiley"; if($("fitNote")) $("fitNote").textContent="Smiley selected — now tap the grid where you want to place it.";});
 ["drawLetterColor","drawBgColor"].forEach(id=>$(id).addEventListener("input",()=>{if(mode==="draw")renderGrid()}));
 
 // Calculator controls
