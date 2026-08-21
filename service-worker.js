@@ -1,14 +1,14 @@
-const CACHE='woven-bracelet-v20';
+const CACHE='woven-bracelet-v21';
 const ASSETS=[
   './',
   './index.html',
-  './styles.css?v=20',
-  './data.js?v=20',
-  './core.js?v=20',
-  './calculator.js?v=20',
-  './projects.js?v=20',
-  './export.js?v=20',
-  './app.js?v=20',
+  './styles.css?v=21',
+  './data.js?v=21',
+  './core.js?v=21',
+  './calculator.js?v=21',
+  './projects.js?v=21',
+  './export.js?v=21',
+  './app.js?v=21',
   './manifest.webmanifest',
   './icon-192.png',
   './icon-512.png',
@@ -27,7 +27,6 @@ self.addEventListener('activate',e=>e.waitUntil(
 ));
 
 self.addEventListener('fetch',e=>{
-  // HTML and versioned modules are network-first so updates cannot mix old/new modules.
   e.respondWith(
     fetch(e.request,{cache:'no-store'})
       .then(r=>{

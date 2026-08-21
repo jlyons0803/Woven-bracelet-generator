@@ -20,6 +20,13 @@ const BASE_THREAD_PRESETS={
   custom:{label:"Custom / measured base thread",wrapFactor:1.00,note:"If your base thread is thicker or thinner than usual, fine-tune the estimate with a real sample."}
 };
 
+function fmtIn(value){
+  const n=Number(value);
+  if(!Number.isFinite(n)) return "0 in";
+  const rounded=Math.round(n*10)/10;
+  return `${rounded} in`;
+}
+
 function renderThreadNotes(){
   const wrapKey=$("threadType").value;
   const wrapPreset=THREAD_PRESETS[wrapKey]||THREAD_PRESETS.custom;
@@ -29,7 +36,7 @@ function renderThreadNotes(){
   const ppiText=wrapPreset.ppi!=null ? ` Suggested starting point: ${wrapPreset.ppi} wrap passes per inch.` : "";
   $("threadTypeNote").innerHTML=
     `<b>${wrapPreset.label}:</b> ${wrapPreset.note}${ppiText} ` +
-    `The value in Wrap passes per inch is what the calculator will actually use when you tap Update Calculations.`;
+    `The value in Wrap passes per inch is what the calculator will actually use when you tap Update All Values.`;
 
   const factorPct=Math.round((basePreset.wrapFactor-1)*100);
   const factorText=factorPct===0 ? `This uses the standard base-thread estimate.` :
@@ -69,7 +76,7 @@ function runCalculatorUpdate(){
   }catch(err){
     console.error("Calculator update failed:",err);
     if($("calcDirtyNote")){
-      $("calcDirtyNote").textContent="Calculation error — refresh the app once, then try again.";
+      $("calcDirtyNote").textContent=`Calculation error: ${err && err.message ? err.message : "unknown error"}`;
     }
     if(btn) btn.textContent="Try Again";
   }finally{
