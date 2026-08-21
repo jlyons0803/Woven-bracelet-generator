@@ -1,8 +1,52 @@
-function fmtIn(v){return (Math.round(v*10)/10).toString()+" in"}
-function fmtYd(inches){
-  let y=inches/36;
-  return (y<10?y.toFixed(2):y.toFixed(1)).replace(/0$/,"").replace(/\.$/,"")+" yd";
+const THREAD_PRESETS={
+  floss6:{label:"6-strand embroidery floss",ppi:9,note:"A medium-thick starting estimate when all 6 strands are used together."},
+  floss3:{label:"3-strand embroidery floss",ppi:12,note:"Thinner than full floss, so more wrap passes usually fit into each inch."},
+  pearl5:{label:"Pearl cotton #5",ppi:8,note:"A thicker pearl cotton starting estimate."},
+  pearl8:{label:"Pearl cotton #8",ppi:11,note:"A medium pearl cotton starting estimate."},
+  pearl10:{label:"Pearl cotton #10",ppi:13,note:"A finer pearl cotton starting estimate."},
+  crochet10:{label:"Crochet / craft thread #10",ppi:10,note:"A general starting estimate for size-10 craft/crochet thread."},
+  fineCord:{label:"Fine nylon / beading cord",ppi:14,note:"A fine-cord starting estimate; actual packing can vary quite a bit by material."},
+  custom:{label:"Custom / measured thread",ppi:null,note:"Enter your own wrap passes per inch. This is best when you have measured your actual thread and tension."}
+};
+
+const BASE_THREAD_PRESETS={
+  floss6:{label:"6-strand embroidery floss",wrapFactor:1.18,note:"Quite thick for a base thread, so wrapping thread usually travels farther around each pass."},
+  floss3:{label:"3-strand embroidery floss",wrapFactor:1.10,note:"A medium-thick floss base."},
+  pearl5:{label:"Pearl cotton #5",wrapFactor:1.15,note:"A thicker pearl-cotton base thread."},
+  pearl8:{label:"Pearl cotton #8",wrapFactor:1.08,note:"A medium pearl-cotton base thread."},
+  pearl10:{label:"Pearl cotton #10",wrapFactor:1.04,note:"A finer pearl-cotton base thread."},
+  crochet10:{label:"Crochet / craft thread #10",wrapFactor:1.06,note:"A medium craft-thread base."},
+  fineCord:{label:"Fine nylon / beading cord",wrapFactor:1.00,note:"A slim base-thread starting estimate."},
+  custom:{label:"Custom / measured base thread",wrapFactor:1.00,note:"If your base thread is thicker or thinner than usual, fine-tune the estimate with a real sample."}
+};
+
+function renderThreadNotes(){
+  const wrapKey=$("threadType").value;
+  const wrapPreset=THREAD_PRESETS[wrapKey]||THREAD_PRESETS.custom;
+  const baseKey=$("baseThreadType").value;
+  const basePreset=BASE_THREAD_PRESETS[baseKey]||BASE_THREAD_PRESETS.custom;
+
+  if(wrapPreset.ppi!=null) $("ppi").value=wrapPreset.ppi;
+
+  const ppiText=wrapPreset.ppi!=null ? ` Starting estimate: ${wrapPreset.ppi} wrap passes per inch.` : "";
+  $("threadTypeNote").innerHTML=
+    `<b>${wrapPreset.label}:</b> ${wrapPreset.note}${ppiText} ` +
+    `Your own woven sample remains the most accurate way to estimate total wrapping-string length because tension affects the result.`;
+
+  const factorPct=Math.round((basePreset.wrapFactor-1)*100);
+  const factorText=factorPct===0 ? `This uses the standard base-thread estimate.` :
+    (factorPct>0 ? `This increases the wrapping-string estimate by about ${factorPct}% compared with the standard slim-base estimate.` :
+                    `This decreases the wrapping-string estimate by about ${Math.abs(factorPct)}%.`);
+  $("baseThreadTypeNote").innerHTML=
+    `<b>${basePreset.label}:</b> ${basePreset.note} ${factorText}`;
 }
+
+function applyThreadPreset(){
+  renderThreadNotes();
+  updateCalculator();
+  autosaveCurrentProject();
+}
+
 function updateCalculator(){
   const m=activeMatrix(); if(!m.length||!m[0].length)return;
 
@@ -15,6 +59,8 @@ function updateCalculator(){
   const sampleCols=Math.max(1,Number($("sampleCols").value)||10);
   const sampleUsed=Math.max(.01,Number($("sampleUsed").value)||36);
   const tail=Math.max(0,Number($("tail").value)||0);
+  const baseThreadKey=$("baseThreadType")?.value||"fineCord";
+  const basePreset=BASE_THREAD_PRESETS[baseThreadKey]||BASE_THREAD_PRESETS.custom;
 
   let on=0;
   let minRow=canvasRows, maxRow=-1;
@@ -39,7 +85,7 @@ function updateCalculator(){
   const graphLen=activeCols/ppi;
 
   // Calibration sample is based on full-width passes over the actual woven height.
-  const inchesPerCell=sampleUsed/(sampleCols*activeRows);
+  const inchesPerCell=(sampleUsed/(sampleCols*activeRows))*basePreset.wrapFactor;
   const patternIn=on ? (on*inchesPerCell*(1+waste)+tail) : 0;
   const bgIn=bgCells ? (bgCells*inchesPerCell*(1+waste)+tail) : 0;
 
@@ -62,8 +108,11 @@ function updateCalculator(){
     ? `Canvas: ${canvasRows} rows × ${canvasCols} columns. Active pattern height: ${activeRows} rows.`
     : `Canvas: ${canvasRows} rows × ${canvasCols} columns.`;
 
+  const threadKey=$("threadType")?.value||"custom";
+  const threadLabel=(THREAD_PRESETS[threadKey]||THREAD_PRESETS.custom).label;
+  const baseLabel=basePreset.label;
   $("calcNote").innerHTML =
-    `<b>${boundsMsg}</b> Pattern cells: ${on.toLocaleString()}; background cells counted: ${bgCells.toLocaleString()}. ` +
-    `Calibration used: ${sampleUsed}" of thread for ${sampleCols} full-width passes over ${activeRows} active rows. ` +
+    `<b>${boundsMsg}</b> Wrapping thread: ${threadLabel}. Base thread: ${baseLabel}. Pattern cells: ${on.toLocaleString()}; background cells counted: ${bgCells.toLocaleString()}. ` +
+    `Calibration used: ${sampleUsed}" of thread for ${sampleCols} full-width passes over ${activeRows} active rows, adjusted for the selected base-thread thickness. ` +
     sizeMsg;
 }

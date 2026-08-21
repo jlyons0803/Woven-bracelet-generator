@@ -47,6 +47,8 @@ function captureProjectState(){
       finished:$("finished").value,
       tie:$("tie").value,
       baseExtra:$("baseExtra").value,
+      threadType:$("threadType").value,
+      baseThreadType:$("baseThreadType").value,
       ppi:$("ppi").value,
       waste:$("waste").value,
       sampleCols:$("sampleCols").value,
@@ -77,9 +79,20 @@ function applyProjectState(state){
     drawMatrix=Array.isArray(d.matrix) && d.matrix.length ? d.matrix.map(row=>row.map(v=>v?1:0)) : [];
 
     const c=state.calculator||{};
+    if(c.threadType!=null && $("threadType").querySelector(`option[value="${c.threadType}"]`)){
+      $("threadType").value=c.threadType;
+    }else{
+      $("threadType").value="floss6";
+    }
+    if(c.baseThreadType!=null && $("baseThreadType").querySelector(`option[value="${c.baseThreadType}"]`)){
+      $("baseThreadType").value=c.baseThreadType;
+    }else{
+      $("baseThreadType").value="fineCord";
+    }
     ["finished","tie","baseExtra","ppi","waste","sampleCols","sampleUsed","tail"].forEach(id=>{
       if(c[id]!=null) $(id).value=c[id];
     });
+    renderThreadNotes();
 
     customFitToScreen=state.customFitToScreen!==false;
     history=[];
@@ -296,6 +309,10 @@ function newProjectNow(){
     $("drawCols").value=60;
     $("drawLetterColor").value="#183d7a";
     $("drawBgColor").value="#d9f3e8";
+    $("threadType").value="floss6";
+    $("baseThreadType").value="fineCord";
+    $("ppi").value=THREAD_PRESETS.floss6.ppi;
+    renderThreadNotes();
     drawMatrix=blank(9,60);
     history=[];
     customFitToScreen=true;

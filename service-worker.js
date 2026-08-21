@@ -1,4 +1,4 @@
-const CACHE='woven-bracelet-v14-modular';
+const CACHE='woven-bracelet-v16-base-thread';
 const ASSETS=[
   './',
   './index.html',

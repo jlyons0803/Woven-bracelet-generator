@@ -23,7 +23,7 @@ Once hosted and opened in Safari, use <b>Share → Add to Home Screen</b> to ins
 
 <main>
 <h1>Wrapped Woven Bracelet Generator</h1>
-<div class="sub">The app is now split into separate modules for patterns, drawing, calculations, projects, exports, and app controls.</div>
+<div class="sub">Choose both a wrapping-thread type and a base-thread type for a more realistic sizing estimate.</div>
 
 <section class="card" id="projectCard">
   <h2>Projects</h2>
@@ -124,7 +124,31 @@ Once hosted and opened in Safari, use <b>Share → Add to Home Screen</b> to ins
     <div><label>Finished woven length (in)</label><input id="finished" type="number" min="1" max="20" step=".25" value="6.5"></div>
     <div><label>Extra per end for ties/closure (in)</label><input id="tie" type="number" min="0" max="20" step=".25" value="3"></div>
     <div><label>Extra allowance per base string (in)</label><input id="baseExtra" type="number" min="0" max="12" step=".25" value="2"></div>
-    <div><label>Wrap passes per inch</label><input id="ppi" type="number" min="1" max="50" step=".5" value="10"></div>
+    <div><label>Wrapping thread type</label>
+      <select id="threadType">
+        <option value="floss6">6-strand embroidery floss</option>
+        <option value="floss3">3-strand embroidery floss</option>
+        <option value="pearl5">Pearl cotton #5</option>
+        <option value="pearl8">Pearl cotton #8</option>
+        <option value="pearl10">Pearl cotton #10</option>
+        <option value="crochet10">Crochet / craft thread #10</option>
+        <option value="fineCord">Fine nylon / beading cord</option>
+        <option value="custom">Custom / measured thread</option>
+      </select>
+    </div>
+    <div><label>Base thread type</label>
+      <select id="baseThreadType">
+        <option value="floss6">6-strand embroidery floss</option>
+        <option value="floss3">3-strand embroidery floss</option>
+        <option value="pearl5">Pearl cotton #5</option>
+        <option value="pearl8">Pearl cotton #8</option>
+        <option value="pearl10">Pearl cotton #10</option>
+        <option value="crochet10">Crochet / craft thread #10</option>
+        <option value="fineCord" selected>Fine nylon / beading cord</option>
+        <option value="custom">Custom / measured base thread</option>
+      </select>
+    </div>
+    <div><label>Wrap passes per inch</label><input id="ppi" type="number" min="1" max="50" step=".5" value="9"></div>
     <div><label>Safety extra (%)</label><input id="waste" type="number" min="0" max="100" value="20"></div>
   </div>
   <div class="controls" style="margin-top:12px">
@@ -132,6 +156,8 @@ Once hosted and opened in Safari, use <b>Share → Add to Home Screen</b> to ins
     <div><label>Thread used for that sample (in)</label><input id="sampleUsed" type="number" min=".1" max="5000" step=".1" value="36"></div>
     <div><label>Tail allowance per color (in)</label><input id="tail" type="number" min="0" max="60" step=".5" value="12"></div>
   </div>
+  <div id="threadTypeNote" class="note"><b>6-strand embroidery floss:</b> starting estimate of 9 wrap passes per inch.</div>
+  <div id="baseThreadTypeNote" class="note"><b>Fine nylon / beading cord:</b> used as the default base thread. Thicker base threads slightly increase the wrapping-thread estimate because each wrap travels farther around the base strings.</div>
 
   <div class="stats">
     <div class="stat"><b id="baseCount">0</b><span>base strings needed</span></div>
