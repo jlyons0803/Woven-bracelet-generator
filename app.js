@@ -43,7 +43,13 @@ $("stampSmiley").addEventListener("click",()=>{activeStamp="smiley"; if($("fitNo
 // Calculator controls
 $("threadType").addEventListener("change",applyThreadPreset);
 $("baseThreadType").addEventListener("change",applyThreadPreset);
-["finished","tie","baseExtra","ppi","waste","sampleCols","sampleUsed","tail"].forEach(id=>$(id).addEventListener("input",()=>{updateCalculator();autosaveCurrentProject();}));
+["finished","tie","baseExtra","ppi","waste","sampleCols","sampleUsed","tail"].forEach(id=>{
+  $(id).addEventListener("input",markCalculatorDirty);
+});
+$("updateCalculatorBtn").addEventListener("click",()=>{
+  updateCalculator();
+  autosaveCurrentProject();
+});
 
 $("saveProject").addEventListener("click",()=>saveProjectNow(false));
 $("openProject").addEventListener("click",openSelectedProject);

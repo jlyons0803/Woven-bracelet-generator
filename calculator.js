@@ -41,10 +41,17 @@ function renderThreadNotes(){
     `<b>${basePreset.label}:</b> ${basePreset.note} ${factorText}`;
 }
 
+function markCalculatorDirty(){
+  if($("calcDirtyNote")){
+    $("calcDirtyNote").innerHTML='Settings changed — tap <b>Update Calculations</b> to refresh the totals.';
+  }
+  if($("updateCalculatorBtn")) $("updateCalculatorBtn").classList.add("primary");
+  autosaveCurrentProject();
+}
+
 function applyThreadPreset(){
   renderThreadNotes();
-  updateCalculator();
-  autosaveCurrentProject();
+  markCalculatorDirty();
 }
 
 function updateCalculator(){
@@ -115,4 +122,8 @@ function updateCalculator(){
     `<b>${boundsMsg}</b> Wrapping thread: ${threadLabel}. Base thread: ${baseLabel}. Pattern cells: ${on.toLocaleString()}; background cells counted: ${bgCells.toLocaleString()}. ` +
     `Calibration used: ${sampleUsed}" of thread for ${sampleCols} full-width passes over ${activeRows} active rows, adjusted for the selected base-thread thickness. ` +
     sizeMsg;
+
+  if($("calcDirtyNote")){
+    $("calcDirtyNote").textContent="Calculations are up to date.";
+  }
 }
