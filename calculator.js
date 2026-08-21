@@ -26,30 +26,34 @@ function renderThreadNotes(){
   const baseKey=$("baseThreadType").value;
   const basePreset=BASE_THREAD_PRESETS[baseKey]||BASE_THREAD_PRESETS.custom;
 
-  if(wrapPreset.ppi!=null) $("ppi").value=wrapPreset.ppi;
-
-  const ppiText=wrapPreset.ppi!=null ? ` Starting estimate: ${wrapPreset.ppi} wrap passes per inch.` : "";
+  const ppiText=wrapPreset.ppi!=null ? ` Suggested starting point: ${wrapPreset.ppi} wrap passes per inch.` : "";
   $("threadTypeNote").innerHTML=
     `<b>${wrapPreset.label}:</b> ${wrapPreset.note}${ppiText} ` +
-    `Your own woven sample remains the most accurate way to estimate total wrapping-string length because tension affects the result.`;
+    `The value in Wrap passes per inch is what the calculator will actually use when you tap Update Calculations.`;
 
   const factorPct=Math.round((basePreset.wrapFactor-1)*100);
   const factorText=factorPct===0 ? `This uses the standard base-thread estimate.` :
-    (factorPct>0 ? `This increases the wrapping-string estimate by about ${factorPct}% compared with the standard slim-base estimate.` :
-                    `This decreases the wrapping-string estimate by about ${Math.abs(factorPct)}%.`);
+    (factorPct>0 ? `This adds about ${factorPct}% to the wrapping-string estimate for the thicker base.` :
+                    `This reduces the wrapping-string estimate by about ${Math.abs(factorPct)}%.`);
   $("baseThreadTypeNote").innerHTML=
     `<b>${basePreset.label}:</b> ${basePreset.note} ${factorText}`;
 }
 
 function markCalculatorDirty(){
   if($("calcDirtyNote")){
-    $("calcDirtyNote").innerHTML='Settings changed — tap <b>Update Calculations</b> to refresh the totals.';
+    $("calcDirtyNote").innerHTML='Settings changed — tap <b>Update Calculations</b> to apply them.';
   }
-  if($("updateCalculatorBtn")) $("updateCalculatorBtn").classList.add("primary");
   autosaveCurrentProject();
 }
 
-function applyThreadPreset(){
+function applyWrappingThreadPreset(){
+  const preset=THREAD_PRESETS[$("threadType").value]||THREAD_PRESETS.custom;
+  if(preset.ppi!=null) $("ppi").value=preset.ppi;
+  renderThreadNotes();
+  markCalculatorDirty();
+}
+
+function applyBaseThreadPreset(){
   renderThreadNotes();
   markCalculatorDirty();
 }
@@ -91,10 +95,15 @@ function updateCalculator(){
   const baseTotal=each*activeRows;
   const graphLen=activeCols/ppi;
 
-  // Calibration sample is based on full-width passes over the actual woven height.
+  // Calibration sample gives thread used per woven cell.
+  // PPI also changes how much thread is needed for a requested physical bracelet length:
+  // the graph width is activeCols passes, while a finished piece at the chosen PPI needs
+  // roughly finished * ppi passes. Scale the working-thread estimate accordingly.
   const inchesPerCell=(sampleUsed/(sampleCols*activeRows))*basePreset.wrapFactor;
-  const patternIn=on ? (on*inchesPerCell*(1+waste)+tail) : 0;
-  const bgIn=bgCells ? (bgCells*inchesPerCell*(1+waste)+tail) : 0;
+  const physicalPassTarget=Math.max(1,finished*ppi);
+  const passScale=physicalPassTarget/Math.max(1,activeCols);
+  const patternIn=on ? (on*inchesPerCell*passScale*(1+waste)+tail) : 0;
+  const bgIn=bgCells ? (bgCells*inchesPerCell*passScale*(1+waste)+tail) : 0;
 
   $("baseCount").textContent=activeRows;
   $("passCount").textContent=activeCols;
@@ -120,7 +129,7 @@ function updateCalculator(){
   const baseLabel=basePreset.label;
   $("calcNote").innerHTML =
     `<b>${boundsMsg}</b> Wrapping thread: ${threadLabel}. Base thread: ${baseLabel}. Pattern cells: ${on.toLocaleString()}; background cells counted: ${bgCells.toLocaleString()}. ` +
-    `Calibration used: ${sampleUsed}" of thread for ${sampleCols} full-width passes over ${activeRows} active rows, adjusted for the selected base-thread thickness. ` +
+    `Calibration used: ${sampleUsed}" of thread for ${sampleCols} full-width passes over ${activeRows} active rows, adjusted for base-thread thickness and ${ppi} passes/in. ` +
     sizeMsg;
 
   if($("calcDirtyNote")){

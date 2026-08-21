@@ -41,12 +41,13 @@ $("stampSmiley").addEventListener("click",()=>{activeStamp="smiley"; if($("fitNo
 ["drawLetterColor","drawBgColor"].forEach(id=>$(id).addEventListener("input",()=>{if(mode==="draw")renderGrid()}));
 
 // Calculator controls
-$("threadType").addEventListener("change",applyThreadPreset);
-$("baseThreadType").addEventListener("change",applyThreadPreset);
+$("threadType").addEventListener("change",applyWrappingThreadPreset);
+$("baseThreadType").addEventListener("change",applyBaseThreadPreset);
 ["finished","tie","baseExtra","ppi","waste","sampleCols","sampleUsed","tail"].forEach(id=>{
   $(id).addEventListener("input",markCalculatorDirty);
 });
 $("updateCalculatorBtn").addEventListener("click",()=>{
+  renderThreadNotes();
   updateCalculator();
   autosaveCurrentProject();
 });

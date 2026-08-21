@@ -1,4 +1,4 @@
-const CACHE='woven-bracelet-v17-update-button';
+const CACHE='woven-bracelet-v18-update-fix';
 const ASSETS=[
   './',
   './index.html',

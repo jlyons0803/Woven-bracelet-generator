@@ -132,6 +132,8 @@ function renderGrid(){
     }
   }
 
+  // Structural pattern changes update the calculator automatically.
+  // User-entered calculator settings are applied explicitly with the Update Calculations button.
   updateCalculator();
   autosaveCurrentProject();
 }
