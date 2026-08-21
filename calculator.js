@@ -41,7 +41,31 @@ function renderThreadNotes(){
 
 function markCalculatorDirty(){
   if($("calcDirtyNote")){
-    $("calcDirtyNote").innerHTML='Settings changed — tap <b>Update Calculations</b> to apply them.';
+    $("calcDirtyNote").innerHTML='Changes waiting — tap <b>Update Calculations</b>.';
+  }
+  autosaveCurrentProject();
+}
+
+function runCalculatorUpdate(){
+  // Read every current control value at the moment the button is tapped.
+  // Nothing is copied from a stale project/calculator snapshot.
+  renderThreadNotes();
+  updateCalculator();
+
+  if($("calcDirtyNote")){
+    const now=new Date();
+    $("calcDirtyNote").textContent=`Updated at ${now.toLocaleTimeString([], {hour:"numeric",minute:"2-digit"})}.`;
+  }
+
+  const btn=$("updateCalculatorBtn");
+  if(btn){
+    const original=btn.textContent;
+    btn.textContent="Updated ✓";
+    btn.disabled=true;
+    setTimeout(()=>{
+      btn.textContent=original;
+      btn.disabled=false;
+    },700);
   }
   autosaveCurrentProject();
 }

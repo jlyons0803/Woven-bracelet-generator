@@ -132,10 +132,9 @@ function renderGrid(){
     }
   }
 
-  // Structural pattern changes update the calculator automatically.
-  // User-entered calculator settings are applied explicitly with the Update Calculations button.
-  updateCalculator();
-  autosaveCurrentProject();
+  // Any graph/name/drawing change can affect the totals.
+  // Mark the calculator as waiting so one button applies ALL current values together.
+  markCalculatorDirty();
 }
 window.addEventListener("pointerup",()=>dragging=false);
 

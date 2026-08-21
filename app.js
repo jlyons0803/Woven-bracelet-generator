@@ -46,11 +46,7 @@ $("baseThreadType").addEventListener("change",applyBaseThreadPreset);
 ["finished","tie","baseExtra","ppi","waste","sampleCols","sampleUsed","tail"].forEach(id=>{
   $(id).addEventListener("input",markCalculatorDirty);
 });
-$("updateCalculatorBtn").addEventListener("click",()=>{
-  renderThreadNotes();
-  updateCalculator();
-  autosaveCurrentProject();
-});
+$("updateCalculatorBtn").addEventListener("click",runCalculatorUpdate);
 
 $("saveProject").addEventListener("click",()=>saveProjectNow(false));
 $("openProject").addEventListener("click",openSelectedProject);
@@ -78,6 +74,7 @@ refreshProjectList();
 renderThreadNotes();
 nameMatrix=makeNameMatrix();
 renderGrid();
+runCalculatorUpdate();
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', function() {

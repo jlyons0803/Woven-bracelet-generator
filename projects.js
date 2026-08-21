@@ -102,6 +102,7 @@ function applyProjectState(state){
   }finally{
     loadingProject=false;
   }
+  runCalculatorUpdate();
 }
 
 function matrixForProjectState(state){
@@ -321,6 +322,7 @@ function newProjectNow(){
   }finally{
     loadingProject=false;
   }
+  runCalculatorUpdate();
   setProjectStatus("New unsaved project.");
 }
 function deleteSelectedProject(){
