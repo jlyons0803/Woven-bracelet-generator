@@ -67,11 +67,12 @@ function makeNameMatrix(){
     : 0;
 
   const contentRows=Math.max(requestedRows,nameHeight);
-  const actualRows=contentRows+(borderThickness*2);
+  const borderGap=borderThickness>0 ? BORDER_GAP_ROWS : 0;
+  const actualRows=contentRows+(borderThickness*2)+(borderGap*2);
   const actualCols=Math.max(10,artWidth+(sidePadding*2));
   const m=Array.from({length:actualRows},()=>Array(actualCols).fill(0));
 
-  const top=borderThickness+Math.floor((contentRows-nameHeight)/2);
+  const top=borderThickness+borderGap+Math.floor((contentRows-nameHeight)/2);
   const left=chars.length ? Math.floor((actualCols-artWidth)/2) : 0;
 
   // Resize the original 5×7 letter grid to any whole-number width/height.
@@ -101,7 +102,7 @@ function makeNameMatrix(){
     $("nameSizeNote").textContent=
       `Graph: ${actualRows} rows × ${actualCols} columns. ` +
       `Each letter is ${nameHeight} rows tall × ${letterWidth} columns wide. ` +
-      (borderThickness ? `Top/bottom border: ${borderThickness} row${borderThickness===1?"":"s"}. ` : "") +
+      (borderThickness ? `Top/bottom border: ${borderThickness} row${borderThickness===1?"":"s"} with 1 blank row between the border and the name. ` : "") +
       `Use the − / + buttons to change either dimension by exactly 1.${extra}`;
   }
   return m;
@@ -150,4 +151,6 @@ const STAMPS={
 };
 let activeStamp=null;
 let mirrorStampEnabled=false;
+let customBorderApplied=0;
+const BORDER_GAP_ROWS=1;
 let customFitToScreen=true;

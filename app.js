@@ -124,6 +124,8 @@ refreshProjectList();
 renderThreadNotes();
 nameMatrix=makeNameMatrix();
 drawMatrix=clone(nameMatrix);
+customBorderApplied=Math.max(0,Math.min(3,Number($("nameBorder").value)||0));
+$("drawBorderThickness").value=customBorderApplied||1;
 $("drawRows").value=drawMatrix.length;
 $("drawCols").value=drawMatrix[0]?.length||1;
 $("drawLetterColor").value=$("nameLetterColor").value;

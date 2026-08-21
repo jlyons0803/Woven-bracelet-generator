@@ -43,6 +43,7 @@ function captureProjectState(){
       letterColor:$("drawLetterColor").value,
       bgColor:$("drawBgColor").value,
       borderThickness:$("drawBorderThickness").value,
+      borderApplied:customBorderApplied,
       mirrorStamp:$("mirrorStamp").checked,
       matrix:clone(drawMatrix)
     },
@@ -81,6 +82,7 @@ function applyProjectState(state){
     if(d.letterColor) $("drawLetterColor").value=d.letterColor;
     if(d.bgColor) $("drawBgColor").value=d.bgColor;
     if(d.borderThickness!=null) $("drawBorderThickness").value=d.borderThickness;
+    customBorderApplied=Math.max(0,Math.min(3,Number(d.borderApplied)||0));
     $("mirrorStamp").checked=!!d.mirrorStamp;
     mirrorStampEnabled=$("mirrorStamp").checked;
     if($("mirrorStampNote")){
@@ -136,10 +138,11 @@ function matrixForProjectState(state){
 
   const artWidth=chars.length ? (chars.length*letterWidth)+((chars.length-1)*spacing) : 0;
   const contentRows=Math.max(requestedRows,nameHeight);
-  const actualRows=contentRows+(borderThickness*2);
+  const borderGap=borderThickness>0 ? BORDER_GAP_ROWS : 0;
+  const actualRows=contentRows+(borderThickness*2)+(borderGap*2);
   const actualCols=Math.max(10,artWidth+(sidePadding*2));
   const m=Array.from({length:actualRows},()=>Array(actualCols).fill(0));
-  const top=borderThickness+Math.floor((contentRows-nameHeight)/2);
+  const top=borderThickness+borderGap+Math.floor((contentRows-nameHeight)/2);
   const left=chars.length ? Math.floor((actualCols-artWidth)/2) : 0;
 
   chars.forEach((ch,i)=>{
@@ -335,6 +338,7 @@ function newProjectNow(){
     $("drawLetterColor").value="#183d7a";
     $("drawBgColor").value="#d9f3e8";
     $("drawBorderThickness").value=1;
+    customBorderApplied=0;
     $("mirrorStamp").checked=false;
     mirrorStampEnabled=false;
     $("threadType").value="floss6";
@@ -345,6 +349,8 @@ function newProjectNow(){
     customFitToScreen=true;
     nameMatrix=makeNameMatrix();
     drawMatrix=clone(nameMatrix);
+    customBorderApplied=Math.max(0,Math.min(3,Number($("nameBorder").value)||0));
+    $("drawBorderThickness").value=customBorderApplied||1;
     $("drawRows").value=drawMatrix.length;
     $("drawCols").value=drawMatrix[0]?.length||1;
     $("drawLetterColor").value=$("nameLetterColor").value;

@@ -36,6 +36,11 @@ function sendNameToDraw(){
   // Copy it into the editable custom grid.
   drawMatrix=clone(nameMatrix);
 
+  // Record the generated border so Remove Border can safely remove only
+  // the border and spacer rows, never any part of the name.
+  customBorderApplied=Math.max(0,Math.min(3,Number($("nameBorder").value)||0));
+  $("drawBorderThickness").value=customBorderApplied || 1;
+
   // Update the custom grid size controls to match what was copied.
   $("drawRows").value=drawMatrix.length;
   $("drawCols").value=drawMatrix[0]?.length || 1;
@@ -59,6 +64,8 @@ function switchMode(next){
   if(next==="name"){
     nameMatrix=makeNameMatrix();
     drawMatrix=clone(nameMatrix);
+    customBorderApplied=Math.max(0,Math.min(3,Number($("nameBorder").value)||0));
+    $("drawBorderThickness").value=customBorderApplied || 1;
     $("drawRows").value=drawMatrix.length;
     $("drawCols").value=drawMatrix[0]?.length || 1;
     $("drawLetterColor").value=$("nameLetterColor").value;
@@ -176,32 +183,73 @@ function updateName(){
 }
 
 
+function stripCustomBorderRows(){
+  if(!customBorderApplied || !drawMatrix.length) return;
+
+  const trim=customBorderApplied+BORDER_GAP_ROWS;
+  if(drawMatrix.length>(trim*2)){
+    drawMatrix=drawMatrix.slice(trim,drawMatrix.length-trim).map(row=>row.slice());
+  }
+  customBorderApplied=0;
+}
+
 function addCustomBorder(){
   if(mode!=="draw" || !drawMatrix.length) return;
+
   history.push(clone(drawMatrix));
   if(history.length>40) history.shift();
-  applyTopBottomBorder(drawMatrix,$("drawBorderThickness").value);
+
+  // Replace an existing V26 border instead of stacking another one.
+  stripCustomBorderRows();
+
+  const t=Math.max(1,Math.min(3,Math.floor(Number($("drawBorderThickness").value)||1)));
+  const cols=drawMatrix[0].length;
+  const borderRow=Array(cols).fill(1);
+  const gapRow=Array(cols).fill(0);
+
+  const topRows=[];
+  const bottomRows=[];
+  for(let i=0;i<t;i++){
+    topRows.push(borderRow.slice());
+    bottomRows.push(borderRow.slice());
+  }
+  topRows.push(gapRow.slice());
+  bottomRows.unshift(gapRow.slice());
+
+  drawMatrix=[...topRows,...drawMatrix.map(row=>row.slice()),...bottomRows];
+  customBorderApplied=t;
+  $("drawRows").value=drawMatrix.length;
+
+  if($("fitNote")){
+    $("fitNote").textContent=`Added a ${t}-row top and bottom border with 1 blank row between the border and the design.`;
+  }
   renderGrid();
 }
 
 function removeCustomBorder(){
   if(mode!=="draw" || !drawMatrix.length) return;
+
+  if(!customBorderApplied){
+    if($("fitNote")){
+      $("fitNote").textContent="There is no removable border on this pattern.";
+    }
+    return;
+  }
+
   history.push(clone(drawMatrix));
   if(history.length>40) history.shift();
 
-  const t=Math.max(1,Math.floor(Number($("drawBorderThickness").value)||1));
-  const rows=drawMatrix.length, cols=drawMatrix[0].length;
-  const limit=Math.min(t,Math.ceil(rows/2));
-  for(let r=0;r<limit;r++){
-    for(let c=0;c<cols;c++){
-      drawMatrix[r][c]=0;
-      drawMatrix[rows-1-r][c]=0;
-    }
+  stripCustomBorderRows();
+  $("drawRows").value=drawMatrix.length;
+
+  if($("fitNote")){
+    $("fitNote").textContent="Border removed. Your original pattern was preserved.";
   }
   renderGrid();
 }
 
 function resizeCustomGraph(){
+  customBorderApplied=0;
   const rows=Math.max(3,Math.min(60,Number($("drawRows").value)||9));
   const cols=Math.max(5,Math.min(200,Number($("drawCols").value)||60));
   history.push(clone(drawMatrix));
