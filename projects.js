@@ -331,11 +331,16 @@ function newProjectNow(){
     $("baseThreadType").value="fineCord";
     $("ppi").value=THREAD_PRESETS.floss6.ppi;
     renderThreadNotes();
-    drawMatrix=blank(9,60);
     history=[];
     customFitToScreen=true;
     nameMatrix=makeNameMatrix();
-    switchMode("name");
+    drawMatrix=clone(nameMatrix);
+    $("drawRows").value=drawMatrix.length;
+    $("drawCols").value=drawMatrix[0]?.length||1;
+    $("drawLetterColor").value=$("nameLetterColor").value;
+    $("drawBgColor").value=$("nameBgColor").value;
+    switchMode("draw");
+    $("patternTitle").textContent=($("name").value.toUpperCase()||"NAME")+" — EDITABLE";
   }finally{
     loadingProject=false;
   }

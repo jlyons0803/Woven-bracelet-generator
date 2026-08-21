@@ -407,3 +407,28 @@ input[type=color]{height:46px;padding:4px}
   .borderTools{align-items:stretch;flex-direction:column}
   .borderField{max-width:none}
 }
+
+#namePanel{position:relative}
+#namePanel::after{
+  content:"↓";
+  position:absolute;
+  left:50%;
+  bottom:-26px;
+  transform:translateX(-50%);
+  display:grid;
+  place-items:center;
+  width:36px;
+  height:36px;
+  border-radius:50%;
+  background:var(--accent);
+  color:#fff;
+  font-size:20px;
+  font-weight:900;
+  border:4px solid var(--page);
+  z-index:2;
+}
+#drawPanel{margin-top:26px}
+@media(max-width:620px){
+  #namePanel::after{bottom:-24px;width:34px;height:34px}
+  #drawPanel{margin-top:24px}
+}

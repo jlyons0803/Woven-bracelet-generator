@@ -28,7 +28,7 @@ const FONT={
 " ":["00000","00000","00000","00000","00000","00000","00000"]
 };
 
-let mode="name";
+let mode="draw";
 let nameMatrix=[];
 let drawMatrix=[];
 let history=[];

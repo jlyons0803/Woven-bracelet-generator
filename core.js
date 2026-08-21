@@ -34,24 +34,37 @@ function sendNameToDraw(){
   switchMode("draw");
   $("patternTitle").textContent=($("name").value.toUpperCase() || "NAME") + " — EDITABLE";
   if($("fitNote")){
-    $("fitNote").textContent="Your generated name is now editable. Tap or drag on any square to add to the design or erase parts of it.";
+    $("fitNote").textContent="Name loaded into the editor. You can now draw, erase, resize, add borders, or add picture stamps.";
   }
 }
 
 function switchMode(next){
-  mode=next;
-  $("namePanel").classList.toggle("hidden",next!=="name");
-  $("drawPanel").classList.toggle("hidden",next!=="draw");
-  $("tabName").classList.toggle("active",next==="name");
-  $("tabDraw").classList.toggle("active",next==="draw");
-  $("modeBadge").textContent=next==="name"?"Name pattern":"Custom pattern";
+  // V24 uses one unified editor. "Name" is now a way to populate the editable
+  // custom grid rather than a separate editing mode.
   if(next==="name"){
     nameMatrix=makeNameMatrix();
-    $("patternTitle").textContent=$("name").value.toUpperCase()||"NAME";
-  }else{
-    if(!drawMatrix.length) drawMatrix=blank(Number($("drawRows").value)||9,Number($("drawCols").value)||60);
-    $("patternTitle").textContent="MY CUSTOM PATTERN";
+    drawMatrix=clone(nameMatrix);
+    $("drawRows").value=drawMatrix.length;
+    $("drawCols").value=drawMatrix[0]?.length || 1;
+    $("drawLetterColor").value=$("nameLetterColor").value;
+    $("drawBgColor").value=$("nameBgColor").value;
   }
+
+  mode="draw";
+  $("namePanel").classList.remove("hidden");
+  $("drawPanel").classList.remove("hidden");
+  $("modeBadge").textContent="Editable pattern";
+
+  if(!drawMatrix.length){
+    drawMatrix=blank(Number($("drawRows").value)||9,Number($("drawCols").value)||60);
+  }
+
+  if(next==="name"){
+    $("patternTitle").textContent=($("name").value.toUpperCase()||"NAME")+" — EDITABLE";
+  }else if(!$("patternTitle").textContent || $("patternTitle").textContent==="NAME"){
+    $("patternTitle").textContent="MY PATTERN";
+  }
+
   renderGrid();
 }
 
@@ -139,10 +152,10 @@ function renderGrid(){
 window.addEventListener("pointerup",()=>dragging=false);
 
 function updateName(){
-  if(mode!=="name")return;
+  // Keep the generator preview settings current without overwriting the editable pattern.
+  // The user explicitly applies the name with "Generate Name in Editor".
   nameMatrix=makeNameMatrix();
-  $("patternTitle").textContent=$("name").value.toUpperCase()||"NAME";
-  renderGrid();
+  autosaveCurrentProject();
 }
 
 

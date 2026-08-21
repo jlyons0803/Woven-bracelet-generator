@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <title>Woven Bracelet Studio</title>
-<link rel="stylesheet" href="styles.css?v=23">
+<link rel="stylesheet" href="styles.css?v=24">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="theme-color" content="#6557d9">
@@ -45,19 +45,13 @@
         <div class="eyebrow">STEP 1</div>
         <h2>Design your bracelet</h2>
       </div>
-      <span class="sectionHint">Generate a name or draw freely</span>
+      <span class="sectionHint">Name generator + custom editor together</span>
     </div>
-
-    <div class="modeSwitcher">
-      <button type="button" id="tabName" class="tab active">Name Generator</button>
-      <button type="button" id="tabDraw" class="tab">Draw My Own Pattern</button>
-    </div>
-
-    <section id="namePanel" class="card editorCard">
+<section id="namePanel" class="card editorCard">
       <div class="cardHead">
         <div>
-          <h3>Name Generator</h3>
-          <p>Build a pixel-style name pattern and control its exact proportions.</p>
+          <h3>Add a Name</h3>
+          <p>Create a name, then place it directly into the editable pattern below.</p>
         </div>
       </div>
 
@@ -94,15 +88,15 @@
 
       <div id="nameSizeNote" class="infoLine"></div>
       <div class="actions">
-        <button type="button" id="sendToDraw" class="primary">Continue in Custom Editor</button>
+        <button type="button" id="sendToDraw" class="primary">Generate Name in Editor</button>
       </div>
     </section>
 
-    <section id="drawPanel" class="card editorCard hidden">
+    <section id="drawPanel" class="card editorCard">
       <div class="cardHead">
         <div>
-          <h3>Custom Editor</h3>
-          <p>Draw pixel-by-pixel or add a small motif to the pattern.</p>
+          <h3>Edit Pattern</h3>
+          <p>Your generated name appears here as an editable pattern. Draw, erase, resize, add borders, or add picture stamps.</p>
         </div>
       </div>
 
@@ -161,7 +155,7 @@
           <div class="eyebrow">LIVE PATTERN</div>
           <h3 id="patternTitle">EMERSYN</h3>
         </div>
-        <span id="modeBadge" class="badge">Name pattern</span>
+        <span id="modeBadge" class="badge">Editable pattern</span>
       </div>
 
       <div class="gridScroll" id="gridScroll"><div id="grid" class="pixelGrid"></div></div>
@@ -333,11 +327,11 @@
   On iPhone or iPad: Safari → Share → Add to Home Screen.
 </div>
 
-<script defer src="data.js?v=23"></script>
-<script defer src="core.js?v=23"></script>
-<script defer src="calculator.js?v=23"></script>
-<script defer src="projects.js?v=23"></script>
-<script defer src="export.js?v=23"></script>
-<script defer src="app.js?v=23"></script>
+<script defer src="data.js?v=24"></script>
+<script defer src="core.js?v=24"></script>
+<script defer src="calculator.js?v=24"></script>
+<script defer src="projects.js?v=24"></script>
+<script defer src="export.js?v=24"></script>
+<script defer src="app.js?v=24"></script>
 </body>
 </html>

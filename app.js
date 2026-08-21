@@ -39,10 +39,6 @@ window.addEventListener("resize",()=>{
   window.__wovenResizeTimer=setTimeout(()=>renderGrid(),120);
 });
 
-// Tabs
-$("tabName").addEventListener("click",()=>switchMode("name"));
-$("tabDraw").addEventListener("click",()=>switchMode("draw"));
-
 // Name controls
 ["name","nameRows","nameHeight","nameWidth","namePad","spacing","nameBorder","nameLetterColor","nameBgColor"].forEach(id=>$(id).addEventListener("input",updateName));
 $("sendToDraw").addEventListener("click",sendNameToDraw);
@@ -118,6 +114,14 @@ $("saveBtn").addEventListener("click",saveSVG);
 refreshProjectList();
 renderThreadNotes();
 nameMatrix=makeNameMatrix();
+drawMatrix=clone(nameMatrix);
+$("drawRows").value=drawMatrix.length;
+$("drawCols").value=drawMatrix[0]?.length||1;
+$("drawLetterColor").value=$("nameLetterColor").value;
+$("drawBgColor").value=$("nameBgColor").value;
+mode="draw";
+$("modeBadge").textContent="Editable pattern";
+$("patternTitle").textContent=($("name").value.toUpperCase()||"NAME")+" — EDITABLE";
 renderGrid();
 if(typeof runCalculatorUpdate==="function") runCalculatorUpdate();
 

@@ -1,7 +1,7 @@
-const CACHE='woven-bracelet-v23-borders';
+const CACHE='woven-bracelet-v24-unified-editor';
 const ASSETS=[
-  './','./index.html','./styles.css?v=23','./data.js?v=23','./core.js?v=23',
-  './calculator.js?v=23','./projects.js?v=23','./export.js?v=23','./app.js?v=23',
+  './','./index.html','./styles.css?v=24','./data.js?v=24','./core.js?v=24',
+  './calculator.js?v=24','./projects.js?v=24','./export.js?v=24','./app.js?v=24',
   './manifest.webmanifest','./icon-192.png','./icon-512.png','./apple-touch-icon.png'
 ];
 self.addEventListener('install',e=>{self.skipWaiting();e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)))});
