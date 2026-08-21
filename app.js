@@ -70,6 +70,15 @@ $("stampHeart").addEventListener("click",()=>{activeStamp="heart"; if($("fitNote
 $("stampFlower").addEventListener("click",()=>{activeStamp="flower"; if($("fitNote")) $("fitNote").textContent="Flower selected — now tap the grid where you want to place it.";});
 $("stampStar").addEventListener("click",()=>{activeStamp="star"; if($("fitNote")) $("fitNote").textContent="Star selected — now tap the grid where you want to place it.";});
 $("stampSmiley").addEventListener("click",()=>{activeStamp="smiley"; if($("fitNote")) $("fitNote").textContent="Smiley selected — now tap the grid where you want to place it.";});
+$("mirrorStamp").addEventListener("change",()=>{
+  mirrorStampEnabled=$("mirrorStamp").checked;
+  if($("mirrorStampNote")){
+    $("mirrorStampNote").textContent=mirrorStampEnabled
+      ? "Mirror is ON — place one stamp and its matching copy will appear on the opposite side."
+      : "Turn on Mirror stamp, then place a stamp on one side. A matching stamp will appear the same distance from the center on the other side.";
+  }
+  autosaveCurrentProject();
+});
 $("addBorderBtn").addEventListener("click",addCustomBorder);
 $("removeBorderBtn").addEventListener("click",removeCustomBorder);
 $("drawBorderThickness").addEventListener("change",autosaveCurrentProject);

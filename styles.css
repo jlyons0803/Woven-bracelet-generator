@@ -432,3 +432,12 @@ input[type=color]{height:46px;padding:4px}
   #namePanel::after{bottom:-24px;width:34px;height:34px}
   #drawPanel{margin-top:24px}
 }
+
+.toolGroupHead{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.mirrorToggle{
+  display:inline-flex;align-items:center;gap:8px;margin:0;min-height:40px;padding:7px 11px;
+  border:1px solid #d9d9e6;border-radius:999px;background:#faf9ff;color:#555b70;
+  font-size:13px;font-weight:820;cursor:pointer
+}
+.mirrorToggle input{width:20px;height:20px;min-height:0;margin:0;accent-color:var(--accent)}
+.mirrorToggle:has(input:checked){background:var(--accent-soft);border-color:#bdb5ff;color:var(--accent-dark)}

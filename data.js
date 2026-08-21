@@ -149,4 +149,5 @@ const STAMPS={
   ]
 };
 let activeStamp=null;
+let mirrorStampEnabled=false;
 let customFitToScreen=true;

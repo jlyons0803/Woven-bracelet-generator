@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <title>Woven Bracelet Studio</title>
-<link rel="stylesheet" href="styles.css?v=24">
+<link rel="stylesheet" href="styles.css?v=25">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="theme-color" content="#6557d9">
@@ -138,13 +138,20 @@
       </div>
 
       <div class="toolGroup">
-        <span class="toolLabel">Picture stamps</span>
+        <div class="toolGroupHead">
+          <span class="toolLabel">Picture stamps</span>
+          <label class="mirrorToggle" for="mirrorStamp">
+            <input id="mirrorStamp" type="checkbox">
+            <span>Mirror stamp</span>
+          </label>
+        </div>
         <div class="actions compact stampActions">
           <button type="button" id="stampHeart">♥ Heart</button>
           <button type="button" id="stampFlower">✿ Flower</button>
           <button type="button" id="stampStar">★ Star</button>
           <button type="button" id="stampSmiley">☺ Smiley</button>
         </div>
+        <div id="mirrorStampNote" class="infoLine">Turn on Mirror stamp, then place a stamp on one side. A matching stamp will appear the same distance from the center on the other side.</div>
       </div>
       <div class="infoLine"><b>Tip:</b> tap or drag across squares to draw. Start on a filled square to erase. Borders use the current pattern color.</div>
     </section>
@@ -327,11 +334,11 @@
   On iPhone or iPad: Safari → Share → Add to Home Screen.
 </div>
 
-<script defer src="data.js?v=24"></script>
-<script defer src="core.js?v=24"></script>
-<script defer src="calculator.js?v=24"></script>
-<script defer src="projects.js?v=24"></script>
-<script defer src="export.js?v=24"></script>
-<script defer src="app.js?v=24"></script>
+<script defer src="data.js?v=25"></script>
+<script defer src="core.js?v=25"></script>
+<script defer src="calculator.js?v=25"></script>
+<script defer src="projects.js?v=25"></script>
+<script defer src="export.js?v=25"></script>
+<script defer src="app.js?v=25"></script>
 </body>
 </html>

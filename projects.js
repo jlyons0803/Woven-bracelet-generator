@@ -43,6 +43,7 @@ function captureProjectState(){
       letterColor:$("drawLetterColor").value,
       bgColor:$("drawBgColor").value,
       borderThickness:$("drawBorderThickness").value,
+      mirrorStamp:$("mirrorStamp").checked,
       matrix:clone(drawMatrix)
     },
     calculator:{
@@ -80,6 +81,13 @@ function applyProjectState(state){
     if(d.letterColor) $("drawLetterColor").value=d.letterColor;
     if(d.bgColor) $("drawBgColor").value=d.bgColor;
     if(d.borderThickness!=null) $("drawBorderThickness").value=d.borderThickness;
+    $("mirrorStamp").checked=!!d.mirrorStamp;
+    mirrorStampEnabled=$("mirrorStamp").checked;
+    if($("mirrorStampNote")){
+      $("mirrorStampNote").textContent=mirrorStampEnabled
+        ? "Mirror is ON — place one stamp and its matching copy will appear on the opposite side."
+        : "Turn on Mirror stamp, then place a stamp on one side. A matching stamp will appear the same distance from the center on the other side.";
+    }
     drawMatrix=Array.isArray(d.matrix) && d.matrix.length ? d.matrix.map(row=>row.map(v=>v?1:0)) : [];
 
     const c=state.calculator||{};
@@ -327,6 +335,8 @@ function newProjectNow(){
     $("drawLetterColor").value="#183d7a";
     $("drawBgColor").value="#d9f3e8";
     $("drawBorderThickness").value=1;
+    $("mirrorStamp").checked=false;
+    mirrorStampEnabled=false;
     $("threadType").value="floss6";
     $("baseThreadType").value="fineCord";
     $("ppi").value=THREAD_PRESETS.floss6.ppi;

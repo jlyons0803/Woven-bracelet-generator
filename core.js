@@ -1,4 +1,4 @@
-function placeStampAt(centerRow,centerCol,stampRows){
+function paintStampAt(centerRow,centerCol,stampRows){
   const height=stampRows.length;
   const width=stampRows[0].length;
   const startRow=centerRow-Math.floor(height/2);
@@ -11,6 +11,21 @@ function placeStampAt(centerRow,centerCol,stampRows){
       if(rr<0 || cc<0 || rr>=drawMatrix.length || cc>=drawMatrix[0].length) continue;
       if(stampRows[r][c]==="1") drawMatrix[rr][cc]=1;
     }
+  }
+}
+
+function placeStampAt(centerRow,centerCol,stampRows){
+  paintStampAt(centerRow,centerCol,stampRows);
+
+  if(!mirrorStampEnabled || !drawMatrix.length) return;
+
+  // Mirror around the exact horizontal center of the graph.
+  // Example: on a 60-column graph, column 10 mirrors to column 49.
+  const cols=drawMatrix[0].length;
+  const mirroredCenterCol=(cols-1)-centerCol;
+
+  if(mirroredCenterCol!==centerCol){
+    paintStampAt(centerRow,mirroredCenterCol,stampRows);
   }
 }
 
@@ -110,7 +125,9 @@ function renderGrid(){
           activeStamp=null;
           renderGrid();
           if($("fitNote")){
-            $("fitNote").textContent=`Added a ${placed}. You can tap a stamp button again to place another one, or keep drawing normally.`;
+            $("fitNote").textContent=mirrorStampEnabled
+              ? `Added mirrored ${placed} stamps on both sides.`
+              : `Added a ${placed}. You can tap a stamp button again to place another one, or keep drawing normally.`;
           }
           return;
         }
