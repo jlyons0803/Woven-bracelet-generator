@@ -119,6 +119,24 @@ $("projectName").addEventListener("input",autosaveCurrentProject);
 $("printBtn").addEventListener("click",()=>window.print());
 $("saveBtn").addEventListener("click",saveSVG);
 
+// V27 fresh-start behavior:
+ // Reopening the app starts with the default unsaved design instead of the last edited name.
+ currentProjectId=null;
+ $("projectName").value="My Bracelet";
+ $("name").value="EMERSYN";
+ $("nameRows").value=9;
+ $("nameHeight").value=7;
+ $("nameWidth").value=5;
+ $("namePad").value=4;
+ $("spacing").value=1;
+ $("nameBorder").value=0;
+ $("nameLetterColor").value="#183d7a";
+ $("nameBgColor").value="#d9f3e8";
+ $("drawBorderThickness").value=1;
+ $("mirrorStamp").checked=false;
+ mirrorStampEnabled=false;
+ customBorderApplied=0;
+
 // Initial render
 refreshProjectList();
 renderThreadNotes();
