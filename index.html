@@ -40,6 +40,11 @@ input,select{width:100%} input[type=color]{height:43px;padding:3px}
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:12px}
 .stat{border:1px solid #e1e5eb;border-radius:12px;padding:12px;background:#fff}
 .stat b{display:block;font-size:21px}.stat span{font-size:12px;color:var(--muted)}
+.stringTotals{grid-template-columns:repeat(2,1fr)}
+.totalStat{border:2px solid var(--accent);background:#f7f6ff;padding:16px}
+.totalStat b{font-size:28px;color:var(--accent)}
+.totalStat span{font-size:12px;font-weight:850;letter-spacing:.02em}
+@media(max-width:520px){.stringTotals{grid-template-columns:1fr}}
 .gridScroll{overflow:auto;-webkit-overflow-scrolling:touch;border:1px solid #e1e5eb;border-radius:12px;background:white;padding:12px;margin-top:12px}
 .pixelGrid{display:grid;width:max-content;border-left:1px solid var(--line);border-top:1px solid var(--line)}
 .cell{width:var(--cell-size,20px);height:var(--cell-size,20px);border-right:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--bg);touch-action:none;user-select:none;-webkit-user-select:none}
@@ -68,7 +73,7 @@ Once hosted and opened in Safari, use <b>Share → Add to Home Screen</b> to ins
 
 <main>
 <h1>Wrapped Woven Bracelet Generator</h1>
-<div class="sub">Saved bracelet projects now include thumbnail previews so you can recognize your designs at a glance.</div>
+<div class="sub">String totals are simplified: one total in inches for all base strings, and one total in inches for the wrapping string.</div>
 
 <section class="card" id="projectCard">
   <h2>Projects</h2>
@@ -179,16 +184,14 @@ Once hosted and opened in Safari, use <b>Share → Add to Home Screen</b> to ins
   </div>
 
   <div class="stats">
-    <div class="stat"><b id="baseCount">0</b><span>base strings</span></div>
+    <div class="stat"><b id="baseCount">0</b><span>base strings needed</span></div>
     <div class="stat"><b id="passCount">0</b><span>wrap passes / graph columns</span></div>
     <div class="stat"><b id="eachBase">0 in</b><span>cut length for each base string</span></div>
     <div class="stat"><b id="graphLen">0 in</b><span>estimated woven graph length</span></div>
   </div>
-  <div class="stats">
-    <div class="stat"><b id="baseTotal">0 yd</b><span>total base-string material</span></div>
-    <div class="stat"><b id="patternYd">0 yd</b><span>pattern-color working thread</span></div>
-    <div class="stat"><b id="backgroundYd">0 yd</b><span>background working thread</span></div>
-    <div class="stat"><b id="workingYd">0 yd</b><span>total working thread</span></div>
+  <div class="stats stringTotals">
+    <div class="stat totalStat"><b id="baseTotal">0 in</b><span>TOTAL BASE STRING LENGTH NEEDED</span></div>
+    <div class="stat totalStat"><b id="workingTotal">0 in</b><span>TOTAL WRAPPING STRING LENGTH NEEDED</span></div>
   </div>
   <div id="calcNote" class="note"></div>
 </section>
@@ -553,10 +556,8 @@ function updateCalculator(){
   $("passCount").textContent=activeCols;
   $("eachBase").textContent=fmtIn(each);
   $("graphLen").textContent=fmtIn(graphLen);
-  $("baseTotal").textContent=fmtYd(baseTotal);
-  $("patternYd").textContent=fmtYd(patternIn);
-  $("backgroundYd").textContent=fmtYd(bgIn);
-  $("workingYd").textContent=fmtYd(patternIn+bgIn);
+  $("baseTotal").textContent=fmtIn(baseTotal);
+  $("workingTotal").textContent=fmtIn(patternIn+bgIn);
 
   const target=Math.round(finished*ppi);
   const delta=target-activeCols;
