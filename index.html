@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <title>Woven Bracelet Studio</title>
-<link rel="stylesheet" href="styles.css?v=22">
+<link rel="stylesheet" href="styles.css?v=23">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="theme-color" content="#6557d9">
@@ -82,6 +82,14 @@
         <div class="field"><label>Letter spacing</label><select id="spacing"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select></div>
         <div class="field colorField"><label>Pattern color</label><input id="nameLetterColor" type="color" value="#183d7a"></div>
         <div class="field colorField"><label>Background color</label><input id="nameBgColor" type="color" value="#d9f3e8"></div>
+        <div class="field"><label>Top & bottom border</label>
+          <select id="nameBorder">
+            <option value="0" selected>No border</option>
+            <option value="1">1 row</option>
+            <option value="2">2 rows</option>
+            <option value="3">3 rows</option>
+          </select>
+        </div>
       </div>
 
       <div id="nameSizeNote" class="infoLine"></div>
@@ -119,6 +127,23 @@
       </div>
 
       <div class="toolGroup">
+        <span class="toolLabel">Borders</span>
+        <div class="borderTools">
+          <div class="field borderField"><label>Border thickness</label>
+            <select id="drawBorderThickness">
+              <option value="1" selected>1 row</option>
+              <option value="2">2 rows</option>
+              <option value="3">3 rows</option>
+            </select>
+          </div>
+          <div class="actions compact borderActions">
+            <button type="button" id="addBorderBtn">Add Top & Bottom Border</button>
+            <button type="button" id="removeBorderBtn">Remove Border</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="toolGroup">
         <span class="toolLabel">Picture stamps</span>
         <div class="actions compact stampActions">
           <button type="button" id="stampHeart">♥ Heart</button>
@@ -127,7 +152,7 @@
           <button type="button" id="stampSmiley">☺ Smiley</button>
         </div>
       </div>
-      <div class="infoLine"><b>Tip:</b> tap or drag across squares to draw. Start on a filled square to erase.</div>
+      <div class="infoLine"><b>Tip:</b> tap or drag across squares to draw. Start on a filled square to erase. Borders use the current pattern color.</div>
     </section>
 
     <section class="card previewCard">
@@ -308,11 +333,11 @@
   On iPhone or iPad: Safari → Share → Add to Home Screen.
 </div>
 
-<script defer src="data.js?v=22"></script>
-<script defer src="core.js?v=22"></script>
-<script defer src="calculator.js?v=22"></script>
-<script defer src="projects.js?v=22"></script>
-<script defer src="export.js?v=22"></script>
-<script defer src="app.js?v=22"></script>
+<script defer src="data.js?v=23"></script>
+<script defer src="core.js?v=23"></script>
+<script defer src="calculator.js?v=23"></script>
+<script defer src="projects.js?v=23"></script>
+<script defer src="export.js?v=23"></script>
+<script defer src="app.js?v=23"></script>
 </body>
 </html>

@@ -44,7 +44,7 @@ $("tabName").addEventListener("click",()=>switchMode("name"));
 $("tabDraw").addEventListener("click",()=>switchMode("draw"));
 
 // Name controls
-["name","nameRows","nameHeight","nameWidth","namePad","spacing","nameLetterColor","nameBgColor"].forEach(id=>$(id).addEventListener("input",updateName));
+["name","nameRows","nameHeight","nameWidth","namePad","spacing","nameBorder","nameLetterColor","nameBgColor"].forEach(id=>$(id).addEventListener("input",updateName));
 $("sendToDraw").addEventListener("click",sendNameToDraw);
 
 function stepNumber(id,amount){
@@ -74,6 +74,9 @@ $("stampHeart").addEventListener("click",()=>{activeStamp="heart"; if($("fitNote
 $("stampFlower").addEventListener("click",()=>{activeStamp="flower"; if($("fitNote")) $("fitNote").textContent="Flower selected — now tap the grid where you want to place it.";});
 $("stampStar").addEventListener("click",()=>{activeStamp="star"; if($("fitNote")) $("fitNote").textContent="Star selected — now tap the grid where you want to place it.";});
 $("stampSmiley").addEventListener("click",()=>{activeStamp="smiley"; if($("fitNote")) $("fitNote").textContent="Smiley selected — now tap the grid where you want to place it.";});
+$("addBorderBtn").addEventListener("click",addCustomBorder);
+$("removeBorderBtn").addEventListener("click",removeCustomBorder);
+$("drawBorderThickness").addEventListener("change",autosaveCurrentProject);
 ["drawLetterColor","drawBgColor"].forEach(id=>$(id).addEventListener("input",()=>{if(mode==="draw")renderGrid()}));
 
 // Calculator controls

@@ -37,6 +37,21 @@ let drawValue=1;
 
 const $=id=>document.getElementById(id);
 
+
+function applyTopBottomBorder(matrix,thickness){
+  const t=Math.max(0,Math.floor(Number(thickness)||0));
+  if(!matrix.length || !matrix[0]?.length || t<=0) return matrix;
+  const rows=matrix.length, cols=matrix[0].length;
+  const limit=Math.min(t,Math.ceil(rows/2));
+  for(let r=0;r<limit;r++){
+    for(let c=0;c<cols;c++){
+      matrix[r][c]=1;
+      matrix[rows-1-r][c]=1;
+    }
+  }
+  return matrix;
+}
+
 function makeNameMatrix(){
   const text=$("name").value.toUpperCase();
   const spacing=Math.max(0,Number($("spacing").value)||1);
@@ -44,17 +59,19 @@ function makeNameMatrix(){
   const letterWidth=Math.max(3,Math.min(30,Math.round(Number($("nameWidth").value)||5)));
   const requestedRows=Math.max(7,Math.min(60,Number($("nameRows").value)||9));
   const sidePadding=Math.max(0,Math.min(30,Number($("namePad").value)||0));
+  const borderThickness=Math.max(0,Math.min(3,Number($("nameBorder").value)||0));
   const chars=[...text].filter(ch=>FONT[ch]);
 
   const artWidth=chars.length
     ? (chars.length*letterWidth)+((chars.length-1)*spacing)
     : 0;
 
-  const actualRows=Math.max(requestedRows,nameHeight);
+  const contentRows=Math.max(requestedRows,nameHeight);
+  const actualRows=contentRows+(borderThickness*2);
   const actualCols=Math.max(10,artWidth+(sidePadding*2));
   const m=Array.from({length:actualRows},()=>Array(actualCols).fill(0));
 
-  const top=Math.floor((actualRows-nameHeight)/2);
+  const top=borderThickness+Math.floor((contentRows-nameHeight)/2);
   const left=chars.length ? Math.floor((actualCols-artWidth)/2) : 0;
 
   // Resize the original 5×7 letter grid to any whole-number width/height.
@@ -74,6 +91,8 @@ function makeNameMatrix(){
     }
   });
 
+  applyTopBottomBorder(m,borderThickness);
+
   if($("nameSizeNote")){
     let extra="";
     if(actualRows>requestedRows){
@@ -82,6 +101,7 @@ function makeNameMatrix(){
     $("nameSizeNote").textContent=
       `Graph: ${actualRows} rows × ${actualCols} columns. ` +
       `Each letter is ${nameHeight} rows tall × ${letterWidth} columns wide. ` +
+      (borderThickness ? `Top/bottom border: ${borderThickness} row${borderThickness===1?"":"s"}. ` : "") +
       `Use the − / + buttons to change either dimension by exactly 1.${extra}`;
   }
   return m;

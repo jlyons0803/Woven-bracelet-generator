@@ -145,6 +145,32 @@ function updateName(){
   renderGrid();
 }
 
+
+function addCustomBorder(){
+  if(mode!=="draw" || !drawMatrix.length) return;
+  history.push(clone(drawMatrix));
+  if(history.length>40) history.shift();
+  applyTopBottomBorder(drawMatrix,$("drawBorderThickness").value);
+  renderGrid();
+}
+
+function removeCustomBorder(){
+  if(mode!=="draw" || !drawMatrix.length) return;
+  history.push(clone(drawMatrix));
+  if(history.length>40) history.shift();
+
+  const t=Math.max(1,Math.floor(Number($("drawBorderThickness").value)||1));
+  const rows=drawMatrix.length, cols=drawMatrix[0].length;
+  const limit=Math.min(t,Math.ceil(rows/2));
+  for(let r=0;r<limit;r++){
+    for(let c=0;c<cols;c++){
+      drawMatrix[r][c]=0;
+      drawMatrix[rows-1-r][c]=0;
+    }
+  }
+  renderGrid();
+}
+
 function resizeCustomGraph(){
   const rows=Math.max(3,Math.min(60,Number($("drawRows").value)||9));
   const cols=Math.max(5,Math.min(200,Number($("drawCols").value)||60));

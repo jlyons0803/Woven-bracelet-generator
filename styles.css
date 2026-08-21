@@ -399,3 +399,11 @@ input[type=color]{height:46px;padding:4px}
   .card{box-shadow:none;border:0;padding:0}
   .gridScroll{overflow:visible;border:0;padding:0;background:white}
 }
+
+.borderTools{display:flex;gap:12px;align-items:end;flex-wrap:wrap}
+.borderField{min-width:150px;max-width:210px}
+.borderActions{margin-top:0}
+@media(max-width:620px){
+  .borderTools{align-items:stretch;flex-direction:column}
+  .borderField{max-width:none}
+}
