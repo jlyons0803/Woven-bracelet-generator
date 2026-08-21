@@ -3,187 +3,316 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-<title>Wrapped Woven Bracelet Generator</title>
-<link rel="stylesheet" href="styles.css?v=21">
-
-
+<title>Woven Bracelet Studio</title>
+<link rel="stylesheet" href="styles.css?v=22">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="theme-color" content="#6657d9">
+<meta name="theme-color" content="#6557d9">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Woven Bracelet">
-
 </head>
 <body>
 
-<div id="installNote" style="max-width:1180px;margin:0 auto;padding:0 20px 10px;color:#667085;font:13px system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif">
-Once hosted and opened in Safari, use <b>Share → Add to Home Screen</b> to install it like an app.
-</div>
+<header class="appHeader">
+  <div class="headerInner">
+    <div>
+      <div class="eyebrow">PATTERN DESIGNER</div>
+      <h1>Woven Bracelet Studio</h1>
+      <p class="sub">Create the pattern first, calculate your string, then save the project.</p>
+    </div>
+    <div class="headerMark" aria-hidden="true">▦</div>
+  </div>
+</header>
+
+<nav class="appNav" aria-label="Main sections">
+  <button type="button" id="navDesign" class="navItem active">
+    <span class="navIcon">✦</span><span>Design</span>
+  </button>
+  <button type="button" id="navCalculator" class="navItem">
+    <span class="navIcon">⌁</span><span>Calculator</span>
+  </button>
+  <button type="button" id="navProjects" class="navItem">
+    <span class="navIcon">▣</span><span>Projects</span>
+  </button>
+</nav>
 
 <main>
-<h1>Wrapped Woven Bracelet Generator</h1>
-<div class="sub">Make your changes first, then tap Update All Values. All calculator totals are refreshed together from the values currently on screen.</div>
-
-<section class="card" id="projectCard">
-  <h2>Projects</h2>
-  <div class="projectbar">
-    <div class="wide"><label>Project name</label><input id="projectName" value="My Bracelet" maxlength="60"></div>
-    <div class="wide"><label>Saved projects</label><select id="projectSelect"><option value="">— Select a project —</option></select></div>
-    <button type="button" id="saveProject" class="primary">Save Project</button>
-    <button type="button" id="openProject">Open</button>
-    <button type="button" id="newProject">New</button>
-    <button type="button" id="exportProject">Export</button>
-    <button type="button" id="importProject">Import</button>
-    <button type="button" id="deleteProject">Delete</button>
-  </div>
-  <input id="importProjectFile" type="file" accept=".json,.woven.json,application/json" class="hidden">
-  <div id="projectStatus" class="projectStatus">Projects are saved on this device. Once a project has been saved, later edits auto-save to it.</div>
-  <div id="projectGallery" class="projectGallery"></div>
-</section>
-
-<div class="tabs">
-  <button type="button" id="tabName" class="tab active">Name Generator</button>
-  <button type="button" id="tabDraw" class="tab">Draw My Own Pattern</button>
-</div>
-
-<section id="namePanel" class="card">
-  <h2>Name Generator</h2>
-  <div class="controls">
-    <div><label>Name</label><input id="name" value="EMERSYN" maxlength="24"></div>
-    <div><label>Graph rows</label><input id="nameRows" type="number" min="7" max="60" value="9"></div>
-    <div><label>Name height (rows)</label>
-      <div class="stepper">
-        <button type="button" id="nameHeightMinus">−</button>
-        <input id="nameHeight" type="number" min="3" max="40" step="1" value="7">
-        <button type="button" id="nameHeightPlus">+</button>
+  <!-- DESIGN -->
+  <section id="paneDesign" class="appPane">
+    <div class="sectionIntro">
+      <div>
+        <div class="eyebrow">STEP 1</div>
+        <h2>Design your bracelet</h2>
       </div>
+      <span class="sectionHint">Generate a name or draw freely</span>
     </div>
-    <div><label>Letter width (columns)</label>
-      <div class="stepper">
-        <button type="button" id="nameWidthMinus">−</button>
-        <input id="nameWidth" type="number" min="3" max="30" step="1" value="5">
-        <button type="button" id="nameWidthPlus">+</button>
+
+    <div class="modeSwitcher">
+      <button type="button" id="tabName" class="tab active">Name Generator</button>
+      <button type="button" id="tabDraw" class="tab">Draw My Own Pattern</button>
+    </div>
+
+    <section id="namePanel" class="card editorCard">
+      <div class="cardHead">
+        <div>
+          <h3>Name Generator</h3>
+          <p>Build a pixel-style name pattern and control its exact proportions.</p>
+        </div>
       </div>
+
+      <div class="controls">
+        <div class="field fieldWide"><label>Name</label><input id="name" value="EMERSYN" maxlength="24"></div>
+        <div class="field"><label>Graph rows</label><input id="nameRows" type="number" min="7" max="60" value="9"></div>
+        <div class="field"><label>Name height</label>
+          <div class="stepper">
+            <button type="button" id="nameHeightMinus" aria-label="Decrease name height">−</button>
+            <input id="nameHeight" type="number" min="3" max="40" step="1" value="7">
+            <button type="button" id="nameHeightPlus" aria-label="Increase name height">+</button>
+          </div>
+        </div>
+        <div class="field"><label>Letter width</label>
+          <div class="stepper">
+            <button type="button" id="nameWidthMinus" aria-label="Decrease letter width">−</button>
+            <input id="nameWidth" type="number" min="3" max="30" step="1" value="5">
+            <button type="button" id="nameWidthPlus" aria-label="Increase letter width">+</button>
+          </div>
+        </div>
+        <div class="field"><label>Side padding</label><input id="namePad" type="number" min="0" max="30" value="4"></div>
+        <div class="field"><label>Letter spacing</label><select id="spacing"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select></div>
+        <div class="field colorField"><label>Pattern color</label><input id="nameLetterColor" type="color" value="#183d7a"></div>
+        <div class="field colorField"><label>Background color</label><input id="nameBgColor" type="color" value="#d9f3e8"></div>
+      </div>
+
+      <div id="nameSizeNote" class="infoLine"></div>
+      <div class="actions">
+        <button type="button" id="sendToDraw" class="primary">Continue in Custom Editor</button>
+      </div>
+    </section>
+
+    <section id="drawPanel" class="card editorCard hidden">
+      <div class="cardHead">
+        <div>
+          <h3>Custom Editor</h3>
+          <p>Draw pixel-by-pixel or add a small motif to the pattern.</p>
+        </div>
+      </div>
+
+      <div class="controls drawControls">
+        <div class="field"><label>Graph rows</label><input id="drawRows" type="number" min="3" max="60" value="9"></div>
+        <div class="field"><label>Graph columns</label><input id="drawCols" type="number" min="5" max="200" value="60"></div>
+        <div class="field colorField"><label>Pattern color</label><input id="drawLetterColor" type="color" value="#183d7a"></div>
+        <div class="field colorField"><label>Background color</label><input id="drawBgColor" type="color" value="#d9f3e8"></div>
+        <div class="field"><label>&nbsp;</label><button type="button" id="resizeGraph" class="primary fullButton">Resize Graph</button></div>
+      </div>
+
+      <div class="toolGroup">
+        <span class="toolLabel">View & edit</span>
+        <div class="actions compact">
+          <button type="button" id="fitCustomBtn">Fit to Screen</button>
+          <button type="button" id="largeSquaresBtn">Large Squares</button>
+          <button type="button" id="undoBtn">Undo</button>
+          <button type="button" id="clearBtn">Clear</button>
+          <button type="button" id="fillBtn">Fill All</button>
+          <button type="button" id="invertBtn">Invert</button>
+        </div>
+      </div>
+
+      <div class="toolGroup">
+        <span class="toolLabel">Picture stamps</span>
+        <div class="actions compact stampActions">
+          <button type="button" id="stampHeart">♥ Heart</button>
+          <button type="button" id="stampFlower">✿ Flower</button>
+          <button type="button" id="stampStar">★ Star</button>
+          <button type="button" id="stampSmiley">☺ Smiley</button>
+        </div>
+      </div>
+      <div class="infoLine"><b>Tip:</b> tap or drag across squares to draw. Start on a filled square to erase.</div>
+    </section>
+
+    <section class="card previewCard">
+      <div class="cardHead previewHead">
+        <div>
+          <div class="eyebrow">LIVE PATTERN</div>
+          <h3 id="patternTitle">EMERSYN</h3>
+        </div>
+        <span id="modeBadge" class="badge">Name pattern</span>
+      </div>
+
+      <div class="gridScroll" id="gridScroll"><div id="grid" class="pixelGrid"></div></div>
+      <div id="fitNote" class="infoLine"></div>
+
+      <div class="actions previewActions">
+        <button type="button" id="printBtn">Print Pattern</button>
+        <button type="button" id="saveBtn">Save SVG</button>
+        <button type="button" id="goCalculatorBtn" class="primary">Next: Calculate String</button>
+      </div>
+    </section>
+  </section>
+
+  <!-- CALCULATOR -->
+  <section id="paneCalculator" class="appPane hidden">
+    <div class="sectionIntro">
+      <div>
+        <div class="eyebrow">STEP 2</div>
+        <h2>Calculate your string</h2>
+      </div>
+      <span class="sectionHint">Set materials, then update once</span>
     </div>
-    <div><label>Side padding (columns each side)</label><input id="namePad" type="number" min="0" max="30" value="4"></div>
-    <div><label>Space between letters</label><select id="spacing"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select></div>
-    <div><label>Pattern color</label><input id="nameLetterColor" type="color" value="#183d7a"></div>
-    <div><label>Background color</label><input id="nameBgColor" type="color" value="#d9f3e8"></div>
-  </div>
-  <div id="nameSizeNote" class="note"></div>
-  <div class="actions">
-    <button type="button" id="sendToDraw" class="primary">Add Name to Draw My Own Pattern</button>
-  </div>
-  <div class="note">This copies the generated name into the custom editor so you can draw around it, add symbols, borders, extra colors, or resize the graph.</div>
-</section>
 
-<section id="drawPanel" class="card hidden">
-  <h2>Draw My Own Pattern</h2>
-  <div class="controls">
-    <div><label>Graph rows</label><input id="drawRows" type="number" min="3" max="60" value="9"></div>
-    <div><label>Graph columns</label><input id="drawCols" type="number" min="5" max="200" value="60"></div>
-    <div><label>Pattern color</label><input id="drawLetterColor" type="color" value="#183d7a"></div>
-    <div><label>Background color</label><input id="drawBgColor" type="color" value="#d9f3e8"></div>
-    <div><button type="button" id="resizeGraph" class="primary">Resize Graph</button></div>
-  </div>
-  <div class="actions">
-    <button type="button" id="fitCustomBtn">Fit Graph to Screen</button>
-    <button type="button" id="largeSquaresBtn">Large Squares</button>
-    <button type="button" id="clearBtn">Clear</button>
-    <button type="button" id="fillBtn">Fill All</button>
-    <button type="button" id="invertBtn">Invert</button>
-    <button type="button" id="undoBtn">Undo</button>
-  </div>
-  <div class="actions">
-    <button type="button" id="stampHeart">Add Heart</button>
-    <button type="button" id="stampFlower">Add Flower</button>
-    <button type="button" id="stampStar">Add Star</button>
-    <button type="button" id="stampSmiley">Add Smiley</button>
-  </div>
-  <div class="note"><b>Draw:</b> tap a square, or press and drag across squares. Start on a blank square to draw; start on a filled square to erase.</div>
-  <div class="note"><b>Picture stamps:</b> tap a stamp button, then tap the grid where you want to place that picture.</div>
-</section>
+    <section id="stringCard" class="card calculatorCard">
+      <div class="cardHead">
+        <div>
+          <h3>Bracelet sizing</h3>
+          <p>Enter your finished size and the thread you plan to use.</p>
+        </div>
+      </div>
 
-<section class="card">
-  <div style="display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap">
-    <h2 id="patternTitle">EMERSYN</h2>
-    <span id="modeBadge" class="badge">Name pattern</span>
-  </div>
-  <div class="gridScroll" id="gridScroll"><div id="grid" class="pixelGrid"></div></div>
-  <div id="fitNote" class="note"></div>
-  <div class="actions">
-    <button type="button" id="printBtn">Print Pattern</button>
-    <button type="button" id="saveBtn">Save SVG</button>
-  </div>
-</section>
+      <div class="calcSection">
+        <div class="miniHeading">Bracelet length</div>
+        <div class="controls calcGrid">
+          <div class="field"><label>Finished woven length (in)</label><input id="finished" type="number" min="1" max="20" step=".25" value="6.5"></div>
+          <div class="field"><label>Extra per end for ties / closure (in)</label><input id="tie" type="number" min="0" max="20" step=".25" value="3"></div>
+          <div class="field"><label>Extra allowance per base string (in)</label><input id="baseExtra" type="number" min="0" max="12" step=".25" value="2"></div>
+          <div class="field"><label>Safety extra (%)</label><input id="waste" type="number" min="0" max="100" value="20"></div>
+        </div>
+      </div>
 
-<section id="stringCard" class="card">
-  <h2>String Calculator</h2>
-  <div class="controls">
-    <div><label>Finished woven length (in)</label><input id="finished" type="number" min="1" max="20" step=".25" value="6.5"></div>
-    <div><label>Extra per end for ties/closure (in)</label><input id="tie" type="number" min="0" max="20" step=".25" value="3"></div>
-    <div><label>Extra allowance per base string (in)</label><input id="baseExtra" type="number" min="0" max="12" step=".25" value="2"></div>
-    <div><label>Wrapping thread type</label>
-      <select id="threadType">
-        <option value="floss6">6-strand embroidery floss</option>
-        <option value="floss3">3-strand embroidery floss</option>
-        <option value="pearl5">Pearl cotton #5</option>
-        <option value="pearl8">Pearl cotton #8</option>
-        <option value="pearl10">Pearl cotton #10</option>
-        <option value="crochet10">Crochet / craft thread #10</option>
-        <option value="fineCord">Fine nylon / beading cord</option>
-        <option value="custom">Custom / measured thread</option>
-      </select>
+      <div class="calcSection">
+        <div class="miniHeading">Thread setup</div>
+        <div class="controls calcGrid">
+          <div class="field"><label>Wrapping thread type</label>
+            <select id="threadType">
+              <option value="floss6">6-strand embroidery floss</option>
+              <option value="floss3">3-strand embroidery floss</option>
+              <option value="pearl5">Pearl cotton #5</option>
+              <option value="pearl8">Pearl cotton #8</option>
+              <option value="pearl10">Pearl cotton #10</option>
+              <option value="crochet10">Crochet / craft thread #10</option>
+              <option value="fineCord">Fine nylon / beading cord</option>
+              <option value="custom">Custom / measured thread</option>
+            </select>
+          </div>
+          <div class="field"><label>Base thread type</label>
+            <select id="baseThreadType">
+              <option value="floss6">6-strand embroidery floss</option>
+              <option value="floss3">3-strand embroidery floss</option>
+              <option value="pearl5">Pearl cotton #5</option>
+              <option value="pearl8">Pearl cotton #8</option>
+              <option value="pearl10">Pearl cotton #10</option>
+              <option value="crochet10">Crochet / craft thread #10</option>
+              <option value="fineCord" selected>Fine nylon / beading cord</option>
+              <option value="custom">Custom / measured base thread</option>
+            </select>
+          </div>
+          <div class="field"><label>Wrap passes per inch</label><input id="ppi" type="number" min="1" max="50" step=".5" value="9"></div>
+        </div>
+        <div id="threadTypeNote" class="infoLine"></div>
+        <div id="baseThreadTypeNote" class="infoLine"></div>
+      </div>
+
+      <details class="advancedBox">
+        <summary>Calibration & advanced settings</summary>
+        <div class="controls calcGrid advancedGrid">
+          <div class="field"><label>Sample full columns woven</label><input id="sampleCols" type="number" min="1" max="100" value="10"></div>
+          <div class="field"><label>Thread used for sample (in)</label><input id="sampleUsed" type="number" min=".1" max="5000" step=".1" value="36"></div>
+          <div class="field"><label>Tail allowance per color (in)</label><input id="tail" type="number" min="0" max="60" step=".5" value="12"></div>
+        </div>
+      </details>
+
+      <div class="updateBar">
+        <div>
+          <b>Ready to calculate?</b>
+          <div id="calcDirtyNote" class="updateStatus">Make your changes, then update all values.</div>
+        </div>
+        <button type="button" id="updateCalculatorBtn" class="primary bigAction">Update All Values</button>
+      </div>
+
+      <div class="resultGrid">
+        <div class="stat"><b id="baseCount">0</b><span>Base strings needed</span></div>
+        <div class="stat"><b id="passCount">0</b><span>Wrap passes / graph columns</span></div>
+        <div class="stat"><b id="eachBase">0 in</b><span>Cut length for each base string</span></div>
+        <div class="stat"><b id="graphLen">0 in</b><span>Estimated woven graph length</span></div>
+      </div>
+
+      <div class="totalGrid">
+        <div class="totalStat">
+          <span>Total base string</span>
+          <b id="baseTotal">0 in</b>
+          <small>All base strings combined</small>
+        </div>
+        <div class="totalStat">
+          <span>Total wrapping string</span>
+          <b id="workingTotal">0 in</b>
+          <small>Estimated working thread needed</small>
+        </div>
+      </div>
+
+      <div id="calcNote" class="infoLine calcFootnote"></div>
+
+      <div class="actions previewActions">
+        <button type="button" id="backToDesignBtn">Back to Design</button>
+        <button type="button" id="goProjectsBtn" class="primary">Next: Save Project</button>
+      </div>
+    </section>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="paneProjects" class="appPane hidden">
+    <div class="sectionIntro">
+      <div>
+        <div class="eyebrow">STEP 3</div>
+        <h2>Save your projects</h2>
+      </div>
+      <span class="sectionHint">Your saved designs stay on this device</span>
     </div>
-    <div><label>Base thread type</label>
-      <select id="baseThreadType">
-        <option value="floss6">6-strand embroidery floss</option>
-        <option value="floss3">3-strand embroidery floss</option>
-        <option value="pearl5">Pearl cotton #5</option>
-        <option value="pearl8">Pearl cotton #8</option>
-        <option value="pearl10">Pearl cotton #10</option>
-        <option value="crochet10">Crochet / craft thread #10</option>
-        <option value="fineCord" selected>Fine nylon / beading cord</option>
-        <option value="custom">Custom / measured base thread</option>
-      </select>
-    </div>
-    <div><label>Wrap passes per inch</label><input id="ppi" type="number" min="1" max="50" step=".5" value="9"></div>
-    <div><label>Safety extra (%)</label><input id="waste" type="number" min="0" max="100" value="20"></div>
-  </div>
-  <div class="controls" style="margin-top:12px">
-    <div><label>Sample full columns woven</label><input id="sampleCols" type="number" min="1" max="100" value="10"></div>
-    <div><label>Thread used for that sample (in)</label><input id="sampleUsed" type="number" min=".1" max="5000" step=".1" value="36"></div>
-    <div><label>Tail allowance per color (in)</label><input id="tail" type="number" min="0" max="60" step=".5" value="12"></div>
-  </div>
-  <div id="threadTypeNote" class="note"><b>6-strand embroidery floss:</b> starting estimate of 9 wrap passes per inch.</div>
-  <div id="baseThreadTypeNote" class="note"><b>Fine nylon / beading cord:</b> used as the default base thread. Thicker base threads slightly increase the wrapping-thread estimate because each wrap travels farther around the base strings.</div>
-  <div class="actions">
-    <button type="button" id="updateCalculatorBtn" class="primary">Update All Values</button>
-  </div>
-  <div id="calcDirtyNote" class="note">Make any changes you want, then tap <b>Update All Values</b> once to refresh every total.</div>
 
-  <div class="stats">
-    <div class="stat"><b id="baseCount">0</b><span>base strings needed</span></div>
-    <div class="stat"><b id="passCount">0</b><span>wrap passes / graph columns</span></div>
-    <div class="stat"><b id="eachBase">0 in</b><span>cut length for each base string</span></div>
-    <div class="stat"><b id="graphLen">0 in</b><span>estimated woven graph length</span></div>
-  </div>
-  <div class="stats stringTotals">
-    <div class="stat totalStat"><b id="baseTotal">0 in</b><span>TOTAL BASE STRING LENGTH NEEDED</span></div>
-    <div class="stat totalStat"><b id="workingTotal">0 in</b><span>TOTAL WRAPPING STRING LENGTH NEEDED</span></div>
-  </div>
-  <div id="calcNote" class="note"></div>
-</section>
+    <section class="card" id="projectCard">
+      <div class="cardHead">
+        <div>
+          <h3>Project Library</h3>
+          <p>Save, reopen, back up, or share your bracelet designs.</p>
+        </div>
+      </div>
+
+      <div class="projectPrimary">
+        <div class="field"><label>Project name</label><input id="projectName" value="My Bracelet" maxlength="60"></div>
+        <button type="button" id="saveProject" class="primary bigAction">Save Project</button>
+      </div>
+
+      <div class="projectOpenRow">
+        <div class="field projectSelectField"><label>Saved projects</label><select id="projectSelect"><option value="">— Select a project —</option></select></div>
+        <div class="actions projectActions">
+          <button type="button" id="openProject">Open</button>
+          <button type="button" id="newProject">New</button>
+          <button type="button" id="exportProject">Export</button>
+          <button type="button" id="importProject">Import</button>
+          <button type="button" id="deleteProject" class="dangerButton">Delete</button>
+        </div>
+      </div>
+
+      <input id="importProjectFile" type="file" accept=".json,.woven.json,application/json" class="hidden">
+      <div id="projectStatus" class="projectStatus">Projects are saved on this device. Once saved, later edits auto-save.</div>
+
+      <div class="libraryHeading">Saved designs</div>
+      <div id="projectGallery" class="projectGallery"></div>
+
+      <div class="actions previewActions">
+        <button type="button" id="projectsToDesignBtn">Back to Design</button>
+      </div>
+    </section>
+  </section>
 </main>
 
+<div id="installNote" class="installNote">
+  On iPhone or iPad: Safari → Share → Add to Home Screen.
+</div>
 
-<script defer src="data.js?v=21"></script>
-<script defer src="core.js?v=21"></script>
-<script defer src="calculator.js?v=21"></script>
-<script defer src="projects.js?v=21"></script>
-<script defer src="export.js?v=21"></script>
-<script defer src="app.js?v=21"></script>
-
+<script defer src="data.js?v=22"></script>
+<script defer src="core.js?v=22"></script>
+<script defer src="calculator.js?v=22"></script>
+<script defer src="projects.js?v=22"></script>
+<script defer src="export.js?v=22"></script>
+<script defer src="app.js?v=22"></script>
 </body>
 </html>

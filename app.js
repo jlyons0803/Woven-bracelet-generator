@@ -1,3 +1,39 @@
+function showAppPane(target){
+  const panes={
+    design:$("paneDesign"),
+    calculator:$("paneCalculator"),
+    projects:$("paneProjects")
+  };
+  const nav={
+    design:$("navDesign"),
+    calculator:$("navCalculator"),
+    projects:$("navProjects")
+  };
+
+  Object.entries(panes).forEach(([key,el])=>el.classList.toggle("hidden",key!==target));
+  Object.entries(nav).forEach(([key,el])=>el.classList.toggle("active",key===target));
+
+  if(target==="design"){
+    requestAnimationFrame(()=>renderGrid());
+  }
+  if(target==="calculator" && typeof markCalculatorDirty==="function"){
+    markCalculatorDirty();
+  }
+  if(target==="projects" && typeof refreshProjectList==="function"){
+    refreshProjectList(currentProjectId);
+  }
+
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+$("navDesign").addEventListener("click",()=>showAppPane("design"));
+$("navCalculator").addEventListener("click",()=>showAppPane("calculator"));
+$("navProjects").addEventListener("click",()=>showAppPane("projects"));
+$("goCalculatorBtn").addEventListener("click",()=>showAppPane("calculator"));
+$("backToDesignBtn").addEventListener("click",()=>showAppPane("design"));
+$("goProjectsBtn").addEventListener("click",()=>showAppPane("projects"));
+$("projectsToDesignBtn").addEventListener("click",()=>showAppPane("design"));
+
 window.addEventListener("resize",()=>{
   clearTimeout(window.__wovenResizeTimer);
   window.__wovenResizeTimer=setTimeout(()=>renderGrid(),120);

@@ -1,14 +1,14 @@
-const CACHE='woven-bracelet-v21';
+const CACHE='woven-bracelet-v22-redesign';
 const ASSETS=[
   './',
   './index.html',
-  './styles.css?v=21',
-  './data.js?v=21',
-  './core.js?v=21',
-  './calculator.js?v=21',
-  './projects.js?v=21',
-  './export.js?v=21',
-  './app.js?v=21',
+  './styles.css?v=22',
+  './data.js?v=22',
+  './core.js?v=22',
+  './calculator.js?v=22',
+  './projects.js?v=22',
+  './export.js?v=22',
+  './app.js?v=22',
   './manifest.webmanifest',
   './icon-192.png',
   './icon-512.png',
