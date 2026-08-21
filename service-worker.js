@@ -1,14 +1,14 @@
-const CACHE='woven-bracelet-v19-update-rebuild';
+const CACHE='woven-bracelet-v20';
 const ASSETS=[
   './',
   './index.html',
-  './styles.css',
-  './data.js',
-  './core.js',
-  './calculator.js',
-  './projects.js',
-  './export.js',
-  './app.js',
+  './styles.css?v=20',
+  './data.js?v=20',
+  './core.js?v=20',
+  './calculator.js?v=20',
+  './projects.js?v=20',
+  './export.js?v=20',
+  './app.js?v=20',
   './manifest.webmanifest',
   './icon-192.png',
   './icon-512.png',
@@ -26,12 +26,15 @@ self.addEventListener('activate',e=>e.waitUntil(
     .then(()=>self.clients.claim())
 ));
 
-self.addEventListener('fetch',e=>e.respondWith(
-  fetch(e.request)
-    .then(r=>{
-      const copy=r.clone();
-      caches.open(CACHE).then(c=>c.put(e.request,copy));
-      return r;
-    })
-    .catch(()=>caches.match(e.request))
-));
+self.addEventListener('fetch',e=>{
+  // HTML and versioned modules are network-first so updates cannot mix old/new modules.
+  e.respondWith(
+    fetch(e.request,{cache:'no-store'})
+      .then(r=>{
+        const copy=r.clone();
+        caches.open(CACHE).then(c=>c.put(e.request,copy));
+        return r;
+      })
+      .catch(()=>caches.match(e.request))
+  );
+});

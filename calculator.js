@@ -41,33 +41,45 @@ function renderThreadNotes(){
 
 function markCalculatorDirty(){
   if($("calcDirtyNote")){
-    $("calcDirtyNote").innerHTML='Changes waiting — tap <b>Update Calculations</b>.';
+    $("calcDirtyNote").innerHTML='Changes waiting — tap <b>Update All Values</b>.';
   }
   autosaveCurrentProject();
 }
 
 function runCalculatorUpdate(){
-  // Read every current control value at the moment the button is tapped.
-  // Nothing is copied from a stale project/calculator snapshot.
-  renderThreadNotes();
-  updateCalculator();
-
-  if($("calcDirtyNote")){
-    const now=new Date();
-    $("calcDirtyNote").textContent=`Updated at ${now.toLocaleTimeString([], {hour:"numeric",minute:"2-digit"})}.`;
-  }
-
   const btn=$("updateCalculatorBtn");
-  if(btn){
-    const original=btn.textContent;
-    btn.textContent="Updated ✓";
-    btn.disabled=true;
-    setTimeout(()=>{
-      btn.textContent=original;
-      btn.disabled=false;
-    },700);
+  const original=btn ? btn.textContent : "Update All Values";
+
+  try{
+    if(btn){
+      btn.textContent="Updating…";
+      btn.disabled=true;
+    }
+
+    renderThreadNotes();
+    updateCalculator();
+
+    if($("calcDirtyNote")){
+      const now=new Date();
+      $("calcDirtyNote").textContent=`Updated at ${now.toLocaleTimeString([], {hour:"numeric",minute:"2-digit"})}.`;
+    }
+
+    if(btn) btn.textContent="Updated ✓";
+    autosaveCurrentProject();
+  }catch(err){
+    console.error("Calculator update failed:",err);
+    if($("calcDirtyNote")){
+      $("calcDirtyNote").textContent="Calculation error — refresh the app once, then try again.";
+    }
+    if(btn) btn.textContent="Try Again";
+  }finally{
+    if(btn){
+      setTimeout(()=>{
+        btn.textContent=original;
+        btn.disabled=false;
+      },800);
+    }
   }
-  autosaveCurrentProject();
 }
 
 function applyWrappingThreadPreset(){

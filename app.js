@@ -46,7 +46,13 @@ $("baseThreadType").addEventListener("change",applyBaseThreadPreset);
 ["finished","tie","baseExtra","ppi","waste","sampleCols","sampleUsed","tail"].forEach(id=>{
   $(id).addEventListener("input",markCalculatorDirty);
 });
-$("updateCalculatorBtn").addEventListener("click",runCalculatorUpdate);
+$("updateCalculatorBtn").addEventListener("click",()=>{
+  if(typeof runCalculatorUpdate==="function"){
+    runCalculatorUpdate();
+  }else{
+    $("calcDirtyNote").textContent="App files are out of sync. Refresh Safari once to load the newest version.";
+  }
+});
 
 $("saveProject").addEventListener("click",()=>saveProjectNow(false));
 $("openProject").addEventListener("click",openSelectedProject);
@@ -74,7 +80,7 @@ refreshProjectList();
 renderThreadNotes();
 nameMatrix=makeNameMatrix();
 renderGrid();
-runCalculatorUpdate();
+if(typeof runCalculatorUpdate==="function") runCalculatorUpdate();
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', function() {
