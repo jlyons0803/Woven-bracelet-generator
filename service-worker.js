@@ -1,7 +1,7 @@
-const CACHE='woven-bracelet-v28-blank-start';
+const CACHE='dandelyons-designs-v29';
 const ASSETS=[
-  './','./index.html','./styles.css?v=28','./data.js?v=28','./core.js?v=28',
-  './calculator.js?v=28','./projects.js?v=28','./export.js?v=28','./app.js?v=28',
+  './','./index.html','./styles.css?v=29','./data.js?v=29','./core.js?v=29',
+  './calculator.js?v=29','./projects.js?v=29','./export.js?v=29','./app.js?v=29',
   './manifest.webmanifest','./icon-192.png','./icon-512.png','./apple-touch-icon.png'
 ];
 self.addEventListener('install',e=>{self.skipWaiting();e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)))});

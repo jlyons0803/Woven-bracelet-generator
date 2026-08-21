@@ -1,12 +1,8 @@
 {
-  "name": "Woven Bracelet Generator",
-  "short_name": "Woven Bracelet",
-  "description": "Create wrapped woven bracelet name patterns, draw custom patterns, and calculate string amounts.",
-  "start_url": "./index.html",
-  "scope": "./",
+  "start_url": "./",
   "display": "standalone",
-  "background_color": "#f5f7fb",
-  "theme_color": "#6657d9",
+  "background_color": "#f4f3fa",
+  "theme_color": "#6557d9",
   "icons": [
     {
       "src": "icon-192.png",
@@ -17,11 +13,8 @@
       "src": "icon-512.png",
       "sizes": "512x512",
       "type": "image/png"
-    },
-    {
-      "src": "icon-1024.png",
-      "sizes": "1024x1024",
-      "type": "image/png"
     }
-  ]
+  ],
+  "name": "DandeLyons Designs",
+  "short_name": "DandeLyons"
 }
