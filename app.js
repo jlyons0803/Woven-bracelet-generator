@@ -119,11 +119,12 @@ $("projectName").addEventListener("input",autosaveCurrentProject);
 $("printBtn").addEventListener("click",()=>window.print());
 $("saveBtn").addEventListener("click",saveSVG);
 
-// V27 fresh-start behavior:
- // Reopening the app starts with the default unsaved design instead of the last edited name.
+// V28 blank-start behavior:
+ // Reopening the app starts completely blank. Saved projects remain available
+ // in Projects and are loaded only when the user explicitly opens one.
  currentProjectId=null;
- $("projectName").value="My Bracelet";
- $("name").value="EMERSYN";
+ $("projectName").value="";
+ $("name").value="";
  $("nameRows").value=9;
  $("nameHeight").value=7;
  $("nameWidth").value=5;
@@ -141,16 +142,13 @@ $("saveBtn").addEventListener("click",saveSVG);
 refreshProjectList();
 renderThreadNotes();
 nameMatrix=makeNameMatrix();
-drawMatrix=clone(nameMatrix);
-customBorderApplied=Math.max(0,Math.min(3,Number($("nameBorder").value)||0));
-$("drawBorderThickness").value=customBorderApplied||1;
-$("drawRows").value=drawMatrix.length;
-$("drawCols").value=drawMatrix[0]?.length||1;
+drawMatrix=blank(Number($("drawRows").value)||9,Number($("drawCols").value)||60);
+customBorderApplied=0;
 $("drawLetterColor").value=$("nameLetterColor").value;
 $("drawBgColor").value=$("nameBgColor").value;
 mode="draw";
 $("modeBadge").textContent="Editable pattern";
-$("patternTitle").textContent=($("name").value.toUpperCase()||"NAME")+" — EDITABLE";
+$("patternTitle").textContent="MY PATTERN";
 renderGrid();
 if(typeof runCalculatorUpdate==="function") runCalculatorUpdate();
 
