@@ -1,7 +1,7 @@
-const CACHE='dandelyons-designs-v29';
+const CACHE='dandelyons-designs-v30-custom-icon';
 const ASSETS=[
-  './','./index.html','./styles.css?v=29','./data.js?v=29','./core.js?v=29',
-  './calculator.js?v=29','./projects.js?v=29','./export.js?v=29','./app.js?v=29',
+  './','./index.html','./styles.css?v=30','./data.js?v=30','./core.js?v=30',
+  './calculator.js?v=30','./projects.js?v=30','./export.js?v=30','./app.js?v=30',
   './manifest.webmanifest','./icon-192.png','./icon-512.png','./apple-touch-icon.png'
 ];
 self.addEventListener('install',e=>{self.skipWaiting();e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)))});
