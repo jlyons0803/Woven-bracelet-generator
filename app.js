@@ -69,6 +69,38 @@ $("projectsToDesignBtn").addEventListener("click",()=>showAppPane("design"));
 $("beadBackToDesignBtn").addEventListener("click",()=>showAppPane("design"));
 $("beadGoProjectsBtn").addEventListener("click",()=>showAppPane("projects"));
 
+
+function setGraphFullscreen(on){
+  const card=document.querySelector(".previewCard");
+  if(!card) return;
+
+  const enabled=!!on;
+  card.classList.toggle("graphFullscreen",enabled);
+  document.body.classList.toggle("graphFullscreenOpen",enabled);
+
+  const btn=$("fullscreenGraphBtn");
+  if(btn){
+    btn.setAttribute("aria-pressed",enabled?"true":"false");
+  }
+
+  requestAnimationFrame(()=>{
+    renderGrid();
+    if(enabled && $("gridScroll")){
+      $("gridScroll").scrollLeft=0;
+      $("gridScroll").scrollTop=0;
+    }
+  });
+}
+
+$("fullscreenGraphBtn").addEventListener("click",()=>setGraphFullscreen(true));
+$("exitFullscreenGraphBtn").addEventListener("click",()=>setGraphFullscreen(false));
+
+document.addEventListener("keydown",e=>{
+  if(e.key==="Escape" && document.querySelector(".previewCard.graphFullscreen")){
+    setGraphFullscreen(false);
+  }
+});
+
 window.addEventListener("resize",()=>{
   clearTimeout(window.__wovenResizeTimer);
   window.__wovenResizeTimer=setTimeout(()=>renderGrid(),120);

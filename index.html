@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <title>DandeLyons Designs</title>
-<link rel="stylesheet" href="styles.css?v=50">
+<link rel="stylesheet" href="styles.css?v=51">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="theme-color" content="#6557d9">
@@ -177,12 +177,19 @@
           </section>
 
 <section class="card previewCard">
+      <button type="button" id="exitFullscreenGraphBtn" class="exitFullscreenGraphBtn" aria-label="Exit full screen">Done</button>
       <div class="cardHead previewHead">
         <div>
           <div class="eyebrow" id="patternEyebrow">LIVE PATTERN</div>
           <h3 id="patternTitle">MY PATTERN</h3>
         </div>
-        <span id="modeBadge" class="badge">Editable pattern</span>
+        <div class="previewHeadActions">
+          <span id="modeBadge" class="badge">Editable pattern</span>
+          <button type="button" id="fullscreenGraphBtn" class="fullscreenGraphBtn" aria-pressed="false">
+            <span class="fullscreenIcon" aria-hidden="true">⛶</span>
+            <span class="fullscreenLabel">Full Screen</span>
+          </button>
+        </div>
       </div>
 
       <div class="graphToolBar" id="graphToolBar" aria-label="Editing tools">
@@ -699,12 +706,12 @@
   On iPhone or iPad: Safari → Share → Add to Home Screen.
 </div>
 
-<script defer src="data.js?v=50"></script>
-<script defer src="core.js?v=50"></script>
-<script defer src="calculator.js?v=50"></script>
-<script defer src="beads.js?v=50"></script>
-<script defer src="projects.js?v=50"></script>
-<script defer src="export.js?v=50"></script>
-<script defer src="app.js?v=50"></script>
+<script defer src="data.js?v=51"></script>
+<script defer src="core.js?v=51"></script>
+<script defer src="calculator.js?v=51"></script>
+<script defer src="beads.js?v=51"></script>
+<script defer src="projects.js?v=51"></script>
+<script defer src="export.js?v=51"></script>
+<script defer src="app.js?v=51"></script>
 </body>
 </html>
