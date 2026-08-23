@@ -800,3 +800,10 @@ input[type=color]{height:46px;padding:4px}
   border-color:#c2b9ff;
   background:#fff;
 }
+
+/* V44 larger original pixel-art motif library */
+.stampCategories{margin-bottom:12px}
+.stampLibrary{grid-template-columns:repeat(auto-fit,minmax(56px,1fr))}
+@media(max-width:620px){
+  .stampLibrary{grid-template-columns:repeat(4,minmax(0,1fr))}
+}
