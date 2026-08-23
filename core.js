@@ -127,6 +127,9 @@ function renderGrid(){
   if($("graphSizeReadout") && mode==="draw"){
     $("graphSizeReadout").textContent=`${rows} × ${cols}`;
   }
+  if(typeof syncInlineGraphSizeControls==="function"){
+    syncInlineGraphSizeControls();
+  }
 
   // Name patterns always fit the screen.
   // Custom patterns can either fit the screen or use larger squares for easier editing.

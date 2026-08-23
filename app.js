@@ -134,11 +134,7 @@ $("colsMinus").addEventListener("click",()=>stepGraphSize("cols",-1));
 $("colsPlus").addEventListener("click",()=>stepGraphSize("cols",1));
 $("colsPlus10").addEventListener("click",()=>stepGraphSize("cols",10));
 
-document.querySelectorAll(".sizePreset").forEach(btn=>{
-  btn.addEventListener("click",()=>{
-    applyGraphSize(Number(btn.dataset.rows),Number(btn.dataset.cols));
-  });
-});
+
 
 ["drawRows","drawCols"].forEach(id=>{
   $(id).addEventListener("input",updateGraphSizeReadout);
@@ -155,10 +151,95 @@ $("showGridNumbers").addEventListener("change",()=>{
 $("clearBtn").addEventListener("click",()=>mutate("clear"));
 $("fillBtn").addEventListener("click",()=>mutate("fill"));
 $("invertBtn").addEventListener("click",()=>mutate("invert"));
-$("insertRowBtn").addEventListener("click",()=>insertBlankRowAt($("insertRowAt").value));
-$("insertColBtn").addEventListener("click",()=>insertBlankColumnAt($("insertColAt").value));
-$("deleteRowBtn").addEventListener("click",()=>deleteRowAt($("insertRowAt").value));
-$("deleteColBtn").addEventListener("click",()=>deleteColumnAt($("insertColAt").value));
+
+
+
+
+
+function syncInlineGraphSizeControls(){
+  if($("graphRowsSelect")) $("graphRowsSelect").value=String(Math.max(3,Math.min(60,drawMatrix.length || Number($("drawRows").value)||9)));
+  if($("graphColsSelect")) $("graphColsSelect").value=String(Math.max(5,Math.min(200,(drawMatrix[0]?.length) || Number($("drawCols").value)||60)));
+  refreshEditPositionOptions();
+}
+
+function refreshEditPositionOptions(){
+  const axis=$("editAxisSelect")?.value || "";
+  const pos=$("editPositionSelect");
+  if(!pos) return;
+  const prior=pos.value;
+  pos.innerHTML='<option value="">Choose number</option>';
+  if(!axis){
+    pos.disabled=true;
+    return;
+  }
+  const max=axis==="row" ? (drawMatrix.length || Number($("drawRows").value)||9)
+                         : ((drawMatrix[0]?.length) || Number($("drawCols").value)||60);
+  for(let i=1;i<=max;i++){
+    const opt=document.createElement("option");
+    opt.value=String(i);
+    opt.textContent=String(i);
+    pos.appendChild(opt);
+  }
+  pos.disabled=false;
+  if(prior && Number(prior)<=max) pos.value=prior;
+}
+
+function applyGraphPresetValue(value){
+  if(!value) return;
+  const [rows,cols]=value.split("x").map(Number);
+  applyGraphSize(rows,cols);
+  syncInlineGraphSizeControls();
+  $("graphPresetSelect").value="";
+}
+
+$("graphPresetSelect").addEventListener("change",e=>applyGraphPresetValue(e.target.value));
+
+$("graphRowsSelect").addEventListener("change",()=>{
+  applyGraphSize(Number($("graphRowsSelect").value), Number($("graphColsSelect").value));
+  syncInlineGraphSizeControls();
+});
+$("graphColsSelect").addEventListener("change",()=>{
+  applyGraphSize(Number($("graphRowsSelect").value), Number($("graphColsSelect").value));
+  syncInlineGraphSizeControls();
+});
+
+$("graphOrientationSelect").addEventListener("change",()=>{
+  const portrait=$("graphOrientationSelect").value==="portrait";
+  const card=document.querySelector(".previewCard");
+  if(card) card.classList.toggle("graphPortraitView",portrait);
+  requestAnimationFrame(()=>renderGrid());
+});
+
+$("editAxisSelect").addEventListener("change",()=>{
+  $("editPositionSelect").value="";
+  refreshEditPositionOptions();
+});
+
+$("insertSelectedBtn").addEventListener("click",()=>{
+  const axis=$("editAxisSelect").value;
+  const pos=$("editPositionSelect").value;
+  if(!axis || !pos){
+    if($("fitNote")) $("fitNote").textContent="Choose a row or column and a number first.";
+    return;
+  }
+  if(axis==="row") insertBlankRowAt(pos);
+  else insertBlankColumnAt(pos);
+  syncInlineGraphSizeControls();
+});
+
+$("deleteSelectedBtn").addEventListener("click",()=>{
+  const axis=$("editAxisSelect").value;
+  const pos=$("editPositionSelect").value;
+  if(!axis || !pos){
+    if($("fitNote")) $("fitNote").textContent="Choose a row or column and a number first.";
+    return;
+  }
+  if(axis==="row") deleteRowAt(pos);
+  else deleteColumnAt(pos);
+  $("editPositionSelect").value="";
+  syncInlineGraphSizeControls();
+});
+
 $("randomPatternBtn").addEventListener("click",()=>{
   generateRandomPattern($("randomPatternStyle").value);
   autosaveCurrentProject();
@@ -335,6 +416,7 @@ showGridNumbers=true;
 setCraftMode("woven");
 
 updateGraphSizeReadout();
+syncInlineGraphSizeControls();
 
 // Initial render
 refreshProjectList();

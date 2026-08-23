@@ -1325,3 +1325,110 @@ body.graphFullscreenOpen{
     order:3;
   }
 }
+
+/* V52 graph control cleanup */
+.graphToolBar{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:12px;
+}
+.graphToolButtons{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+.graphInlineSettings{
+  display:flex;
+  align-items:flex-end;
+  gap:8px;
+  margin-left:auto;
+}
+.graphInlineSettings label{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+  font-size:10px;
+  font-weight:850;
+  color:#687086;
+}
+.graphInlineSettings select{
+  min-height:36px;
+  padding:6px 28px 6px 9px;
+  border-radius:10px;
+  background:#fff;
+  font-size:12px;
+  font-weight:800;
+}
+#graphRowsSelect{min-width:70px}
+#graphColsSelect{min-width:82px}
+#graphOrientationSelect{min-width:112px}
+.sideSelect{
+  width:100%;
+  min-height:38px;
+  padding:7px 30px 7px 9px;
+  border-radius:10px;
+  background:#fff;
+  font-size:11px;
+  font-weight:800;
+}
+.rowColActionsTwo{
+  grid-template-columns:1fr 1fr;
+}
+.rowColActionsTwo button{
+  min-height:38px;
+  font-size:11px;
+}
+.previewCard.graphPortraitView .graphWorkspace{
+  grid-template-columns:1fr;
+}
+.previewCard.graphPortraitView .graphCenter{order:1}
+.previewCard.graphPortraitView .graphSideLeft{order:2}
+.previewCard.graphPortraitView .graphSideRight{order:3}
+.previewCard.graphPortraitView .graphSideRail{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+}
+.previewCard.graphPortraitView .graphSideRight .sideClearButton{
+  margin-top:0;
+}
+.previewCard.graphFullscreen.graphPortraitView{
+  overflow:auto !important;
+  -webkit-overflow-scrolling:touch;
+}
+.previewCard.graphFullscreen.graphPortraitView .graphWorkspace{
+  flex:none;
+  grid-template-columns:1fr;
+  overflow:visible;
+}
+.previewCard.graphFullscreen.graphPortraitView .graphCenter{
+  min-height:65dvh;
+}
+.previewCard.graphFullscreen.graphPortraitView .graphCenter .gridScroll{
+  min-height:60dvh;
+}
+@media(max-width:860px){
+  .graphToolBar{
+    align-items:stretch;
+    flex-direction:column;
+  }
+  .graphInlineSettings{
+    width:100%;
+    margin-left:0;
+  }
+  .graphInlineSettings label{
+    flex:1;
+  }
+  .graphInlineSettings select{
+    width:100%;
+  }
+}
+@media(max-width:520px){
+  .graphInlineSettings{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+  }
+  .graphInlineSettings label:last-child{
+    grid-column:1/-1;
+  }
+}
