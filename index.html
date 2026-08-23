@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <title>DandeLyons Designs</title>
-<link rel="stylesheet" href="styles.css?v=47">
+<link rel="stylesheet" href="styles.css?v=48">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="theme-color" content="#6557d9">
@@ -19,7 +19,7 @@
     <div>
       <div class="eyebrow">PATTERN DESIGNER</div>
       <h1>DandeLyons Designs</h1>
-      <p class="sub">Woven and beaded bracelet design in one app.</p>
+      <p class="sub">One workspace for woven and beaded patterns.</p>
     </div>
     <div class="headerMark" aria-hidden="true">▦</div>
   </div>
@@ -68,7 +68,7 @@
         <span class="badge">One workspace</span>
       </div>
 
-      <details class="workspaceSection" open>
+      <details class="workspaceSection">
         <summary>
           <span>
             <b>1. Name setup</b>
@@ -125,17 +125,18 @@
       <details class="workspaceSection" open>
         <summary>
           <span>
-            <b>2. Edit pattern</b>
-            <small>Draw, resize, add borders or stamps</small>
+            <b>2. Pattern workspace</b>
+            <small>Size, draw and customize</small>
           </span>
         </summary>
 
-        <div id="drawPanel" class="workspaceBody">
-          <div class="graphSizeCard">
-            <div class="graphSizeHead">
+        <div id="drawPanel" class="workspaceBody cleanWorkspace">
+
+          <section class="editorBlock editorBlockPrimary">
+            <div class="editorBlockHead">
               <div>
-                <span class="toolbarLabel">Graph size</span>
-                <div class="insertHelp">Change the height or width without having to type both numbers.</div>
+                <span class="editorBlockEyebrow">SETUP</span>
+                <h4>Graph size & colors</h4>
               </div>
               <div id="graphSizeReadout" class="sizeReadout">9 × 60</div>
             </div>
@@ -170,61 +171,100 @@
               <button type="button" class="sizePreset" data-rows="16" data-cols="120">16 × 120</button>
             </div>
 
-            <button type="button" id="resizeGraph" class="primary sizeApplyButton">Apply Typed Size</button>
-          </div>
-
-          <div class="editorSettings colorSettings">
-            <div class="field colorField"><label>Pattern</label><input id="drawLetterColor" type="color" value="#183d7a"></div>
-            <div class="field colorField"><label>Background</label><input id="drawBgColor" type="color" value="#d9f3e8"></div>
-          </div>
-
-          <div class="toolbar">
-            <div class="toolbarGroup">
-              <span class="toolbarLabel">View</span>
-              <button type="button" id="fitCustomBtn">Fit</button>
-              <button type="button" id="largeSquaresBtn">Large</button>
-              <label class="numberToggle" for="showGridNumbers">
-                <input id="showGridNumbers" type="checkbox" checked>
-                <span>Numbers</span>
+            <div class="colorStrip">
+              <label class="colorChip">
+                <span>Pattern</span>
+                <input id="drawLetterColor" type="color" value="#183d7a">
               </label>
+              <label class="colorChip">
+                <span>Background</span>
+                <input id="drawBgColor" type="color" value="#d9f3e8">
+              </label>
+              <button type="button" id="resizeGraph" class="secondaryAction">Apply typed size</button>
             </div>
-            <div class="toolbarGroup">
-              <span class="toolbarLabel">Edit</span>
-              <button type="button" id="undoBtn">Undo</button>
-              
-              <button type="button" id="fillBtn">Fill</button>
-              <button type="button" id="invertBtn">Invert</button>
-            </div>
-          </div>
+          </section>
 
-          <div class="toolbar toolCard insertTools">
-            <div class="toolbarGroup insertGroup">
-              <span class="toolbarLabel">Insert blank</span>
-              <label class="inlineInsertField"><span>Row</span><input id="insertRowAt" type="number" min="1" value="1" inputmode="numeric"></label>
-              <button type="button" id="insertRowBtn">Insert Row</button>
-              <label class="inlineInsertField"><span>Column</span><input id="insertColAt" type="number" min="1" value="1" inputmode="numeric"></label>
-              <button type="button" id="insertColBtn">Insert Column</button>
+          <section class="editorBlock quickToolsBlock">
+            <div class="editorBlockHead compactHead">
+              <div>
+                <span class="editorBlockEyebrow">QUICK TOOLS</span>
+                <h4>Draw & view</h4>
+              </div>
             </div>
-            <div class="insertHelp">1 means top/left. Use the current last row or column + 1 to add one at the bottom/right.</div>
-          </div>
 
-          <div class="toolbar toolCard">
-            <div class="toolbarGroup borderGroup">
-              <span class="toolbarLabel">Border</span>
-              <select id="drawBorderThickness" aria-label="Border thickness">
-                <option value="1" selected>1 row</option>
-                <option value="2">2 rows</option>
-                <option value="3">3 rows</option>
-              </select>
-              <button type="button" id="addBorderBtn">Add</button>
-              <button type="button" id="removeBorderBtn">Remove</button>
+            <div class="quickToolRows">
+              <div class="quickToolRow">
+                <span class="quickToolLabel">View</span>
+                <button type="button" id="fitCustomBtn">Fit</button>
+                <button type="button" id="largeSquaresBtn">Large</button>
+                <label class="numberToggle" for="showGridNumbers">
+                  <input id="showGridNumbers" type="checkbox" checked>
+                  <span>Numbers</span>
+                </label>
+              </div>
+
+              <div class="quickToolRow">
+                <span class="quickToolLabel">Edit</span>
+                <button type="button" id="undoBtn">Undo</button>
+                <button type="button" id="fillBtn">Fill</button>
+                <button type="button" id="invertBtn">Invert</button>
+              </div>
             </div>
-          </div>
+          </section>
 
-          <div class="toolbar toolCard">
-            <div class="toolbarGroup stampGroup stampGroupLarge">
+          <details class="toolDrawer">
+            <summary>
+              <span>
+                <b>Structure</b>
+                <small>Insert rows/columns and borders</small>
+              </span>
+              <span class="drawerHint">Open</span>
+            </summary>
+            <div class="toolDrawerBody">
+              <div class="compactToolSection">
+                <div class="miniHeading">Insert blank</div>
+                <div class="insertGrid">
+                  <label class="inlineInsertField">
+                    <span>Row</span>
+                    <input id="insertRowAt" type="number" min="1" value="1" inputmode="numeric">
+                  </label>
+                  <button type="button" id="insertRowBtn">Insert Row</button>
+
+                  <label class="inlineInsertField">
+                    <span>Column</span>
+                    <input id="insertColAt" type="number" min="1" value="1" inputmode="numeric">
+                  </label>
+                  <button type="button" id="insertColBtn">Insert Column</button>
+                </div>
+                <div class="insertHelp">1 means top/left. Use the current last row or column + 1 for bottom/right.</div>
+              </div>
+
+              <div class="compactToolSection">
+                <div class="miniHeading">Border</div>
+                <div class="borderControls">
+                  <select id="drawBorderThickness" aria-label="Border thickness">
+                    <option value="1" selected>1 row</option>
+                    <option value="2">2 rows</option>
+                    <option value="3">3 rows</option>
+                  </select>
+                  <button type="button" id="addBorderBtn">Add Border</button>
+                  <button type="button" id="removeBorderBtn">Remove</button>
+                </div>
+              </div>
+            </div>
+          </details>
+
+          <details class="toolDrawer">
+            <summary>
+              <span>
+                <b>Stamp library</b>
+                <small>Pixel motifs and mirrored placement</small>
+              </span>
+              <span class="drawerHint">Open</span>
+            </summary>
+            <div class="toolDrawerBody">
               <div class="stampGroupHead">
-                <span class="toolbarLabel">Stamp library</span>
+                <span class="toolbarLabel">Choose a stamp</span>
                 <label class="mirrorToggle" for="mirrorStamp">
                   <input id="mirrorStamp" type="checkbox">
                   <span>Mirror</span>
@@ -305,40 +345,47 @@
                 <button type="button" data-stamp="tribalDiamond" data-category="geometric" title="Tribal Diamond"><span class="stampIcon">◇</span><span class="stampName">Tribal</span></button>
               </div>
 
-              <div class="insertHelp">Choose a category, tap a stamp, then tap the grid to place it. Use Mirror to place matching stamps on both sides.</div>
+              <div id="mirrorStampNote" class="infoLine compactInfo">Turn on Mirror to place the same stamp on both sides of the pattern.</div>
             </div>
-          </div>
+          </details>
 
-          <div class="toolbar toolCard randomPatternTools">
-            <div class="toolbarGroup randomPatternGroup">
-              <span class="toolbarLabel">Pattern generator</span>
-              <label class="inlineRandomField">
-                <span>Style</span>
-                <select id="randomPatternStyle">
-                  <option value="chevron">Chevron</option>
-                  <option value="diamonds">Diamonds</option>
-                  <option value="zigzag">Zigzag</option>
-                  <option value="waves">Waves</option>
-                  <option value="argyle">Argyle</option>
-                  <option value="hearts">Hearts</option>
-                  <option value="greekKey">Greek Key</option>
-                  <option value="flowers">Flowers</option>
-                  <option value="heartBorder">Hearts + Border</option>
-                  <option value="rainbowStripes">Rainbow-style Stripes</option>
-                  <option value="aztec">Aztec / Geometric</option>
-                  <option value="hourglass">Hourglass</option>
-                  <option value="steps">Stepped Diamonds</option>
-                  <option value="crosses">Cross Motif</option>
-                </select>
-              </label>
-              <button type="button" id="randomPatternBtn" class="primary">Generate Bracelet Pattern</button>
+          <details class="toolDrawer">
+            <summary>
+              <span>
+                <b>Pattern library</b>
+                <small>Generate repeating bracelet motifs</small>
+              </span>
+              <span class="drawerHint">Open</span>
+            </summary>
+            <div class="toolDrawerBody">
+              <div class="patternGeneratorRow">
+                <label class="field">
+                  <span>Style</span>
+                  <select id="randomPatternStyle">
+                    <option value="chevron">Chevron</option>
+                    <option value="diamonds">Diamonds</option>
+                    <option value="zigzag">Zigzag</option>
+                    <option value="waves">Waves</option>
+                    <option value="argyle">Argyle</option>
+                    <option value="hearts">Hearts</option>
+                    <option value="greekKey">Greek Key</option>
+                    <option value="flowers">Flowers</option>
+                    <option value="heartBorder">Hearts + Border</option>
+                    <option value="rainbowStripes">Rainbow-style Stripes</option>
+                    <option value="aztec">Aztec / Geometric</option>
+                    <option value="hourglass">Hourglass</option>
+                    <option value="steps">Stepped Diamonds</option>
+                    <option value="crosses">Cross Motif</option>
+                  </select>
+                </label>
+                <button type="button" id="randomPatternBtn" class="primary">Generate Pattern</button>
+              </div>
+              <div id="randomPatternNote" class="insertHelp">Creates a repeating bracelet motif across the current grid. Undo if you want to go back.</div>
             </div>
-            <div id="randomPatternNote" class="insertHelp">Choose a bracelet motif and generate it across the current grid. You can Undo it if you don't like it.</div>
-          </div>
+          </details>
 
-          <div id="mirrorStampNote" class="infoLine">Turn on Mirror to place the same stamp on both sides of the pattern.</div>
-          <div class="infoLine"><b>Tip:</b> tap or drag across squares to draw. Borders leave one blank row between the border and design.</div>
-        </div>
+          <div class="workspaceTip"><b>Tip:</b> tap or drag across squares to draw. Use the drawers only when you need structure, stamps, or generated motifs.</div>
+        </div>        </div>
       </details>
     </section>
 
@@ -621,12 +668,12 @@
   On iPhone or iPad: Safari → Share → Add to Home Screen.
 </div>
 
-<script defer src="data.js?v=47"></script>
-<script defer src="core.js?v=47"></script>
-<script defer src="calculator.js?v=47"></script>
-<script defer src="beads.js?v=47"></script>
-<script defer src="projects.js?v=47"></script>
-<script defer src="export.js?v=47"></script>
-<script defer src="app.js?v=47"></script>
+<script defer src="data.js?v=48"></script>
+<script defer src="core.js?v=48"></script>
+<script defer src="calculator.js?v=48"></script>
+<script defer src="beads.js?v=48"></script>
+<script defer src="projects.js?v=48"></script>
+<script defer src="export.js?v=48"></script>
+<script defer src="app.js?v=48"></script>
 </body>
 </html>
