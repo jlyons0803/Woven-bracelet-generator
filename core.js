@@ -144,6 +144,17 @@ function renderGrid(){
   g.style.setProperty("--cell-size",cellSize+"px");
   g.style.gridTemplateColumns=`repeat(${cols},${cellSize}px)`;
 
+  // V53: let short/wide graphs shrink to their real content height instead of
+  // reserving a tall empty editor area. Taller graphs still get a useful
+  // scrollable editing viewport.
+  const graphCenter=$("gridScroll")?.closest(".graphCenter");
+  if(graphCenter){
+    const graphPixelHeight=(rows*cellSize) + (showGridNumbers ? 28 : 0);
+    const isWideGraph=cols>rows;
+    graphCenter.classList.toggle("wideGraph",isWideGraph);
+    graphCenter.style.setProperty("--graph-content-height",`${graphPixelHeight}px`);
+  }
+
   const numberedWrap=$("gridNumberedWrap");
   const colNumbers=$("colNumbers");
   const rowNumbers=$("rowNumbers");

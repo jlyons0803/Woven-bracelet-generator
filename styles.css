@@ -1432,3 +1432,43 @@ body.graphFullscreenOpen{
     grid-column:1/-1;
   }
 }
+
+/* V53 auto-adjust graph workspace height */
+.graphCenter.wideGraph{
+  align-self:start;
+}
+
+.graphCenter.wideGraph .gridScroll{
+  flex:0 0 auto;
+  min-height:0 !important;
+  height:auto !important;
+  max-height:none !important;
+}
+
+.previewCard.graphPortraitView .graphCenter.wideGraph{
+  min-height:0 !important;
+}
+
+.previewCard.graphPortraitView .graphCenter.wideGraph .gridScroll{
+  min-height:0 !important;
+  height:auto !important;
+}
+
+.previewCard.graphFullscreen.graphPortraitView .graphCenter.wideGraph{
+  min-height:0 !important;
+}
+
+.previewCard.graphFullscreen.graphPortraitView .graphCenter.wideGraph .gridScroll{
+  min-height:0 !important;
+  height:auto !important;
+}
+
+.graphCenter.wideGraph .gridNumbered{
+  margin-top:0 !important;
+  margin-bottom:0 !important;
+}
+
+/* Keep a comfortable viewport only when the graph is actually taller than it is wide. */
+.graphCenter:not(.wideGraph) .gridScroll{
+  min-height:clamp(360px,55vh,680px);
+}

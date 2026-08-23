@@ -1,7 +1,7 @@
-const CACHE='dandelyons-designs-v52-graph-controls-cleanup';
+const CACHE='dandelyons-designs-v53-auto-fit-graph-height';
 const ASSETS=[
-  './','./index.html','./styles.css?v=52','./data.js?v=52','./core.js?v=52',
-  './calculator.js?v=52','./beads.js?v=52','./projects.js?v=52','./export.js?v=52','./app.js?v=52',
+  './','./index.html','./styles.css?v=53','./data.js?v=53','./core.js?v=53',
+  './calculator.js?v=53','./beads.js?v=53','./projects.js?v=53','./export.js?v=53','./app.js?v=53',
   './manifest.webmanifest','./icon-192.png','./icon-512.png','./apple-touch-icon.png'
 ];
 self.addEventListener('install',e=>{self.skipWaiting();e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)))});
