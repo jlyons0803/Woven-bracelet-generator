@@ -781,3 +781,22 @@ input[type=color]{height:46px;padding:4px}
   .stampIcon{font-size:21px}
   .stampName{font-size:8px}
 }
+
+.stampTextIcon{
+  font-size:14px;
+  font-weight:900;
+  letter-spacing:.4px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:26px;
+  min-height:26px;
+  padding:2px 4px;
+  border:1px solid #d8d9e8;
+  border-radius:8px;
+  background:#fafaff;
+}
+.stampLibrary button.active .stampTextIcon{
+  border-color:#c2b9ff;
+  background:#fff;
+}

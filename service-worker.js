@@ -1,7 +1,7 @@
-const CACHE='dandelyons-designs-v40-stamp-categories';
+const CACHE='dandelyons-designs-v43-stamp-shape-cleanup';
 const ASSETS=[
-  './','./index.html','./styles.css?v=40','./data.js?v=40','./core.js?v=40',
-  './calculator.js?v=40','./beads.js?v=40','./projects.js?v=40','./export.js?v=40','./app.js?v=40',
+  './','./index.html','./styles.css?v=43','./data.js?v=43','./core.js?v=43',
+  './calculator.js?v=43','./beads.js?v=43','./projects.js?v=43','./export.js?v=43','./app.js?v=43',
   './manifest.webmanifest','./icon-192.png','./icon-512.png','./apple-touch-icon.png'
 ];
 self.addEventListener('install',e=>{self.skipWaiting();e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)))});
