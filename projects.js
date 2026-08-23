@@ -27,6 +27,7 @@ function captureProjectState(){
     craftMode,
     customFitToScreen,
     activeStamp:null,
+    currentTool,
     nameSettings:{
       name:$("name").value,
       nameRows:$("nameRows").value,
@@ -127,6 +128,9 @@ function applyProjectState(state){
     customFitToScreen=state.customFitToScreen!==false;
     history=[];
     activeStamp=null;
+    currentTool=state.currentTool||"draw";
+    renderToolSelection?.();
+    document.querySelectorAll("[data-stamp]").forEach(b=>b.classList.remove("active"));
     nameMatrix=makeNameMatrix();
     switchMode(state.mode==="draw"?"draw":"name");
   }finally{
@@ -372,6 +376,9 @@ function newProjectNow(){
     $("ppi").value=THREAD_PRESETS.floss6.ppi;
     renderThreadNotes();
     history=[];
+    currentTool="draw";
+    renderToolSelection?.();
+    document.querySelectorAll("[data-stamp]").forEach(b=>b.classList.remove("active"));
     customFitToScreen=true;
     nameMatrix=makeNameMatrix();
     drawMatrix=clone(nameMatrix);

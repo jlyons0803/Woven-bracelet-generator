@@ -58,6 +58,25 @@ function sendNameToDraw(){
   }
 }
 
+
+function inBounds(matrix,r,c){
+  return r>=0 && c>=0 && r<matrix.length && c<matrix[0].length;
+}
+
+function floodFillAt(r,c){
+  if(mode!=="draw" || !drawMatrix.length || !inBounds(drawMatrix,r,c)) return false;
+  const target=drawMatrix[r][c];
+  const replacement=target ? 0 : 1;
+  const stack=[[r,c]];
+  while(stack.length){
+    const [cr,cc]=stack.pop();
+    if(!inBounds(drawMatrix,cr,cc) || drawMatrix[cr][cc]!==target) continue;
+    drawMatrix[cr][cc]=replacement;
+    stack.push([cr+1,cc],[cr-1,cc],[cr,cc+1],[cr,cc-1]);
+  }
+  return true;
+}
+
 function switchMode(next){
   // V24 uses one unified editor. "Name" is now a way to populate the editable
   // custom grid rather than a separate editing mode.
@@ -214,18 +233,29 @@ function renderGrid(){
       cell.addEventListener("pointerdown",e=>{
         e.preventDefault();
 
-        if(activeStamp){
+        if(currentTool==="stamp"){
+          if(!activeStamp){
+            if($("fitNote")) $("fitNote").textContent="Choose a stamp first, then tap the grid where you want to place it.";
+            return;
+          }
           history.push(clone(drawMatrix));
           if(history.length>40)history.shift();
           placeStampAt(r,c,STAMPS[activeStamp]);
-          const placed=activeStamp;
-          activeStamp=null;
-          document.querySelectorAll("[data-stamp]").forEach(b=>b.classList.remove("active"));
           renderGrid();
           if($("fitNote")){
             $("fitNote").textContent=mirrorStampEnabled
-              ? `Added mirrored ${placed} stamps on both sides.`
-              : `Added a ${placed}. You can tap a stamp button again to place another one, or keep drawing normally.`;
+              ? `Added mirrored ${activeStamp} stamps on both sides.`
+              : `Added a ${activeStamp}. Tap again to place more, or switch tools to keep editing.`;
+          }
+          return;
+        }
+
+        if(currentTool==="fill"){
+          history.push(clone(drawMatrix));
+          if(history.length>40)history.shift();
+          if(floodFillAt(r,c)){
+            renderGrid();
+            if($("fitNote")) $("fitNote").textContent="Filled the connected area.";
           }
           return;
         }
@@ -233,14 +263,16 @@ function renderGrid(){
         history.push(clone(drawMatrix));
         if(history.length>40)history.shift();
         dragging=true;
-        drawValue=drawMatrix[r][c]?0:1;
+        drawValue=currentTool==="erase" ? 0 : 1;
         drawMatrix[r][c]=drawValue;
         cell.classList.toggle("on",!!drawValue);
       });
       cell.addEventListener("pointerenter",()=>{
         if(!dragging)return;
-        drawMatrix[r][c]=drawValue;
-        cell.classList.toggle("on",!!drawValue);
+        if(currentTool==="draw" || currentTool==="erase"){
+          drawMatrix[r][c]=drawValue;
+          cell.classList.toggle("on",!!drawValue);
+        }
       });
     }
     g.appendChild(cell);

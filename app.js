@@ -146,13 +146,69 @@ document.querySelectorAll(".stampCategory").forEach(btn=>{
 
 setStampCategory("all");
 
+function renderToolSelection(){
+  document.querySelectorAll(".graphTool").forEach(btn=>{
+    const active=btn.dataset.tool===currentTool;
+    btn.classList.toggle("active",active);
+    if(btn.id==="toolStamp"){
+      btn.classList.toggle("stampWaiting",active && !activeStamp);
+    }
+  });
+}
+
+function setGraphTool(tool){
+  currentTool=tool;
+  renderToolSelection();
+  if($("fitNote")){
+    if(tool==="draw") $("fitNote").textContent="Draw tool selected — tap or drag to add squares.";
+    else if(tool==="erase") $("fitNote").textContent="Erase tool selected — tap or drag to remove squares.";
+    else if(tool==="stamp") $("fitNote").textContent=activeStamp
+      ? `${activeStamp} selected — tap the grid to place it.`
+      : "Stamp tool selected — choose a stamp below, then tap the grid.";
+    else if(tool==="fill") $("fitNote").textContent="Fill tool selected — tap a connected area to fill it.";
+  }
+}
+
+function renderStampButtonPreviews(){
+  document.querySelectorAll("#stampLibrary [data-stamp]").forEach(btn=>{
+    const key=btn.dataset.stamp;
+    const pattern=STAMPS[key];
+    if(!pattern) return;
+    const label=(btn.querySelector(".stampName")?.textContent || btn.title || key).trim();
+    btn.innerHTML="";
+    const preview=document.createElement("span");
+    preview.className="stampPreview";
+    preview.style.setProperty("--sp-rows",pattern.length);
+    preview.style.setProperty("--sp-cols",pattern[0].length);
+    pattern.forEach(row=>{
+      row.split("").forEach(bit=>{
+        const px=document.createElement("span");
+        px.className="stampPixel"+(bit==="1"?" on":"");
+        preview.appendChild(px);
+      });
+    });
+    const name=document.createElement("span");
+    name.className="stampName";
+    name.textContent=label;
+    btn.append(preview,name);
+  });
+}
+
+renderStampButtonPreviews();
+renderToolSelection();
+
+
 document.querySelectorAll("[data-stamp]").forEach(btn=>{
   btn.addEventListener("click",()=>{
     activeStamp=btn.dataset.stamp;
     document.querySelectorAll("[data-stamp]").forEach(b=>b.classList.toggle("active",b===btn));
-    if($("fitNote")) $("fitNote").textContent=`${btn.title || btn.dataset.stamp} selected — now tap the grid where you want to place it.`;
+    setGraphTool("stamp");
   });
 });
+document.querySelectorAll(".graphTool").forEach(btn=>{
+  btn.addEventListener("click",()=>setGraphTool(btn.dataset.tool));
+});
+
 $("mirrorStamp").addEventListener("change",()=>{
   mirrorStampEnabled=$("mirrorStamp").checked;
   if($("mirrorStampNote")){
@@ -236,6 +292,8 @@ customBorderApplied=0;
 $("drawLetterColor").value=$("nameLetterColor").value;
 $("drawBgColor").value=$("nameBgColor").value;
 mode="draw";
+currentTool="draw";
+renderToolSelection();
 $("modeBadge").textContent="Editable pattern";
 $("patternTitle").textContent="MY PATTERN";
 renderGrid();

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <title>DandeLyons Designs</title>
-<link rel="stylesheet" href="styles.css?v=48">
+<link rel="stylesheet" href="styles.css?v=49">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="theme-color" content="#6557d9">
@@ -183,6 +183,40 @@
               <button type="button" id="resizeGraph" class="secondaryAction">Apply typed size</button>
             </div>
           </section>
+
+<section class="card previewCard">
+      <div class="cardHead previewHead">
+        <div>
+          <div class="eyebrow" id="patternEyebrow">LIVE PATTERN</div>
+          <h3 id="patternTitle">MY PATTERN</h3>
+        </div>
+        <span id="modeBadge" class="badge">Editable pattern</span>
+      </div>
+
+      <div class="graphToolBar" id="graphToolBar" aria-label="Editing tools">
+        <button type="button" class="graphTool active" data-tool="draw" id="toolDraw">Draw</button>
+        <button type="button" class="graphTool" data-tool="erase" id="toolErase">Erase</button>
+        <button type="button" class="graphTool" data-tool="stamp" id="toolStamp">Stamp</button>
+        <button type="button" class="graphTool" data-tool="fill" id="toolFill">Fill</button>
+      </div>
+
+      <div class="gridScroll" id="gridScroll">
+        <div id="gridNumberedWrap" class="gridNumbered">
+          <div class="gridCorner" aria-hidden="true"></div>
+          <div id="colNumbers" class="colNumbers" aria-hidden="true"></div>
+          <div id="rowNumbers" class="rowNumbers" aria-hidden="true"></div>
+          <div id="grid" class="pixelGrid"></div>
+        </div>
+      </div>
+      <div id="fitNote" class="infoLine"></div>
+
+      <div class="actions previewActions graphActions">
+        <button type="button" id="clearBtn" class="dangerSoft">Clear Graph</button>
+        <button type="button" id="printBtn">Print Pattern</button>
+        <button type="button" id="saveBtn">Save SVG</button>
+        <button type="button" id="goCalculatorBtn" class="primary">Next: Calculate String</button>
+      </div>
+    </section>
 
           <section class="editorBlock quickToolsBlock">
             <div class="editorBlockHead compactHead">
@@ -389,32 +423,7 @@
       </details>
     </section>
 
-<section class="card previewCard">
-      <div class="cardHead previewHead">
-        <div>
-          <div class="eyebrow" id="patternEyebrow">LIVE PATTERN</div>
-          <h3 id="patternTitle">MY PATTERN</h3>
-        </div>
-        <span id="modeBadge" class="badge">Editable pattern</span>
-      </div>
 
-      <div class="gridScroll" id="gridScroll">
-        <div id="gridNumberedWrap" class="gridNumbered">
-          <div class="gridCorner" aria-hidden="true"></div>
-          <div id="colNumbers" class="colNumbers" aria-hidden="true"></div>
-          <div id="rowNumbers" class="rowNumbers" aria-hidden="true"></div>
-          <div id="grid" class="pixelGrid"></div>
-        </div>
-      </div>
-      <div id="fitNote" class="infoLine"></div>
-
-      <div class="actions previewActions graphActions">
-        <button type="button" id="clearBtn" class="dangerSoft">Clear Graph</button>
-        <button type="button" id="printBtn">Print Pattern</button>
-        <button type="button" id="saveBtn">Save SVG</button>
-        <button type="button" id="goCalculatorBtn" class="primary">Next: Calculate String</button>
-      </div>
-    </section>
   </section>
 
   <!-- CALCULATOR -->
@@ -668,12 +677,12 @@
   On iPhone or iPad: Safari → Share → Add to Home Screen.
 </div>
 
-<script defer src="data.js?v=48"></script>
-<script defer src="core.js?v=48"></script>
-<script defer src="calculator.js?v=48"></script>
-<script defer src="beads.js?v=48"></script>
-<script defer src="projects.js?v=48"></script>
-<script defer src="export.js?v=48"></script>
-<script defer src="app.js?v=48"></script>
+<script defer src="data.js?v=49"></script>
+<script defer src="core.js?v=49"></script>
+<script defer src="calculator.js?v=49"></script>
+<script defer src="beads.js?v=49"></script>
+<script defer src="projects.js?v=49"></script>
+<script defer src="export.js?v=49"></script>
+<script defer src="app.js?v=49"></script>
 </body>
 </html>
