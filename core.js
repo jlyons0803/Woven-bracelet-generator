@@ -248,6 +248,38 @@ function removeCustomBorder(){
   renderGrid();
 }
 
+function insertBlankRowAt(position){
+  if(mode!=="draw" || !drawMatrix.length) return;
+  const rows=drawMatrix.length, cols=drawMatrix[0].length;
+  const pos=Math.max(1,Math.min(rows+1,Math.floor(Number(position)||1)));
+
+  history.push(clone(drawMatrix));
+  if(history.length>40) history.shift();
+
+  drawMatrix.splice(pos-1,0,Array(cols).fill(0));
+  $("drawRows").value=drawMatrix.length;
+  customBorderApplied=0;
+
+  if($("fitNote")) $("fitNote").textContent=`Inserted a blank row at position ${pos}.`;
+  renderGrid();
+}
+
+function insertBlankColumnAt(position){
+  if(mode!=="draw" || !drawMatrix.length) return;
+  const cols=drawMatrix[0].length;
+  const pos=Math.max(1,Math.min(cols+1,Math.floor(Number(position)||1)));
+
+  history.push(clone(drawMatrix));
+  if(history.length>40) history.shift();
+
+  drawMatrix.forEach(row=>row.splice(pos-1,0,0));
+  $("drawCols").value=drawMatrix[0].length;
+  customBorderApplied=0;
+
+  if($("fitNote")) $("fitNote").textContent=`Inserted a blank column at position ${pos}.`;
+  renderGrid();
+}
+
 function resizeCustomGraph(){
   customBorderApplied=0;
   const rows=Math.max(3,Math.min(60,Number($("drawRows").value)||9));

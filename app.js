@@ -65,6 +65,8 @@ $("largeSquaresBtn").addEventListener("click",()=>{customFitToScreen=false; rend
 $("clearBtn").addEventListener("click",()=>mutate("clear"));
 $("fillBtn").addEventListener("click",()=>mutate("fill"));
 $("invertBtn").addEventListener("click",()=>mutate("invert"));
+$("insertRowBtn").addEventListener("click",()=>insertBlankRowAt($("insertRowAt").value));
+$("insertColBtn").addEventListener("click",()=>insertBlankColumnAt($("insertColAt").value));
 $("undoBtn").addEventListener("click",undo);
 $("stampHeart").addEventListener("click",()=>{activeStamp="heart"; if($("fitNote")) $("fitNote").textContent="Heart selected — now tap the grid where you want to place it.";});
 $("stampFlower").addEventListener("click",()=>{activeStamp="flower"; if($("fitNote")) $("fitNote").textContent="Flower selected — now tap the grid where you want to place it.";});

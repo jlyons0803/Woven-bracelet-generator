@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <title>DandeLyons Designs</title>
-<link rel="stylesheet" href="styles.css?v=30">
+<link rel="stylesheet" href="styles.css?v=32">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="theme-color" content="#6557d9">
@@ -19,7 +19,7 @@
     <div>
       <div class="eyebrow">PATTERN DESIGNER</div>
       <h1>DandeLyons Designs</h1>
-      <p class="sub">Create bracelet patterns, calculate your string, and save your designs.</p>
+      <p class="sub">Design. Calculate. Save.</p>
     </div>
     <div class="headerMark" aria-hidden="true">▦</div>
   </div>
@@ -47,116 +47,147 @@
       </div>
       <span class="sectionHint">Name generator + custom editor together</span>
     </div>
-<section id="namePanel" class="card editorCard">
-      <div class="cardHead">
+
+    <section class="card workspaceCard">
+      <div class="cardHead workspaceHead">
         <div>
-          <h3>Add a Name</h3>
-          <p>Create a name, then place it directly into the editable pattern below.</p>
+          <h3>Pattern Builder</h3>
+          <p>Start with a name, then customize the same editable pattern.</p>
         </div>
+        <span class="badge">One workspace</span>
       </div>
 
-      <div class="controls">
-        <div class="field fieldWide"><label>Name</label><input id="name" value="" maxlength="24"></div>
-        <div class="field"><label>Graph rows</label><input id="nameRows" type="number" min="7" max="60" value="9"></div>
-        <div class="field"><label>Name height</label>
-          <div class="stepper">
-            <button type="button" id="nameHeightMinus" aria-label="Decrease name height">−</button>
-            <input id="nameHeight" type="number" min="3" max="40" step="1" value="7">
-            <button type="button" id="nameHeightPlus" aria-label="Increase name height">+</button>
-          </div>
-        </div>
-        <div class="field"><label>Letter width</label>
-          <div class="stepper">
-            <button type="button" id="nameWidthMinus" aria-label="Decrease letter width">−</button>
-            <input id="nameWidth" type="number" min="3" max="30" step="1" value="5">
-            <button type="button" id="nameWidthPlus" aria-label="Increase letter width">+</button>
-          </div>
-        </div>
-        <div class="field"><label>Side padding</label><input id="namePad" type="number" min="0" max="30" value="4"></div>
-        <div class="field"><label>Letter spacing</label><select id="spacing"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select></div>
-        <div class="field colorField"><label>Pattern color</label><input id="nameLetterColor" type="color" value="#183d7a"></div>
-        <div class="field colorField"><label>Background color</label><input id="nameBgColor" type="color" value="#d9f3e8"></div>
-        <div class="field"><label>Top & bottom border</label>
-          <select id="nameBorder">
-            <option value="0" selected>No border</option>
-            <option value="1">1 row</option>
-            <option value="2">2 rows</option>
-            <option value="3">3 rows</option>
-          </select>
-        </div>
-      </div>
+      <details class="workspaceSection" open>
+        <summary>
+          <span>
+            <b>1. Name setup</b>
+            <small>Optional — generate a starting pattern</small>
+          </span>
+        </summary>
 
-      <div id="nameSizeNote" class="infoLine"></div>
-      <div class="actions">
-        <button type="button" id="sendToDraw" class="primary">Generate Name in Editor</button>
-      </div>
+        <div id="namePanel" class="workspaceBody">
+          <div class="controls nameControls">
+            <div class="field fieldWide"><label>Name</label><input id="name" value="" maxlength="24" placeholder="Enter a name"></div>
+            <div class="field"><label>Name height</label>
+              <div class="stepper">
+                <button type="button" id="nameHeightMinus" aria-label="Decrease name height">−</button>
+                <input id="nameHeight" type="number" min="3" max="40" step="1" value="7">
+                <button type="button" id="nameHeightPlus" aria-label="Increase name height">+</button>
+              </div>
+            </div>
+            <div class="field"><label>Letter width</label>
+              <div class="stepper">
+                <button type="button" id="nameWidthMinus" aria-label="Decrease letter width">−</button>
+                <input id="nameWidth" type="number" min="3" max="30" step="1" value="5">
+                <button type="button" id="nameWidthPlus" aria-label="Increase letter width">+</button>
+              </div>
+            </div>
+
+            <div class="field compactField"><label>Graph rows</label><input id="nameRows" type="number" min="7" max="60" value="9"></div>
+            <div class="field compactField"><label>Side padding</label><input id="namePad" type="number" min="0" max="30" value="4"></div>
+            <div class="field compactField"><label>Letter spacing</label>
+              <select id="spacing">
+                <option value="1">1</option><option value="2">2</option><option value="3">3</option>
+                <option value="4">4</option><option value="5">5</option>
+              </select>
+            </div>
+            <div class="field compactField"><label>Top & bottom border</label>
+              <select id="nameBorder">
+                <option value="0" selected>No border</option>
+                <option value="1">1 row</option>
+                <option value="2">2 rows</option>
+                <option value="3">3 rows</option>
+              </select>
+            </div>
+
+            <div class="field colorField"><label>Pattern color</label><input id="nameLetterColor" type="color" value="#183d7a"></div>
+            <div class="field colorField"><label>Background</label><input id="nameBgColor" type="color" value="#d9f3e8"></div>
+          </div>
+
+          <div id="nameSizeNote" class="infoLine"></div>
+          <div class="actions compact workspacePrimary">
+            <button type="button" id="sendToDraw" class="primary">Generate Name in Editor</button>
+          </div>
+        </div>
+      </details>
+
+      <details class="workspaceSection" open>
+        <summary>
+          <span>
+            <b>2. Edit pattern</b>
+            <small>Draw, resize, add borders or stamps</small>
+          </span>
+        </summary>
+
+        <div id="drawPanel" class="workspaceBody">
+          <div class="editorSettings">
+            <div class="field"><label>Rows</label><input id="drawRows" type="number" min="3" max="60" value="9"></div>
+            <div class="field"><label>Columns</label><input id="drawCols" type="number" min="5" max="200" value="60"></div>
+            <div class="field colorField"><label>Pattern</label><input id="drawLetterColor" type="color" value="#183d7a"></div>
+            <div class="field colorField"><label>Background</label><input id="drawBgColor" type="color" value="#d9f3e8"></div>
+            <button type="button" id="resizeGraph" class="primary settingsButton">Resize</button>
+          </div>
+
+          <div class="toolbar">
+            <div class="toolbarGroup">
+              <span class="toolbarLabel">View</span>
+              <button type="button" id="fitCustomBtn">Fit</button>
+              <button type="button" id="largeSquaresBtn">Large</button>
+            </div>
+            <div class="toolbarGroup">
+              <span class="toolbarLabel">Edit</span>
+              <button type="button" id="undoBtn">Undo</button>
+              <button type="button" id="clearBtn">Clear</button>
+              <button type="button" id="fillBtn">Fill</button>
+              <button type="button" id="invertBtn">Invert</button>
+            </div>
+          </div>
+
+          <div class="toolbar toolCard insertTools">
+            <div class="toolbarGroup insertGroup">
+              <span class="toolbarLabel">Insert blank</span>
+              <label class="inlineInsertField"><span>Row</span><input id="insertRowAt" type="number" min="1" value="1" inputmode="numeric"></label>
+              <button type="button" id="insertRowBtn">Insert Row</button>
+              <label class="inlineInsertField"><span>Column</span><input id="insertColAt" type="number" min="1" value="1" inputmode="numeric"></label>
+              <button type="button" id="insertColBtn">Insert Column</button>
+            </div>
+            <div class="insertHelp">1 means top/left. Use the current last row or column + 1 to add one at the bottom/right.</div>
+          </div>
+
+          <div class="toolbar toolCard">
+            <div class="toolbarGroup borderGroup">
+              <span class="toolbarLabel">Border</span>
+              <select id="drawBorderThickness" aria-label="Border thickness">
+                <option value="1" selected>1 row</option>
+                <option value="2">2 rows</option>
+                <option value="3">3 rows</option>
+              </select>
+              <button type="button" id="addBorderBtn">Add</button>
+              <button type="button" id="removeBorderBtn">Remove</button>
+            </div>
+          </div>
+
+          <div class="toolbar toolCard">
+            <div class="toolbarGroup stampGroup">
+              <span class="toolbarLabel">Stamps</span>
+              <button type="button" id="stampHeart">♥</button>
+              <button type="button" id="stampFlower">✿</button>
+              <button type="button" id="stampStar">★</button>
+              <button type="button" id="stampSmiley">☺</button>
+              <label class="mirrorToggle" for="mirrorStamp">
+                <input id="mirrorStamp" type="checkbox">
+                <span>Mirror</span>
+              </label>
+            </div>
+          </div>
+
+          <div id="mirrorStampNote" class="infoLine">Turn on Mirror to place the same stamp on both sides of the pattern.</div>
+          <div class="infoLine"><b>Tip:</b> tap or drag across squares to draw. Borders leave one blank row between the border and design.</div>
+        </div>
+      </details>
     </section>
 
-    <section id="drawPanel" class="card editorCard">
-      <div class="cardHead">
-        <div>
-          <h3>Edit Pattern</h3>
-          <p>Your generated name appears here as an editable pattern. Draw, erase, resize, add borders, or add picture stamps.</p>
-        </div>
-      </div>
-
-      <div class="controls drawControls">
-        <div class="field"><label>Graph rows</label><input id="drawRows" type="number" min="3" max="60" value="9"></div>
-        <div class="field"><label>Graph columns</label><input id="drawCols" type="number" min="5" max="200" value="60"></div>
-        <div class="field colorField"><label>Pattern color</label><input id="drawLetterColor" type="color" value="#183d7a"></div>
-        <div class="field colorField"><label>Background color</label><input id="drawBgColor" type="color" value="#d9f3e8"></div>
-        <div class="field"><label>&nbsp;</label><button type="button" id="resizeGraph" class="primary fullButton">Resize Graph</button></div>
-      </div>
-
-      <div class="toolGroup">
-        <span class="toolLabel">View & edit</span>
-        <div class="actions compact">
-          <button type="button" id="fitCustomBtn">Fit to Screen</button>
-          <button type="button" id="largeSquaresBtn">Large Squares</button>
-          <button type="button" id="undoBtn">Undo</button>
-          <button type="button" id="clearBtn">Clear</button>
-          <button type="button" id="fillBtn">Fill All</button>
-          <button type="button" id="invertBtn">Invert</button>
-        </div>
-      </div>
-
-      <div class="toolGroup">
-        <span class="toolLabel">Borders</span>
-        <div class="borderTools">
-          <div class="field borderField"><label>Border thickness</label>
-            <select id="drawBorderThickness">
-              <option value="1" selected>1 row</option>
-              <option value="2">2 rows</option>
-              <option value="3">3 rows</option>
-            </select>
-          </div>
-          <div class="actions compact borderActions">
-            <button type="button" id="addBorderBtn">Add Top & Bottom Border</button>
-            <button type="button" id="removeBorderBtn">Remove Border</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="toolGroup">
-        <div class="toolGroupHead">
-          <span class="toolLabel">Picture stamps</span>
-          <label class="mirrorToggle" for="mirrorStamp">
-            <input id="mirrorStamp" type="checkbox">
-            <span>Mirror stamp</span>
-          </label>
-        </div>
-        <div class="actions compact stampActions">
-          <button type="button" id="stampHeart">♥ Heart</button>
-          <button type="button" id="stampFlower">✿ Flower</button>
-          <button type="button" id="stampStar">★ Star</button>
-          <button type="button" id="stampSmiley">☺ Smiley</button>
-        </div>
-        <div id="mirrorStampNote" class="infoLine">Turn on Mirror stamp, then place a stamp on one side. A matching stamp will appear the same distance from the center on the other side.</div>
-      </div>
-      <div class="infoLine"><b>Tip:</b> tap or drag across squares to draw. Start on a filled square to erase. Borders use the current pattern color and always leave one blank row between the border and your design.</div>
-    </section>
-
-    <section class="card previewCard">
+<section class="card previewCard">
       <div class="cardHead previewHead">
         <div>
           <div class="eyebrow">LIVE PATTERN</div>
@@ -189,13 +220,13 @@
     <section id="stringCard" class="card calculatorCard">
       <div class="cardHead">
         <div>
-          <h3>Bracelet sizing</h3>
-          <p>Enter your finished size and the thread you plan to use.</p>
+          <h3>String Calculator</h3>
+          <p>Set your bracelet size and thread, then update once.</p>
         </div>
       </div>
 
       <div class="calcSection">
-        <div class="miniHeading">Bracelet length</div>
+        <div class="miniHeading">Size</div>
         <div class="controls calcGrid">
           <div class="field"><label>Finished woven length (in)</label><input id="finished" type="number" min="1" max="20" step=".25" value="6.5"></div>
           <div class="field"><label>Extra per end for ties / closure (in)</label><input id="tie" type="number" min="0" max="20" step=".25" value="3"></div>
@@ -205,7 +236,7 @@
       </div>
 
       <div class="calcSection">
-        <div class="miniHeading">Thread setup</div>
+        <div class="miniHeading">Thread</div>
         <div class="controls calcGrid">
           <div class="field"><label>Wrapping thread type</label>
             <select id="threadType">
@@ -238,7 +269,7 @@
       </div>
 
       <details class="advancedBox">
-        <summary>Calibration & advanced settings</summary>
+        <summary>Advanced calibration</summary>
         <div class="controls calcGrid advancedGrid">
           <div class="field"><label>Sample full columns woven</label><input id="sampleCols" type="number" min="1" max="100" value="10"></div>
           <div class="field"><label>Thread used for sample (in)</label><input id="sampleUsed" type="number" min=".1" max="5000" step=".1" value="36"></div>
@@ -296,8 +327,8 @@
     <section class="card" id="projectCard">
       <div class="cardHead">
         <div>
-          <h3>Project Library</h3>
-          <p>Save, reopen, back up, or share your bracelet designs.</p>
+          <h3>Saved Projects</h3>
+          <p>Save locally, reopen, export, or import a design.</p>
         </div>
       </div>
 
@@ -320,7 +351,7 @@
       <input id="importProjectFile" type="file" accept=".json,.woven.json,application/json" class="hidden">
       <div id="projectStatus" class="projectStatus">Projects are saved on this device. Once saved, later edits auto-save.</div>
 
-      <div class="libraryHeading">Saved designs</div>
+      <div class="libraryHeading">Library</div>
       <div id="projectGallery" class="projectGallery"></div>
 
       <div class="actions previewActions">
@@ -334,11 +365,11 @@
   On iPhone or iPad: Safari → Share → Add to Home Screen.
 </div>
 
-<script defer src="data.js?v=30"></script>
-<script defer src="core.js?v=30"></script>
-<script defer src="calculator.js?v=30"></script>
-<script defer src="projects.js?v=30"></script>
-<script defer src="export.js?v=30"></script>
-<script defer src="app.js?v=30"></script>
+<script defer src="data.js?v=32"></script>
+<script defer src="core.js?v=32"></script>
+<script defer src="calculator.js?v=32"></script>
+<script defer src="projects.js?v=32"></script>
+<script defer src="export.js?v=32"></script>
+<script defer src="app.js?v=32"></script>
 </body>
 </html>
