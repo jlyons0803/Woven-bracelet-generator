@@ -105,6 +105,9 @@ function renderGrid(){
 
   const rows=m.length;
   const cols=m[0].length;
+  if($("graphSizeReadout") && mode==="draw"){
+    $("graphSizeReadout").textContent=`${rows} × ${cols}`;
+  }
 
   // Name patterns always fit the screen.
   // Custom patterns can either fit the screen or use larger squares for easier editing.
@@ -554,22 +557,65 @@ function generateRandomPattern(style="chevron"){
   renderGrid();
 }
 
-function resizeCustomGraph(){
+function applyGraphSize(rows,cols){
+  rows=Math.max(3,Math.min(60,Math.round(Number(rows)||9)));
+  cols=Math.max(5,Math.min(200,Math.round(Number(cols)||60)));
+
+  const oldRows=drawMatrix.length;
+  const oldCols=drawMatrix[0]?.length || 0;
+
+  if(rows===oldRows && cols===oldCols){
+    $("drawRows").value=rows;
+    $("drawCols").value=cols;
+    updateGraphSizeReadout();
+    return;
+  }
+
   customBorderApplied=0;
-  const rows=Math.max(3,Math.min(60,Number($("drawRows").value)||9));
-  const cols=Math.max(5,Math.min(200,Number($("drawCols").value)||60));
   history.push(clone(drawMatrix));
-  if(history.length>40)history.shift();
+  if(history.length>40) history.shift();
 
   const old=drawMatrix;
   const next=blank(rows,cols);
   const copyRows=Math.min(rows,old.length);
   const copyCols=old.length ? Math.min(cols,old[0].length) : 0;
+
   for(let r=0;r<copyRows;r++){
     for(let c=0;c<copyCols;c++) next[r][c]=old[r][c];
   }
+
   drawMatrix=next;
+  $("drawRows").value=rows;
+  $("drawCols").value=cols;
+  updateGraphSizeReadout();
+
+  if($("fitNote")){
+    $("fitNote").textContent=`Graph resized to ${rows} rows × ${cols} columns. Existing pattern was preserved where it fits.`;
+  }
   renderGrid();
+}
+
+function updateGraphSizeReadout(){
+  const rows=Math.max(3,Math.min(60,Number($("drawRows")?.value)||9));
+  const cols=Math.max(5,Math.min(200,Number($("drawCols")?.value)||60));
+  if($("graphSizeReadout")) $("graphSizeReadout").textContent=`${rows} × ${cols}`;
+}
+
+function stepGraphSize(axis,amount){
+  const id=axis==="rows" ? "drawRows" : "drawCols";
+  const el=$(id);
+  const min=Number(el.min)||1;
+  const max=Number(el.max)||999;
+  const value=Math.max(min,Math.min(max,Math.round(Number(el.value)||min)+amount));
+  el.value=value;
+
+  const rows=Number($("drawRows").value)||9;
+  const cols=Number($("drawCols").value)||60;
+  applyGraphSize(rows,cols);
+}
+
+function resizeCustomGraph(){
+  applyGraphSize($("drawRows").value,$("drawCols").value);
 }
 function mutate(kind){
   if(mode!=="draw")return;

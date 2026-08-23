@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <title>DandeLyons Designs</title>
-<link rel="stylesheet" href="styles.css?v=46">
+<link rel="stylesheet" href="styles.css?v=47">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="theme-color" content="#6557d9">
@@ -131,12 +131,51 @@
         </summary>
 
         <div id="drawPanel" class="workspaceBody">
-          <div class="editorSettings">
-            <div class="field"><label>Rows</label><input id="drawRows" type="number" min="3" max="60" value="9"></div>
-            <div class="field"><label>Columns</label><input id="drawCols" type="number" min="5" max="200" value="60"></div>
+          <div class="graphSizeCard">
+            <div class="graphSizeHead">
+              <div>
+                <span class="toolbarLabel">Graph size</span>
+                <div class="insertHelp">Change the height or width without having to type both numbers.</div>
+              </div>
+              <div id="graphSizeReadout" class="sizeReadout">9 × 60</div>
+            </div>
+
+            <div class="sizeControls">
+              <div class="sizeControl">
+                <label>Rows</label>
+                <div class="sizeStepper">
+                  <button type="button" id="rowsMinus" aria-label="Remove one row">−</button>
+                  <input id="drawRows" type="number" min="3" max="60" value="9" inputmode="numeric">
+                  <button type="button" id="rowsPlus" aria-label="Add one row">+</button>
+                </div>
+              </div>
+
+              <div class="sizeControl">
+                <label>Columns</label>
+                <div class="sizeStepper">
+                  <button type="button" id="colsMinus10" aria-label="Remove ten columns">−10</button>
+                  <button type="button" id="colsMinus" aria-label="Remove one column">−</button>
+                  <input id="drawCols" type="number" min="5" max="200" value="60" inputmode="numeric">
+                  <button type="button" id="colsPlus" aria-label="Add one column">+</button>
+                  <button type="button" id="colsPlus10" aria-label="Add ten columns">+10</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="sizePresets" aria-label="Graph size presets">
+              <button type="button" class="sizePreset" data-rows="7" data-cols="40">7 × 40</button>
+              <button type="button" class="sizePreset" data-rows="9" data-cols="60">9 × 60</button>
+              <button type="button" class="sizePreset" data-rows="9" data-cols="90">9 × 90</button>
+              <button type="button" class="sizePreset" data-rows="12" data-cols="90">12 × 90</button>
+              <button type="button" class="sizePreset" data-rows="16" data-cols="120">16 × 120</button>
+            </div>
+
+            <button type="button" id="resizeGraph" class="primary sizeApplyButton">Apply Typed Size</button>
+          </div>
+
+          <div class="editorSettings colorSettings">
             <div class="field colorField"><label>Pattern</label><input id="drawLetterColor" type="color" value="#183d7a"></div>
             <div class="field colorField"><label>Background</label><input id="drawBgColor" type="color" value="#d9f3e8"></div>
-            <button type="button" id="resizeGraph" class="primary settingsButton">Resize</button>
           </div>
 
           <div class="toolbar">
@@ -582,12 +621,12 @@
   On iPhone or iPad: Safari → Share → Add to Home Screen.
 </div>
 
-<script defer src="data.js?v=46"></script>
-<script defer src="core.js?v=46"></script>
-<script defer src="calculator.js?v=46"></script>
-<script defer src="beads.js?v=46"></script>
-<script defer src="projects.js?v=46"></script>
-<script defer src="export.js?v=46"></script>
-<script defer src="app.js?v=46"></script>
+<script defer src="data.js?v=47"></script>
+<script defer src="core.js?v=47"></script>
+<script defer src="calculator.js?v=47"></script>
+<script defer src="beads.js?v=47"></script>
+<script defer src="projects.js?v=47"></script>
+<script defer src="export.js?v=47"></script>
+<script defer src="app.js?v=47"></script>
 </body>
 </html>

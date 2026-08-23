@@ -95,6 +95,24 @@ $("nameWidthPlus").addEventListener("click",()=>stepNumber("nameWidth",1));
 
 // Draw controls/actions
 $("resizeGraph").addEventListener("click",resizeCustomGraph);
+$("rowsMinus").addEventListener("click",()=>stepGraphSize("rows",-1));
+$("rowsPlus").addEventListener("click",()=>stepGraphSize("rows",1));
+$("colsMinus10").addEventListener("click",()=>stepGraphSize("cols",-10));
+$("colsMinus").addEventListener("click",()=>stepGraphSize("cols",-1));
+$("colsPlus").addEventListener("click",()=>stepGraphSize("cols",1));
+$("colsPlus10").addEventListener("click",()=>stepGraphSize("cols",10));
+
+document.querySelectorAll(".sizePreset").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    applyGraphSize(Number(btn.dataset.rows),Number(btn.dataset.cols));
+  });
+});
+
+["drawRows","drawCols"].forEach(id=>{
+  $(id).addEventListener("input",updateGraphSizeReadout);
+  $(id).addEventListener("change",updateGraphSizeReadout);
+});
+
 $("fitCustomBtn").addEventListener("click",()=>{customFitToScreen=true; renderGrid();});
 $("largeSquaresBtn").addEventListener("click",()=>{customFitToScreen=false; renderGrid();});
 $("showGridNumbers").addEventListener("change",()=>{
@@ -206,6 +224,8 @@ $("showGridNumbers").checked=true;
 showGridNumbers=true;
 
 setCraftMode("woven");
+
+updateGraphSizeReadout();
 
 // Initial render
 refreshProjectList();

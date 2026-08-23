@@ -1,7 +1,7 @@
-const CACHE='dandelyons-designs-v46-motif-refine';
+const CACHE='dandelyons-designs-v47-easy-graph-sizing';
 const ASSETS=[
-  './','./index.html','./styles.css?v=46','./data.js?v=46','./core.js?v=46',
-  './calculator.js?v=46','./beads.js?v=46','./projects.js?v=46','./export.js?v=46','./app.js?v=46',
+  './','./index.html','./styles.css?v=47','./data.js?v=47','./core.js?v=47',
+  './calculator.js?v=47','./beads.js?v=47','./projects.js?v=47','./export.js?v=47','./app.js?v=47',
   './manifest.webmanifest','./icon-192.png','./icon-512.png','./apple-touch-icon.png'
 ];
 self.addEventListener('install',e=>{self.skipWaiting();e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)))});
