@@ -404,6 +404,31 @@ function insertBlankColumnAt(position){
 }
 
 
+function deleteRowAt(position){
+  if(mode!=="draw" || !drawMatrix.length || drawMatrix.length<=3) return;
+  const rows=drawMatrix.length;
+  const pos=Math.max(1,Math.min(rows,Math.floor(Number(position)||1)));
+  history.push(clone(drawMatrix));
+  if(history.length>40)history.shift();
+  drawMatrix.splice(pos-1,1);
+  $("drawRows").value=drawMatrix.length;
+  customBorderApplied=0;
+  if($("fitNote")) $("fitNote").textContent=`Deleted row ${pos}.`;
+  renderGrid();
+}
+function deleteColumnAt(position){
+  if(mode!=="draw" || !drawMatrix.length || drawMatrix[0].length<=5) return;
+  const cols=drawMatrix[0].length;
+  const pos=Math.max(1,Math.min(cols,Math.floor(Number(position)||1)));
+  history.push(clone(drawMatrix));
+  if(history.length>40)history.shift();
+  drawMatrix.forEach(row=>row.splice(pos-1,1));
+  $("drawCols").value=drawMatrix[0].length;
+  customBorderApplied=0;
+  if($("fitNote")) $("fitNote").textContent=`Deleted column ${pos}.`;
+  renderGrid();
+}
+
 function generateRandomPattern(style="chevron"){
   if(mode!=="draw" || !drawMatrix.length) return;
 

@@ -15,8 +15,8 @@ function setCraftMode(next){
     ? "Name generator + custom editor together"
     : "Use the same grid as a bead pattern";
   $("patternEyebrow").textContent=craftMode==="woven" ? "LIVE PATTERN" : "BEAD PATTERN";
-  $("goCalculatorBtn").textContent=craftMode==="woven" ? "Next: Calculate String" : "Next: Bead Count";
-  $("printBtn").textContent=craftMode==="woven" ? "Print Pattern" : "Print Bead Pattern";
+  $("goCalculatorBtn").textContent=craftMode==="woven" ? "Calculate String" : "Calculate Beads";
+  if($("printBtn")) $("printBtn").textContent=craftMode==="woven" ? "Print Pattern" : "Print Bead Pattern";
 
   if(craftMode==="beaded" && typeof updateBeadCalculator==="function"){
     updateBeadCalculator();
@@ -125,6 +125,8 @@ $("fillBtn").addEventListener("click",()=>mutate("fill"));
 $("invertBtn").addEventListener("click",()=>mutate("invert"));
 $("insertRowBtn").addEventListener("click",()=>insertBlankRowAt($("insertRowAt").value));
 $("insertColBtn").addEventListener("click",()=>insertBlankColumnAt($("insertColAt").value));
+$("deleteRowBtn").addEventListener("click",()=>deleteRowAt($("insertRowAt").value));
+$("deleteColBtn").addEventListener("click",()=>deleteColumnAt($("insertColAt").value));
 $("randomPatternBtn").addEventListener("click",()=>{
   generateRandomPattern($("randomPatternStyle").value);
   autosaveCurrentProject();
@@ -221,7 +223,26 @@ $("mirrorStamp").addEventListener("change",()=>{
 $("addBorderBtn").addEventListener("click",addCustomBorder);
 $("removeBorderBtn").addEventListener("click",removeCustomBorder);
 $("drawBorderThickness").addEventListener("change",autosaveCurrentProject);
-["drawLetterColor","drawBgColor"].forEach(id=>$(id).addEventListener("input",()=>{if(mode==="draw")renderGrid()}));
+["drawLetterColor","drawBgColor"].forEach(id=>$(id).addEventListener("input",()=>{
+  if(id==="drawLetterColor" && $("sidePatternColor")) $("sidePatternColor").value=$("drawLetterColor").value;
+  if(id==="drawBgColor" && $("sideBackgroundColor")) $("sideBackgroundColor").value=$("drawBgColor").value;
+  if(mode==="draw")renderGrid();
+}));
+document.querySelectorAll(".paletteSwatch").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    const target=$(btn.dataset.target);
+    if(!target)return;
+    target.value=btn.dataset.color;
+    if(target.id==="drawLetterColor") $("sidePatternColor").value=btn.dataset.color;
+    if(target.id==="drawBgColor") $("sideBackgroundColor").value=btn.dataset.color;
+    renderGrid();
+    autosaveCurrentProject();
+  });
+});
+$("sidePatternColor").addEventListener("input",()=>{$("drawLetterColor").value=$("sidePatternColor").value;renderGrid();});
+$("sideBackgroundColor").addEventListener("input",()=>{$("drawBgColor").value=$("sideBackgroundColor").value;renderGrid();});
+$("sidePatternColor").addEventListener("change",autosaveCurrentProject);
+$("sideBackgroundColor").addEventListener("change",autosaveCurrentProject);
 
 // Calculator controls
 $("threadType").addEventListener("change",applyWrappingThreadPreset);
@@ -255,8 +276,8 @@ $("projectSelect").addEventListener("change",()=>{
 });
 $("projectName").addEventListener("input",autosaveCurrentProject);
 
-$("printBtn").addEventListener("click",()=>window.print());
-$("saveBtn").addEventListener("click",saveSVG);
+if($("printBtn")) $("printBtn").addEventListener("click",()=>window.print());
+if($("saveBtn")) $("saveBtn").addEventListener("click",saveSVG);
 
 // V28 blank-start behavior:
  // Reopening the app starts completely blank. Saved projects remain available
@@ -291,6 +312,8 @@ drawMatrix=blank(Number($("drawRows").value)||9,Number($("drawCols").value)||60)
 customBorderApplied=0;
 $("drawLetterColor").value=$("nameLetterColor").value;
 $("drawBgColor").value=$("nameBgColor").value;
+if($("sidePatternColor")) $("sidePatternColor").value=$("drawLetterColor").value;
+if($("sideBackgroundColor")) $("sideBackgroundColor").value=$("drawBgColor").value;
 mode="draw";
 currentTool="draw";
 renderToolSelection();

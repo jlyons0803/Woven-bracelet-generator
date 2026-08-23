@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <title>DandeLyons Designs</title>
-<link rel="stylesheet" href="styles.css?v=49">
+<link rel="stylesheet" href="styles.css?v=50">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="theme-color" content="#6557d9">
@@ -163,14 +163,6 @@
               </div>
             </div>
 
-            <div class="sizePresets" aria-label="Graph size presets">
-              <button type="button" class="sizePreset" data-rows="7" data-cols="40">7 × 40</button>
-              <button type="button" class="sizePreset" data-rows="9" data-cols="60">9 × 60</button>
-              <button type="button" class="sizePreset" data-rows="9" data-cols="90">9 × 90</button>
-              <button type="button" class="sizePreset" data-rows="12" data-cols="90">12 × 90</button>
-              <button type="button" class="sizePreset" data-rows="16" data-cols="120">16 × 120</button>
-            </div>
-
             <div class="colorStrip">
               <label class="colorChip">
                 <span>Pattern</span>
@@ -200,99 +192,94 @@
         <button type="button" class="graphTool" data-tool="fill" id="toolFill">Fill</button>
       </div>
 
-      <div class="gridScroll" id="gridScroll">
-        <div id="gridNumberedWrap" class="gridNumbered">
-          <div class="gridCorner" aria-hidden="true"></div>
-          <div id="colNumbers" class="colNumbers" aria-hidden="true"></div>
-          <div id="rowNumbers" class="rowNumbers" aria-hidden="true"></div>
-          <div id="grid" class="pixelGrid"></div>
+      <div class="graphWorkspace">
+        <aside class="graphSideRail graphSideLeft">
+          <div class="sideRailSection">
+            <div class="sideRailTitle">Rows / columns</div>
+            <div class="sidePresetGrid">
+              <button type="button" class="sizePreset" data-rows="7" data-cols="40">7 × 40</button>
+              <button type="button" class="sizePreset" data-rows="9" data-cols="60">9 × 60</button>
+              <button type="button" class="sizePreset" data-rows="9" data-cols="90">9 × 90</button>
+              <button type="button" class="sizePreset" data-rows="12" data-cols="90">12 × 90</button>
+              <button type="button" class="sizePreset" data-rows="16" data-cols="120">16 × 120</button>
+            </div>
+          </div>
+
+          <div class="sideRailSection rowColumnSection">
+            <div class="sideRailTitle">Edit row / column</div>
+            <div class="sideInsertGrid">
+              <label><span>Row</span><input id="insertRowAt" type="number" min="1" value="1" inputmode="numeric"></label>
+              <label><span>Column</span><input id="insertColAt" type="number" min="1" value="1" inputmode="numeric"></label>
+            </div>
+            <div class="rowColActions">
+              <button type="button" id="insertRowBtn">Insert row</button>
+              <button type="button" id="deleteRowBtn" class="dangerSoft">Delete row</button>
+              <button type="button" id="insertColBtn">Insert column</button>
+              <button type="button" id="deleteColBtn" class="dangerSoft">Delete column</button>
+            </div>
+          </div>
+        </aside>
+
+        <div class="graphCenter">
+          <div class="gridScroll" id="gridScroll">
+            <div id="gridNumberedWrap" class="gridNumbered">
+              <div class="gridCorner" aria-hidden="true"></div>
+              <div id="colNumbers" class="colNumbers" aria-hidden="true"></div>
+              <div id="rowNumbers" class="rowNumbers" aria-hidden="true"></div>
+              <div id="grid" class="pixelGrid"></div>
+            </div>
+          </div>
+          <div id="fitNote" class="infoLine"></div>
         </div>
-      </div>
-      <div id="fitNote" class="infoLine"></div>
 
-      <div class="actions previewActions graphActions">
-        <button type="button" id="clearBtn" class="dangerSoft">Clear Graph</button>
-        <button type="button" id="printBtn">Print Pattern</button>
-        <button type="button" id="saveBtn">Save SVG</button>
-        <button type="button" id="goCalculatorBtn" class="primary">Next: Calculate String</button>
-      </div>
-    </section>
-
-          <section class="editorBlock quickToolsBlock">
-            <div class="editorBlockHead compactHead">
-              <div>
-                <span class="editorBlockEyebrow">QUICK TOOLS</span>
-                <h4>Draw & view</h4>
-              </div>
+        <aside class="graphSideRail graphSideRight">
+          <div class="sideRailSection">
+            <div class="sideRailTitle">Pattern color</div>
+            <div class="colorPalette" aria-label="Pattern color palette">
+              <button type="button" class="paletteSwatch" data-target="drawLetterColor" data-color="#183d7a" style="--swatch:#183d7a" aria-label="Navy"></button>
+              <button type="button" class="paletteSwatch" data-target="drawLetterColor" data-color="#111111" style="--swatch:#111111" aria-label="Black"></button>
+              <button type="button" class="paletteSwatch" data-target="drawLetterColor" data-color="#6b4ab3" style="--swatch:#6b4ab3" aria-label="Purple"></button>
+              <button type="button" class="paletteSwatch" data-target="drawLetterColor" data-color="#d9466b" style="--swatch:#d9466b" aria-label="Pink"></button>
+              <button type="button" class="paletteSwatch" data-target="drawLetterColor" data-color="#d97706" style="--swatch:#d97706" aria-label="Orange"></button>
+              <button type="button" class="paletteSwatch" data-target="drawLetterColor" data-color="#138a72" style="--swatch:#138a72" aria-label="Teal"></button>
             </div>
+            <label class="sideColorPicker"><span>Custom</span><input id="sidePatternColor" type="color" value="#183d7a"></label>
+          </div>
 
-            <div class="quickToolRows">
-              <div class="quickToolRow">
-                <span class="quickToolLabel">View</span>
-                <button type="button" id="fitCustomBtn">Fit</button>
-                <button type="button" id="largeSquaresBtn">Large</button>
-                <label class="numberToggle" for="showGridNumbers">
-                  <input id="showGridNumbers" type="checkbox" checked>
-                  <span>Numbers</span>
-                </label>
-              </div>
-
-              <div class="quickToolRow">
-                <span class="quickToolLabel">Edit</span>
-                <button type="button" id="undoBtn">Undo</button>
-                <button type="button" id="fillBtn">Fill</button>
-                <button type="button" id="invertBtn">Invert</button>
-              </div>
+          <div class="sideRailSection">
+            <div class="sideRailTitle">Background</div>
+            <div class="colorPalette" aria-label="Background color palette">
+              <button type="button" class="paletteSwatch" data-target="drawBgColor" data-color="#d9f3e8" style="--swatch:#d9f3e8" aria-label="Mint"></button>
+              <button type="button" class="paletteSwatch" data-target="drawBgColor" data-color="#ffffff" style="--swatch:#ffffff" aria-label="White"></button>
+              <button type="button" class="paletteSwatch" data-target="drawBgColor" data-color="#fff2c9" style="--swatch:#fff2c9" aria-label="Cream"></button>
+              <button type="button" class="paletteSwatch" data-target="drawBgColor" data-color="#f9d8e7" style="--swatch:#f9d8e7" aria-label="Blush"></button>
+              <button type="button" class="paletteSwatch" data-target="drawBgColor" data-color="#dce7ff" style="--swatch:#dce7ff" aria-label="Blue"></button>
+              <button type="button" class="paletteSwatch" data-target="drawBgColor" data-color="#eee7ff" style="--swatch:#eee7ff" aria-label="Lavender"></button>
             </div>
-          </section>
+            <label class="sideColorPicker"><span>Custom</span><input id="sideBackgroundColor" type="color" value="#d9f3e8"></label>
+          </div>
 
-          <details class="toolDrawer">
+          <div class="sideRailSection">
+            <div class="sideRailTitle">Border</div>
+            <select id="drawBorderThickness" aria-label="Border thickness">
+              <option value="1" selected>1 row</option>
+              <option value="2">2 rows</option>
+              <option value="3">3 rows</option>
+            </select>
+            <button type="button" id="addBorderBtn" class="sideWideButton">Add Border</button>
+            <button type="button" id="removeBorderBtn" class="sideWideButton">Remove</button>
+          </div>
+
+          <button type="button" id="clearBtn" class="dangerSoft sideClearButton">Clear</button>
+        </aside>
+      </div>
+
+      <div class="underGraphBar">
+        <details class="graphStampWindow">
             <summary>
               <span>
-                <b>Structure</b>
-                <small>Insert rows/columns and borders</small>
-              </span>
-              <span class="drawerHint">Open</span>
-            </summary>
-            <div class="toolDrawerBody">
-              <div class="compactToolSection">
-                <div class="miniHeading">Insert blank</div>
-                <div class="insertGrid">
-                  <label class="inlineInsertField">
-                    <span>Row</span>
-                    <input id="insertRowAt" type="number" min="1" value="1" inputmode="numeric">
-                  </label>
-                  <button type="button" id="insertRowBtn">Insert Row</button>
-
-                  <label class="inlineInsertField">
-                    <span>Column</span>
-                    <input id="insertColAt" type="number" min="1" value="1" inputmode="numeric">
-                  </label>
-                  <button type="button" id="insertColBtn">Insert Column</button>
-                </div>
-                <div class="insertHelp">1 means top/left. Use the current last row or column + 1 for bottom/right.</div>
-              </div>
-
-              <div class="compactToolSection">
-                <div class="miniHeading">Border</div>
-                <div class="borderControls">
-                  <select id="drawBorderThickness" aria-label="Border thickness">
-                    <option value="1" selected>1 row</option>
-                    <option value="2">2 rows</option>
-                    <option value="3">3 rows</option>
-                  </select>
-                  <button type="button" id="addBorderBtn">Add Border</button>
-                  <button type="button" id="removeBorderBtn">Remove</button>
-                </div>
-              </div>
-            </div>
-          </details>
-
-          <details class="toolDrawer">
-            <summary>
-              <span>
-                <b>Stamp library</b>
-                <small>Pixel motifs and mirrored placement</small>
+                <b>Stamp window</b>
+                <small>Choose a pixel stamp</small>
               </span>
               <span class="drawerHint">Open</span>
             </summary>
@@ -382,6 +369,41 @@
               <div id="mirrorStampNote" class="infoLine compactInfo">Turn on Mirror to place the same stamp on both sides of the pattern.</div>
             </div>
           </details>
+        <button type="button" id="goCalculatorBtn" class="primary graphNextButton">Calculate Beads</button>
+      </div>
+    </section>
+
+          <section class="editorBlock quickToolsBlock">
+            <div class="editorBlockHead compactHead">
+              <div>
+                <span class="editorBlockEyebrow">QUICK TOOLS</span>
+                <h4>Draw & view</h4>
+              </div>
+            </div>
+
+            <div class="quickToolRows">
+              <div class="quickToolRow">
+                <span class="quickToolLabel">View</span>
+                <button type="button" id="fitCustomBtn">Fit</button>
+                <button type="button" id="largeSquaresBtn">Large</button>
+                <label class="numberToggle" for="showGridNumbers">
+                  <input id="showGridNumbers" type="checkbox" checked>
+                  <span>Numbers</span>
+                </label>
+              </div>
+
+              <div class="quickToolRow">
+                <span class="quickToolLabel">Edit</span>
+                <button type="button" id="undoBtn">Undo</button>
+                <button type="button" id="fillBtn">Fill</button>
+                <button type="button" id="invertBtn">Invert</button>
+              </div>
+            </div>
+          </section>
+
+          
+
+          
 
           <details class="toolDrawer">
             <summary>
@@ -677,12 +699,12 @@
   On iPhone or iPad: Safari → Share → Add to Home Screen.
 </div>
 
-<script defer src="data.js?v=49"></script>
-<script defer src="core.js?v=49"></script>
-<script defer src="calculator.js?v=49"></script>
-<script defer src="beads.js?v=49"></script>
-<script defer src="projects.js?v=49"></script>
-<script defer src="export.js?v=49"></script>
-<script defer src="app.js?v=49"></script>
+<script defer src="data.js?v=50"></script>
+<script defer src="core.js?v=50"></script>
+<script defer src="calculator.js?v=50"></script>
+<script defer src="beads.js?v=50"></script>
+<script defer src="projects.js?v=50"></script>
+<script defer src="export.js?v=50"></script>
+<script defer src="app.js?v=50"></script>
 </body>
 </html>

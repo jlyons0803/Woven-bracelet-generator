@@ -1146,3 +1146,20 @@ input[type=color]{height:46px;padding:4px}
 .stampName{font-size:10px;line-height:1.1;font-weight:800;color:#52576d;text-align:center}
 .stampIcon,.stampTextIcon{display:none !important}
 @media(max-width:480px){.graphTool{flex:1 1 calc(50% - 6px);justify-content:center}.stampPreview{--stamp-cell:3px}}
+
+/* V50 controls arranged around the graph */
+.graphWorkspace{display:grid;grid-template-columns:150px minmax(0,1fr) 170px;gap:12px;align-items:stretch}
+.graphCenter{min-width:0;display:flex;flex-direction:column}
+.graphCenter .gridScroll{flex:1;min-height:440px;margin:0}
+.graphSideRail{display:flex;flex-direction:column;gap:12px;padding:10px;border:1px solid #e8e4f0;border-radius:16px;background:#fbfaff}
+.sideRailSection{display:flex;flex-direction:column;gap:8px}.sideRailSection+.sideRailSection{padding-top:10px;border-top:1px solid #ece8f2}
+.sideRailTitle{font-size:11px;font-weight:900;letter-spacing:.02em;color:#596078}
+.sidePresetGrid{display:grid;gap:6px}.sidePresetGrid .sizePreset{width:100%;min-height:34px;padding:6px 8px;border-radius:10px}
+.sideInsertGrid{display:grid;grid-template-columns:1fr 1fr;gap:6px}.sideInsertGrid label{display:flex;flex-direction:column;gap:4px;font-size:10px;font-weight:850;color:#697086}.sideInsertGrid input{width:100%;min-height:36px;padding:5px;text-align:center}
+.rowColActions{display:grid;grid-template-columns:1fr;gap:6px}.rowColActions button{min-height:34px;padding:6px 7px;font-size:10px;font-weight:850}
+.colorPalette{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.paletteSwatch{aspect-ratio:1;min-height:34px;padding:0;border-radius:10px;background:var(--swatch);border:2px solid #fff;box-shadow:0 0 0 1px #d8d3e2}.paletteSwatch:active{transform:scale(.95)}
+.sideColorPicker{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:36px;padding:5px 7px;border:1px solid #e2deea;border-radius:10px;background:#fff;font-size:10px;font-weight:850;color:#687086}.sideColorPicker input{width:34px;height:28px;min-height:28px;padding:0;border:0;background:transparent}
+.graphSideRight select{width:100%;min-height:36px}.sideWideButton{width:100%;min-height:36px}.sideClearButton{width:100%;min-height:44px;margin-top:auto;font-weight:900}
+.underGraphBar{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:end;margin-top:12px}.graphStampWindow{border:1px solid #dfdaeb;border-radius:14px;background:#fff;overflow:hidden}.graphStampWindow>summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:46px;padding:9px 12px}.graphStampWindow>summary::-webkit-details-marker{display:none}.graphStampWindow>summary span:first-child{display:flex;flex-direction:column;gap:2px}.graphStampWindow .toolDrawerBody{border-top:1px solid #ece8f2;max-height:360px;overflow:auto}.graphNextButton{min-width:170px;min-height:48px;padding:10px 18px}
+@media(max-width:900px){.graphWorkspace{grid-template-columns:125px minmax(0,1fr) 145px;gap:8px}.graphSideRail{padding:8px}.graphCenter .gridScroll{min-height:400px}}
+@media(max-width:700px){.graphWorkspace{grid-template-columns:1fr}.graphCenter{order:1}.graphSideLeft{order:2}.graphSideRight{order:3}.graphSideRail{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.sidePresetGrid{grid-template-columns:repeat(3,minmax(0,1fr))}.sideClearButton{margin-top:0}.underGraphBar{grid-template-columns:1fr}.graphNextButton{width:100%}}
