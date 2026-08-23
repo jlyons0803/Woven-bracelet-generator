@@ -368,7 +368,7 @@ function insertBlankColumnAt(position){
 }
 
 
-function generateRandomPattern(style="balanced"){
+function generateRandomPattern(style="chevron"){
   if(mode!=="draw" || !drawMatrix.length) return;
 
   const rows=drawMatrix.length;
@@ -378,58 +378,159 @@ function generateRandomPattern(style="balanced"){
   if(history.length>40) history.shift();
 
   const next=blank(rows,cols);
+  const fill=(r,c)=>{ if(r>=0 && r<rows && c>=0 && c<cols) next[r][c]=1; };
 
-  if(style==="checker"){
-    for(let r=0;r<rows;r++){
-      for(let c=0;c<cols;c++){
-        next[r][c]=((r+c)%2===0)?1:0;
+  if(style==="chevron"){
+    const repeat=Math.max(4,Math.floor(cols/4));
+    for(let c=0;c<cols;c++){
+      const x=((c%repeat)/(repeat-1))*2-1;
+      const center=Math.round((rows-1)*(1-Math.abs(x))/2);
+      const mirror=rows-1-center;
+      fill(center,c); fill(mirror,c);
+      if(center+1<rows) fill(center+1,c);
+      if(mirror-1>=0) fill(mirror-1,c);
+    }
+
+  }else if(style==="diamonds"){
+    const h=Math.max(3,Math.floor(rows/2));
+    const w=Math.max(6,Math.floor(cols/4));
+    for(let start=0;start<cols+w;start+=w){
+      const cx=start+Math.floor(w/2), cy=Math.floor(rows/2);
+      for(let d=0;d<=Math.min(h,Math.floor(w/2));d++){
+        const xo=Math.floor(w/2)-d;
+        fill(cy-d,cx-xo); fill(cy-d,cx+xo);
+        fill(cy+d,cx-xo); fill(cy+d,cx+xo);
       }
     }
-  }else if(style==="stripes"){
-    const vertical=Math.random()>.5;
-    const band=Math.max(1,Math.floor(Math.random()*3)+1);
-    if(vertical){
-      for(let c=0;c<cols;c++){
-        const on=Math.floor(c/band)%2===0;
-        for(let r=0;r<rows;r++) next[r][c]=on?1:0;
+
+  }else if(style==="zigzag"){
+    const amp=Math.max(2,Math.floor(rows/3));
+    const period=Math.max(4,Math.floor(cols/5));
+    for(let c=0;c<cols;c++){
+      const phase=(c%period)/(period-1);
+      const y=phase<0.5
+        ? Math.round((rows-1)/2-amp+(phase*4*amp))
+        : Math.round((rows-1)/2+amp-((phase-.5)*4*amp));
+      fill(y,c); fill(Math.min(rows-1,y+1),c);
+    }
+
+  }else if(style==="waves"){
+    const mid=(rows-1)/2;
+    const amp=Math.max(2,Math.floor(rows/3));
+    const freq=(Math.PI*2)/Math.max(8,Math.floor(cols/2));
+    for(let c=0;c<cols;c++){
+      const y=Math.round(mid+Math.sin(c*freq)*amp);
+      fill(y,c); if(y+1<rows) fill(y+1,c);
+    }
+
+  }else if(style==="argyle"){
+    const h=Math.max(3,Math.floor(rows/2));
+    const w=Math.max(6,Math.floor(cols/4));
+    for(let start=-w;start<cols+w;start+=w){
+      const cx=start+Math.floor(w/2), cy=Math.floor(rows/2);
+      for(let d=0;d<=Math.min(h,Math.floor(w/2));d++){
+        const xo=Math.floor(w/2)-d;
+        fill(cy-d,cx-xo); fill(cy-d,cx+xo);
+        fill(cy+d,cx-xo); fill(cy+d,cx+xo);
       }
-    }else{
       for(let r=0;r<rows;r++){
-        const on=Math.floor(r/band)%2===0;
-        for(let c=0;c<cols;c++) next[r][c]=on?1:0;
-      }
-    }
-  }else if(style==="mirror"){
-    const half=Math.ceil(cols/2);
-    for(let r=0;r<rows;r++){
-      for(let c=0;c<half;c++){
-        const v=Math.random()<0.42?1:0;
-        next[r][c]=v;
-        next[r][cols-1-c]=v;
-      }
-    }
-  }else{
-    let chance=.42;
-    if(style==="sparse") chance=.24;
-    if(style==="dense") chance=.64;
-
-    for(let r=0;r<rows;r++){
-      for(let c=0;c<cols;c++){
-        next[r][c]=Math.random()<chance?1:0;
+        fill(r,Math.round(cx+(r-cy)*(w/(2*Math.max(1,h)))));
+        fill(r,Math.round(cx-(r-cy)*(w/(2*Math.max(1,h)))));
       }
     }
 
-    // Light smoothing for the balanced style so it looks more intentional
-    // and less like pure static.
-    if(style==="balanced"){
-      for(let r=1;r<rows-1;r++){
-        for(let c=1;c<cols-1;c++){
-          const neighbors=
-            next[r-1][c]+next[r+1][c]+next[r][c-1]+next[r][c+1];
-          if(neighbors>=3 && Math.random()<.45) next[r][c]=1;
-          if(neighbors===0 && Math.random()<.45) next[r][c]=0;
+  }else if(style==="hearts" || style==="heartBorder"){
+    const heart=[[0,1,1,0,1,1,0],
+                 [1,0,0,1,0,0,1],
+                 [1,0,0,0,0,0,1],
+                 [0,1,0,0,0,1,0],
+                 [0,0,1,0,1,0,0],
+                 [0,0,0,1,0,0,0]];
+    const mh=heart.length,mw=heart[0].length,gap=2;
+    const startRow=Math.max(style==="heartBorder"?1:0,Math.floor((rows-mh)/2));
+    if(style==="heartBorder"){
+      for(let c=0;c<cols;c++){ fill(0,c); fill(rows-1,c); }
+    }
+    for(let start=0;start<cols;start+=mw+gap){
+      for(let r=0;r<mh;r++){
+        for(let c=0;c<mw;c++){
+          if(heart[r][c]) fill(startRow+r,start+c);
         }
       }
+    }
+
+  }else if(style==="greekKey"){
+    const top=Math.max(0,Math.floor(rows/2)-2);
+    for(let c=0;c<cols;c++){
+      const phase=c%8;
+      if(phase<=1){
+        for(let r=0;r<5;r++) fill(top+r,c);
+      }else if(phase<=4){
+        fill(top,c);
+      }else if(phase===5){
+        fill(top,c); fill(top+1,c); fill(top+2,c);
+      }else if(phase===6){
+        fill(top+2,c);
+      }else{
+        fill(top+2,c); fill(top+3,c); fill(top+4,c);
+      }
+    }
+
+  }else if(style==="flowers"){
+    const flower=[[0,1,0,1,0],
+                  [1,1,1,1,1],
+                  [0,1,1,1,0],
+                  [1,1,1,1,1],
+                  [0,1,0,1,0]];
+    const mh=5,mw=5,gap=2,startRow=Math.max(0,Math.floor((rows-mh)/2));
+    for(let start=0;start<cols;start+=mw+gap){
+      for(let r=0;r<mh;r++) for(let c=0;c<mw;c++) if(flower[r][c]) fill(startRow+r,start+c);
+    }
+
+  }else if(style==="rainbowStripes"){
+    const band=Math.max(1,Math.floor(cols/12));
+    for(let c=0;c<cols;c++){
+      const stripe=Math.floor(c/band)%6;
+      if(stripe===0 || stripe===2 || stripe===4){
+        for(let r=0;r<rows;r++) fill(r,c);
+      }
+    }
+
+  }else if(style==="aztec"){
+    const step=8, mid=Math.floor(rows/2);
+    for(let start=-step;start<cols+step;start+=step){
+      const center=start+Math.floor(step/2);
+      for(let d=0;d<=Math.min(mid,4);d++){
+        fill(mid-d,center-d); fill(mid-d,center+d);
+        fill(mid+d,center-d); fill(mid+d,center+d);
+      }
+      for(let r=0;r<rows;r++){
+        if(r%2===0){ fill(r,center-3); fill(r,center+3); }
+      }
+    }
+
+  }else if(style==="hourglass"){
+    const period=8,mid=(rows-1)/2,amp=Math.max(2,Math.floor(rows/2));
+    for(let c=0;c<cols;c++){
+      const t=(c%period)/(period-1);
+      const off=Math.round(Math.abs(.5-t)*2*amp);
+      fill(Math.round(mid-off),c); fill(Math.round(mid+off),c);
+    }
+
+  }else if(style==="steps"){
+    const period=10,mid=Math.floor(rows/2);
+    for(let c=0;c<cols;c++){
+      const t=c%period,d=t<=5?t:10-t,off=Math.min(mid,d);
+      fill(mid-off,c); fill(mid+off,c);
+      if(t===0) for(let r=0;r<rows;r++) fill(r,c);
+    }
+
+  }else if(style==="crosses"){
+    const motifW=7,motifH=5,gap=2,top=Math.max(0,Math.floor((rows-motifH)/2));
+    for(let start=0;start<cols;start+=motifW+gap){
+      const cx=start+3;
+      for(let r=0;r<motifH;r++) fill(top+r,cx);
+      for(let c=0;c<motifW;c++) fill(top+2,start+c);
     }
   }
 
@@ -440,18 +541,18 @@ function generateRandomPattern(style="balanced"){
 
   if($("fitNote")){
     const labels={
-      balanced:"balanced",
-      sparse:"sparse",
-      dense:"dense",
-      mirror:"mirrored",
-      stripes:"striped",
-      checker:"checkerboard"
+      chevron:"chevron", diamonds:"diamond", zigzag:"zigzag", waves:"wave",
+      argyle:"argyle", hearts:"heart", greekKey:"Greek key", flowers:"flower",
+      heartBorder:"heart-with-border", rainbowStripes:"striped",
+      aztec:"Aztec geometric", hourglass:"hourglass",
+      steps:"stepped diamond", crosses:"cross motif"
     };
-    $("fitNote").textContent=`Generated a ${labels[style]||"random"} pattern. Tap Undo to go back.`;
+    $("fitNote").textContent=`Generated a ${labels[style]||"bracelet"} pattern. Tap Undo to go back.`;
   }
 
   renderGrid();
 }
+
 function resizeCustomGraph(){
   customBorderApplied=0;
   const rows=Math.max(3,Math.min(60,Number($("drawRows").value)||9));
