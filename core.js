@@ -367,6 +367,91 @@ function insertBlankColumnAt(position){
   renderGrid();
 }
 
+
+function generateRandomPattern(style="balanced"){
+  if(mode!=="draw" || !drawMatrix.length) return;
+
+  const rows=drawMatrix.length;
+  const cols=drawMatrix[0].length;
+
+  history.push(clone(drawMatrix));
+  if(history.length>40) history.shift();
+
+  const next=blank(rows,cols);
+
+  if(style==="checker"){
+    for(let r=0;r<rows;r++){
+      for(let c=0;c<cols;c++){
+        next[r][c]=((r+c)%2===0)?1:0;
+      }
+    }
+  }else if(style==="stripes"){
+    const vertical=Math.random()>.5;
+    const band=Math.max(1,Math.floor(Math.random()*3)+1);
+    if(vertical){
+      for(let c=0;c<cols;c++){
+        const on=Math.floor(c/band)%2===0;
+        for(let r=0;r<rows;r++) next[r][c]=on?1:0;
+      }
+    }else{
+      for(let r=0;r<rows;r++){
+        const on=Math.floor(r/band)%2===0;
+        for(let c=0;c<cols;c++) next[r][c]=on?1:0;
+      }
+    }
+  }else if(style==="mirror"){
+    const half=Math.ceil(cols/2);
+    for(let r=0;r<rows;r++){
+      for(let c=0;c<half;c++){
+        const v=Math.random()<0.42?1:0;
+        next[r][c]=v;
+        next[r][cols-1-c]=v;
+      }
+    }
+  }else{
+    let chance=.42;
+    if(style==="sparse") chance=.24;
+    if(style==="dense") chance=.64;
+
+    for(let r=0;r<rows;r++){
+      for(let c=0;c<cols;c++){
+        next[r][c]=Math.random()<chance?1:0;
+      }
+    }
+
+    // Light smoothing for the balanced style so it looks more intentional
+    // and less like pure static.
+    if(style==="balanced"){
+      for(let r=1;r<rows-1;r++){
+        for(let c=1;c<cols-1;c++){
+          const neighbors=
+            next[r-1][c]+next[r+1][c]+next[r][c-1]+next[r][c+1];
+          if(neighbors>=3 && Math.random()<.45) next[r][c]=1;
+          if(neighbors===0 && Math.random()<.45) next[r][c]=0;
+        }
+      }
+    }
+  }
+
+  drawMatrix=next;
+  customBorderApplied=0;
+  $("drawRows").value=rows;
+  $("drawCols").value=cols;
+
+  if($("fitNote")){
+    const labels={
+      balanced:"balanced",
+      sparse:"sparse",
+      dense:"dense",
+      mirror:"mirrored",
+      stripes:"striped",
+      checker:"checkerboard"
+    };
+    $("fitNote").textContent=`Generated a ${labels[style]||"random"} pattern. Tap Undo to go back.`;
+  }
+
+  renderGrid();
+}
 function resizeCustomGraph(){
   customBorderApplied=0;
   const rows=Math.max(3,Math.min(60,Number($("drawRows").value)||9));

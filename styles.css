@@ -663,3 +663,26 @@ input[type=color]{height:46px;padding:4px}
   .craftModeBtn{min-height:58px;padding:10px 12px}
   .craftModeBtn span{font-size:15px}
 }
+
+.randomPatternTools{flex-direction:column;align-items:stretch}
+.randomPatternGroup{width:100%}
+.inlineRandomField{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  margin:0;
+  font-size:12px;
+  font-weight:800;
+  color:#606679;
+}
+.inlineRandomField select{
+  width:auto;
+  min-width:120px;
+  min-height:40px;
+  padding:7px 9px;
+}
+@media(max-width:620px){
+  .randomPatternGroup{display:grid;grid-template-columns:1fr;gap:8px}
+  .inlineRandomField{justify-content:space-between}
+  .inlineRandomField select{min-width:150px}
+}
