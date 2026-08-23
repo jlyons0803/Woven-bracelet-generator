@@ -686,3 +686,98 @@ input[type=color]{height:46px;padding:4px}
   .inlineRandomField{justify-content:space-between}
   .inlineRandomField select{min-width:150px}
 }
+
+.stampGroupLarge{display:block;width:100%}
+.stampGroupHead{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:10px;
+}
+.stampLibrary{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(44px,1fr));
+  gap:8px;
+}
+.stampLibrary button{
+  min-height:44px;
+  padding:6px;
+  font-size:24px;
+  line-height:1;
+}
+.stampLibrary button.active{
+  border-color:#bfb7ff;
+  background:var(--accent-soft);
+  color:var(--accent-dark);
+}
+@media(max-width:620px){
+  .stampLibrary{
+    grid-template-columns:repeat(5,minmax(0,1fr));
+  }
+  .stampLibrary button{font-size:22px}
+}
+
+.stampCategories{
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+  margin:0 0 10px;
+}
+.stampCategory{
+  min-height:36px;
+  padding:7px 11px;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:850;
+}
+.stampCategory.active{
+  background:var(--accent);
+  color:#fff;
+  border-color:var(--accent);
+}
+.stampLibrary button{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:4px;
+  min-height:64px;
+}
+.stampIcon{
+  display:block;
+  font-size:23px;
+  line-height:1;
+}
+.stampName{
+  display:block;
+  max-width:100%;
+  font-size:9px;
+  line-height:1.05;
+  font-weight:800;
+  color:var(--muted);
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.stampLibrary button.active .stampName{
+  color:var(--accent-dark);
+}
+.stampLibrary button.stampHidden{
+  display:none;
+}
+@media(max-width:620px){
+  .stampCategories{
+    display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:6px;
+  }
+  .stampCategory{
+    padding:6px 5px;
+    min-height:34px;
+    font-size:11px;
+  }
+  .stampLibrary button{min-height:60px}
+  .stampIcon{font-size:21px}
+  .stampName{font-size:8px}
+}

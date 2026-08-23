@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <title>DandeLyons Designs</title>
-<link rel="stylesheet" href="styles.css?v=38">
+<link rel="stylesheet" href="styles.css?v=40">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="theme-color" content="#6557d9">
@@ -183,16 +183,53 @@
           </div>
 
           <div class="toolbar toolCard">
-            <div class="toolbarGroup stampGroup">
-              <span class="toolbarLabel">Stamps</span>
-              <button type="button" id="stampHeart">♥</button>
-              <button type="button" id="stampFlower">✿</button>
-              <button type="button" id="stampStar">★</button>
-              <button type="button" id="stampSmiley">☺</button>
-              <label class="mirrorToggle" for="mirrorStamp">
-                <input id="mirrorStamp" type="checkbox">
-                <span>Mirror</span>
-              </label>
+            <div class="toolbarGroup stampGroup stampGroupLarge">
+              <div class="stampGroupHead">
+                <span class="toolbarLabel">Stamp library</span>
+                <label class="mirrorToggle" for="mirrorStamp">
+                  <input id="mirrorStamp" type="checkbox">
+                  <span>Mirror</span>
+                </label>
+              </div>
+
+              <div class="stampCategories" id="stampCategories" aria-label="Stamp categories">
+                <button type="button" class="stampCategory active" data-category="all">All</button>
+                <button type="button" class="stampCategory" data-category="love">Love</button>
+                <button type="button" class="stampCategory" data-category="nature">Nature</button>
+                <button type="button" class="stampCategory" data-category="animals">Animals</button>
+                <button type="button" class="stampCategory" data-category="symbols">Symbols</button>
+                <button type="button" class="stampCategory" data-category="fun">Fun</button>
+                <button type="button" class="stampCategory" data-category="seasonal">Seasonal</button>
+              </div>
+
+              <div class="stampLibrary" id="stampLibrary">
+                <button type="button" id="stampHeart" data-stamp="heart" data-category="love" title="Heart"><span class="stampIcon">♥</span><span class="stampName">Heart</span></button>
+                <button type="button" id="stampFlower" data-stamp="flower" data-category="nature" title="Flower"><span class="stampIcon">✿</span><span class="stampName">Flower</span></button>
+                <button type="button" id="stampStar" data-stamp="star" data-category="symbols" title="Star"><span class="stampIcon">★</span><span class="stampName">Star</span></button>
+                <button type="button" id="stampSmiley" data-stamp="smiley" data-category="fun" title="Smiley"><span class="stampIcon">☺</span><span class="stampName">Smiley</span></button>
+
+                <button type="button" data-stamp="diamond" data-category="symbols" title="Diamond"><span class="stampIcon">◆</span><span class="stampName">Diamond</span></button>
+                <button type="button" data-stamp="moon" data-category="nature" title="Moon"><span class="stampIcon">☾</span><span class="stampName">Moon</span></button>
+                <button type="button" data-stamp="sun" data-category="nature" title="Sun"><span class="stampIcon">☀</span><span class="stampName">Sun</span></button>
+                <button type="button" data-stamp="clover" data-category="nature" title="Clover"><span class="stampIcon">☘</span><span class="stampName">Clover</span></button>
+
+                <button type="button" data-stamp="butterfly" data-category="animals" title="Butterfly"><span class="stampIcon">🦋</span><span class="stampName">Butterfly</span></button>
+                <button type="button" data-stamp="bow" data-category="love" title="Bow"><span class="stampIcon">🎀</span><span class="stampName">Bow</span></button>
+                <button type="button" data-stamp="crown" data-category="fun" title="Crown"><span class="stampIcon">♛</span><span class="stampName">Crown</span></button>
+                <button type="button" data-stamp="lightning" data-category="symbols" title="Lightning"><span class="stampIcon">⚡</span><span class="stampName">Lightning</span></button>
+
+                <button type="button" data-stamp="arrow" data-category="symbols" title="Arrow"><span class="stampIcon">➜</span><span class="stampName">Arrow</span></button>
+                <button type="button" data-stamp="paw" data-category="animals" title="Paw"><span class="stampIcon">🐾</span><span class="stampName">Paw</span></button>
+                <button type="button" data-stamp="cat" data-category="animals" title="Cat"><span class="stampIcon">🐱</span><span class="stampName">Cat</span></button>
+                <button type="button" data-stamp="music" data-category="fun" title="Music"><span class="stampIcon">♫</span><span class="stampName">Music</span></button>
+
+                <button type="button" data-stamp="peace" data-category="symbols" title="Peace"><span class="stampIcon">☮</span><span class="stampName">Peace</span></button>
+                <button type="button" data-stamp="snowflake" data-category="seasonal" title="Snowflake"><span class="stampIcon">❄</span><span class="stampName">Snowflake</span></button>
+                <button type="button" data-stamp="rainbow" data-category="nature" title="Rainbow"><span class="stampIcon">🌈</span><span class="stampName">Rainbow</span></button>
+                <button type="button" data-stamp="berry" data-category="nature" title="Berry / Floral"><span class="stampIcon">❋</span><span class="stampName">Floral</span></button>
+              </div>
+
+              <div class="insertHelp">Choose a category, tap a stamp, then tap the grid to place it. Use Mirror to place matching stamps on both sides.</div>
             </div>
           </div>
 
@@ -507,12 +544,12 @@
   On iPhone or iPad: Safari → Share → Add to Home Screen.
 </div>
 
-<script defer src="data.js?v=38"></script>
-<script defer src="core.js?v=38"></script>
-<script defer src="calculator.js?v=38"></script>
-<script defer src="beads.js?v=38"></script>
-<script defer src="projects.js?v=38"></script>
-<script defer src="export.js?v=38"></script>
-<script defer src="app.js?v=38"></script>
+<script defer src="data.js?v=40"></script>
+<script defer src="core.js?v=40"></script>
+<script defer src="calculator.js?v=40"></script>
+<script defer src="beads.js?v=40"></script>
+<script defer src="projects.js?v=40"></script>
+<script defer src="export.js?v=40"></script>
+<script defer src="app.js?v=40"></script>
 </body>
 </html>

@@ -217,6 +217,7 @@ function renderGrid(){
           placeStampAt(r,c,STAMPS[activeStamp]);
           const placed=activeStamp;
           activeStamp=null;
+          document.querySelectorAll("[data-stamp]").forEach(b=>b.classList.remove("active"));
           renderGrid();
           if($("fitNote")){
             $("fitNote").textContent=mirrorStampEnabled

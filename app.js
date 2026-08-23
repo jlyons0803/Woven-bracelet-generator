@@ -112,10 +112,29 @@ $("randomPatternBtn").addEventListener("click",()=>{
   autosaveCurrentProject();
 });
 $("undoBtn").addEventListener("click",undo);
-$("stampHeart").addEventListener("click",()=>{activeStamp="heart"; if($("fitNote")) $("fitNote").textContent="Heart selected — now tap the grid where you want to place it.";});
-$("stampFlower").addEventListener("click",()=>{activeStamp="flower"; if($("fitNote")) $("fitNote").textContent="Flower selected — now tap the grid where you want to place it.";});
-$("stampStar").addEventListener("click",()=>{activeStamp="star"; if($("fitNote")) $("fitNote").textContent="Star selected — now tap the grid where you want to place it.";});
-$("stampSmiley").addEventListener("click",()=>{activeStamp="smiley"; if($("fitNote")) $("fitNote").textContent="Smiley selected — now tap the grid where you want to place it.";});
+function setStampCategory(category){
+  document.querySelectorAll(".stampCategory").forEach(btn=>{
+    btn.classList.toggle("active",btn.dataset.category===category);
+  });
+  document.querySelectorAll("[data-stamp]").forEach(btn=>{
+    const show=category==="all" || btn.dataset.category===category;
+    btn.classList.toggle("stampHidden",!show);
+  });
+}
+
+document.querySelectorAll(".stampCategory").forEach(btn=>{
+  btn.addEventListener("click",()=>setStampCategory(btn.dataset.category));
+});
+
+setStampCategory("all");
+
+document.querySelectorAll("[data-stamp]").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    activeStamp=btn.dataset.stamp;
+    document.querySelectorAll("[data-stamp]").forEach(b=>b.classList.toggle("active",b===btn));
+    if($("fitNote")) $("fitNote").textContent=`${btn.title || btn.dataset.stamp} selected — now tap the grid where you want to place it.`;
+  });
+});
 $("mirrorStamp").addEventListener("change",()=>{
   mirrorStampEnabled=$("mirrorStamp").checked;
   if($("mirrorStampNote")){
