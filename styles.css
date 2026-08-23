@@ -563,3 +563,67 @@ input[type=color]{height:46px;padding:4px}
   .inlineInsertField{justify-content:space-between}
   .inlineInsertField input{width:82px}
 }
+
+.numberToggle{
+  display:inline-flex;align-items:center;gap:6px;margin:0;min-height:40px;
+  padding:7px 10px;border:1px solid #d9d9e6;border-radius:10px;background:#faf9ff;
+  color:#555b70;font-size:12px;font-weight:820;cursor:pointer
+}
+.numberToggle input{width:18px;height:18px;min-height:0;margin:0;accent-color:var(--accent)}
+
+.gridNumbered{
+  display:grid;
+  grid-template-columns:34px max-content;
+  grid-template-rows:28px max-content;
+  width:max-content;
+  margin:auto;
+  align-items:start;
+}
+.gridCorner{grid-column:1;grid-row:1}
+.colNumbers{
+  grid-column:2;grid-row:1;
+  display:grid;
+  height:28px;
+  align-items:end;
+}
+.rowNumbers{
+  grid-column:1;grid-row:2;
+  display:grid;
+  width:34px;
+}
+.gridNumbered .pixelGrid{
+  grid-column:2;grid-row:2;
+  margin:0;
+}
+.colNumber{
+  width:var(--cell-size,20px);
+  font-size:9px;line-height:1;text-align:center;
+  color:#73788c;font-weight:800;white-space:nowrap;
+  padding-bottom:5px;
+}
+.rowNumber{
+  height:var(--cell-size,20px);
+  display:flex;align-items:center;justify-content:flex-end;
+  padding-right:6px;font-size:9px;line-height:1;
+  color:#73788c;font-weight:800;
+}
+.gridNumbersHidden{
+  display:block;
+}
+.gridNumbersHidden .gridCorner,
+.gridNumbersHidden .colNumbers,
+.gridNumbersHidden .rowNumbers{
+  display:none;
+}
+.gridNumbersHidden .pixelGrid{margin:auto}
+@media(max-width:620px){
+  .gridNumbered{grid-template-columns:30px max-content}
+  .rowNumbers{width:30px}
+  .rowNumber{padding-right:5px;font-size:8px}
+  .colNumber{font-size:8px}
+}
+
+/* V34 numbered-grid Safari fix */
+#gridNumberedWrap{overflow:visible}
+#colNumbers,#rowNumbers{min-width:0;min-height:0}
+#colNumbers .colNumber,#rowNumbers .rowNumber{box-sizing:border-box}

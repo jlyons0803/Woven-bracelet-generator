@@ -110,7 +110,8 @@ function renderGrid(){
   // Custom patterns can either fit the screen or use larger squares for easier editing.
   let cellSize=20;
   if(holder && (mode==="name" || customFitToScreen)){
-    const available=Math.max(240,holder.clientWidth-26);
+    const numberGutter=showGridNumbers ? 34 : 0;
+    const available=Math.max(240,holder.clientWidth-26-numberGutter);
     cellSize=Math.floor(available/cols);
     cellSize=Math.max(6,Math.min(20,cellSize));
   }
@@ -121,25 +122,84 @@ function renderGrid(){
   const numberedWrap=$("gridNumberedWrap");
   const colNumbers=$("colNumbers");
   const rowNumbers=$("rowNumbers");
+  const corner=numberedWrap ? numberedWrap.querySelector(".gridCorner") : null;
+
   if(numberedWrap && colNumbers && rowNumbers){
-    numberedWrap.classList.toggle("gridNumbersHidden",!showGridNumbers);
+    const labelWidth=34;
+    const labelHeight=28;
+
+    // Apply the layout inline as well as through CSS. This prevents Safari or
+    // an older cached stylesheet from turning the column labels into one long
+    // vertical list.
+    numberedWrap.style.display=showGridNumbers ? "grid" : "block";
+    numberedWrap.style.gridTemplateColumns=`${labelWidth}px ${cols*cellSize}px`;
+    numberedWrap.style.gridTemplateRows=`${labelHeight}px ${rows*cellSize}px`;
+    numberedWrap.style.width=showGridNumbers ? `${labelWidth+(cols*cellSize)}px` : `${cols*cellSize}px`;
+    numberedWrap.style.margin="0 auto";
+
+    if(corner){
+      corner.style.display=showGridNumbers ? "block" : "none";
+      corner.style.gridColumn="1";
+      corner.style.gridRow="1";
+      corner.style.width=labelWidth+"px";
+      corner.style.height=labelHeight+"px";
+    }
+
     colNumbers.innerHTML="";
     rowNumbers.innerHTML="";
-    colNumbers.style.setProperty("--cell-size",cellSize+"px");
-    rowNumbers.style.setProperty("--cell-size",cellSize+"px");
+
+    colNumbers.style.display=showGridNumbers ? "grid" : "none";
+    colNumbers.style.gridColumn="2";
+    colNumbers.style.gridRow="1";
     colNumbers.style.gridTemplateColumns=`repeat(${cols},${cellSize}px)`;
+    colNumbers.style.width=`${cols*cellSize}px`;
+    colNumbers.style.height=labelHeight+"px";
+    colNumbers.style.alignItems="end";
+
+    rowNumbers.style.display=showGridNumbers ? "grid" : "none";
+    rowNumbers.style.gridColumn="1";
+    rowNumbers.style.gridRow="2";
     rowNumbers.style.gridTemplateRows=`repeat(${rows},${cellSize}px)`;
+    rowNumbers.style.width=labelWidth+"px";
+    rowNumbers.style.height=`${rows*cellSize}px`;
+
+    g.style.gridColumn=showGridNumbers ? "2" : "auto";
+    g.style.gridRow=showGridNumbers ? "2" : "auto";
+    g.style.margin="0";
 
     for(let c=0;c<cols;c++){
       const n=document.createElement("div");
       n.className="colNumber";
       n.textContent=String(c+1);
+      n.style.width=cellSize+"px";
+      n.style.height=labelHeight+"px";
+      n.style.display="flex";
+      n.style.alignItems="flex-end";
+      n.style.justifyContent="center";
+      n.style.paddingBottom="5px";
+      n.style.fontSize=cellSize<10 ? "7px" : "9px";
+      n.style.lineHeight="1";
+      n.style.color="#73788c";
+      n.style.fontWeight="800";
+      n.style.boxSizing="border-box";
       colNumbers.appendChild(n);
     }
+
     for(let r=0;r<rows;r++){
       const n=document.createElement("div");
       n.className="rowNumber";
       n.textContent=String(r+1);
+      n.style.width=labelWidth+"px";
+      n.style.height=cellSize+"px";
+      n.style.display="flex";
+      n.style.alignItems="center";
+      n.style.justifyContent="flex-end";
+      n.style.paddingRight="6px";
+      n.style.fontSize=cellSize<10 ? "7px" : "9px";
+      n.style.lineHeight="1";
+      n.style.color="#73788c";
+      n.style.fontWeight="800";
+      n.style.boxSizing="border-box";
       rowNumbers.appendChild(n);
     }
   }

@@ -1,7 +1,7 @@
-const CACHE='dandelyons-designs-v33-numbered-grid';
+const CACHE='dandelyons-designs-v34-number-fix';
 const ASSETS=[
-  './','./index.html','./styles.css?v=33','./data.js?v=33','./core.js?v=33',
-  './calculator.js?v=33','./projects.js?v=33','./export.js?v=33','./app.js?v=33',
+  './','./index.html','./styles.css?v=34','./data.js?v=34','./core.js?v=34',
+  './calculator.js?v=34','./projects.js?v=34','./export.js?v=34','./app.js?v=34',
   './manifest.webmanifest','./icon-192.png','./icon-512.png','./apple-touch-icon.png'
 ];
 self.addEventListener('install',e=>{self.skipWaiting();e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)))});
