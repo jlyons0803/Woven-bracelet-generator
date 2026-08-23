@@ -1,3 +1,36 @@
+let craftMode="woven";
+
+function setCraftMode(next){
+  craftMode=next==="beaded" ? "beaded" : "woven";
+
+  $("craftWoven").classList.toggle("active",craftMode==="woven");
+  $("craftBeaded").classList.toggle("active",craftMode==="beaded");
+
+  $("wovenCalculatorWrap").classList.toggle("hidden",craftMode!=="woven");
+  $("beadCalculatorWrap").classList.toggle("hidden",craftMode!=="beaded");
+
+  $("navCalcLabel").textContent=craftMode==="woven" ? "Calculator" : "Beads";
+  $("designHeading").textContent=craftMode==="woven" ? "Design your bracelet" : "Design your beaded bracelet";
+  $("designHint").textContent=craftMode==="woven"
+    ? "Name generator + custom editor together"
+    : "Use the same grid as a bead pattern";
+  $("patternEyebrow").textContent=craftMode==="woven" ? "LIVE PATTERN" : "BEAD PATTERN";
+  $("goCalculatorBtn").textContent=craftMode==="woven" ? "Next: Calculate String" : "Next: Bead Count";
+  $("printBtn").textContent=craftMode==="woven" ? "Print Pattern" : "Print Bead Pattern";
+
+  if(craftMode==="beaded" && typeof updateBeadCalculator==="function"){
+    updateBeadCalculator();
+  }else if(craftMode==="woven" && typeof runCalculatorUpdate==="function"){
+    runCalculatorUpdate();
+  }
+
+  // Keep the current pattern when switching modes.
+  renderGrid();
+}
+
+$("craftWoven").addEventListener("click",()=>setCraftMode("woven"));
+$("craftBeaded").addEventListener("click",()=>setCraftMode("beaded"));
+
 function showAppPane(target){
   const panes={
     design:$("paneDesign"),
@@ -29,10 +62,12 @@ function showAppPane(target){
 $("navDesign").addEventListener("click",()=>showAppPane("design"));
 $("navCalculator").addEventListener("click",()=>showAppPane("calculator"));
 $("navProjects").addEventListener("click",()=>showAppPane("projects"));
-$("goCalculatorBtn").addEventListener("click",()=>showAppPane("calculator"));
+$("goCalculatorBtn").addEventListener("click",()=>{showAppPane("calculator"); if(craftMode==="beaded") updateBeadCalculator();});
 $("backToDesignBtn").addEventListener("click",()=>showAppPane("design"));
 $("goProjectsBtn").addEventListener("click",()=>showAppPane("projects"));
 $("projectsToDesignBtn").addEventListener("click",()=>showAppPane("design"));
+$("beadBackToDesignBtn").addEventListener("click",()=>showAppPane("design"));
+$("beadGoProjectsBtn").addEventListener("click",()=>showAppPane("projects"));
 
 window.addEventListener("resize",()=>{
   clearTimeout(window.__wovenResizeTimer);
@@ -146,6 +181,8 @@ $("saveBtn").addEventListener("click",saveSVG);
  customBorderApplied=0;
 $("showGridNumbers").checked=true;
 showGridNumbers=true;
+
+setCraftMode("woven");
 
 // Initial render
 refreshProjectList();

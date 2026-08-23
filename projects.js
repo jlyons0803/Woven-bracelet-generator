@@ -24,6 +24,7 @@ function captureProjectState(){
     appVersion:11,
     savedAt:new Date().toISOString(),
     mode,
+    craftMode,
     customFitToScreen,
     activeStamp:null,
     nameSettings:{
@@ -59,6 +60,12 @@ function captureProjectState(){
       sampleCols:$("sampleCols").value,
       sampleUsed:$("sampleUsed").value,
       tail:$("tail").value
+    },
+    beadCalculator:{
+      finished:$("beadFinished").value,
+      beadSize:$("beadSize").value,
+      customBeadMM:$("customBeadMM").value,
+      waste:$("beadWaste").value
     }
   };
 }
@@ -96,6 +103,12 @@ function applyProjectState(state){
     drawMatrix=Array.isArray(d.matrix) && d.matrix.length ? d.matrix.map(row=>row.map(v=>v?1:0)) : [];
 
     const c=state.calculator||{};
+    const bc=state.beadCalculator||{};
+    if(bc.finished!=null) $("beadFinished").value=bc.finished;
+    if(bc.beadSize!=null) $("beadSize").value=bc.beadSize;
+    if(bc.customBeadMM!=null) $("customBeadMM").value=bc.customBeadMM;
+    if(bc.waste!=null) $("beadWaste").value=bc.waste;
+    $("customBeadMM").disabled=$("beadSize").value!=="custom";
     if(c.threadType!=null && $("threadType").querySelector(`option[value="${c.threadType}"]`)){
       $("threadType").value=c.threadType;
     }else{
@@ -119,7 +132,9 @@ function applyProjectState(state){
   }finally{
     loadingProject=false;
   }
-  runCalculatorUpdate();
+  setCraftMode(state.craftMode==="beaded" ? "beaded" : "woven");
+  if(craftMode==="beaded") updateBeadCalculator();
+  else runCalculatorUpdate();
 }
 
 function matrixForProjectState(state){
@@ -342,6 +357,12 @@ function newProjectNow(){
     $("drawBgColor").value="#d9f3e8";
     $("drawBorderThickness").value=1;
     customBorderApplied=0;
+    $("beadFinished").value=6.5;
+    $("beadSize").value="2.0";
+    $("customBeadMM").value="2.0";
+    $("customBeadMM").disabled=true;
+    $("beadWaste").value=10;
+    setCraftMode("woven");
     $("mirrorStamp").checked=false;
     mirrorStampEnabled=false;
     $("showGridNumbers").checked=true;

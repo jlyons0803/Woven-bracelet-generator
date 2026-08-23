@@ -627,3 +627,39 @@ input[type=color]{height:46px;padding:4px}
 #gridNumberedWrap{overflow:visible}
 #colNumbers,#rowNumbers{min-width:0;min-height:0}
 #colNumbers .colNumber,#rowNumbers .rowNumber{box-sizing:border-box}
+
+.craftModeBar{
+  max-width:1120px;
+  margin:14px auto 0;
+  padding:0 20px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+.craftModeBtn{
+  min-height:64px;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  justify-content:center;
+  gap:2px;
+  padding:12px 16px;
+  border:1px solid #d9d9e6;
+  border-radius:16px;
+  background:#fff;
+  color:#5d6377;
+  box-shadow:0 4px 14px rgba(40,34,82,.04);
+}
+.craftModeBtn span{font-size:16px;font-weight:900}
+.craftModeBtn small{font-size:11px;color:var(--muted);font-weight:600}
+.craftModeBtn.active{
+  border-color:#bfb7ff;
+  background:var(--accent-soft);
+  color:var(--accent-dark);
+}
+.craftModeBtn.active small{color:#6f65b5}
+@media(max-width:620px){
+  .craftModeBar{padding:0 12px;margin-top:10px}
+  .craftModeBtn{min-height:58px;padding:10px 12px}
+  .craftModeBtn span{font-size:15px}
+}

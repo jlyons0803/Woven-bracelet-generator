@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <title>DandeLyons Designs</title>
-<link rel="stylesheet" href="styles.css?v=34">
+<link rel="stylesheet" href="styles.css?v=35">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="theme-color" content="#6557d9">
@@ -19,18 +19,29 @@
     <div>
       <div class="eyebrow">PATTERN DESIGNER</div>
       <h1>DandeLyons Designs</h1>
-      <p class="sub">Design. Calculate. Save.</p>
+      <p class="sub">Woven and beaded bracelet design in one app.</p>
     </div>
     <div class="headerMark" aria-hidden="true">▦</div>
   </div>
 </header>
+
+<div class="craftModeBar" aria-label="Bracelet type">
+  <button type="button" id="craftWoven" class="craftModeBtn active">
+    <span>Woven</span>
+    <small>Wrapped / woven patterns</small>
+  </button>
+  <button type="button" id="craftBeaded" class="craftModeBtn">
+    <span>Beaded</span>
+    <small>Bead patterns & counts</small>
+  </button>
+</div>
 
 <nav class="appNav" aria-label="Main sections">
   <button type="button" id="navDesign" class="navItem active">
     <span class="navIcon">✦</span><span>Design</span>
   </button>
   <button type="button" id="navCalculator" class="navItem">
-    <span class="navIcon">⌁</span><span>Calculator</span>
+    <span class="navIcon">⌁</span><span id="navCalcLabel">Calculator</span>
   </button>
   <button type="button" id="navProjects" class="navItem">
     <span class="navIcon">▣</span><span>Projects</span>
@@ -43,9 +54,9 @@
     <div class="sectionIntro">
       <div>
         <div class="eyebrow">STEP 1</div>
-        <h2>Design your bracelet</h2>
+        <h2 id="designHeading">Design your bracelet</h2>
       </div>
-      <span class="sectionHint">Name generator + custom editor together</span>
+      <span id="designHint" class="sectionHint">Name generator + custom editor together</span>
     </div>
 
     <section class="card workspaceCard">
@@ -194,7 +205,7 @@
 <section class="card previewCard">
       <div class="cardHead previewHead">
         <div>
-          <div class="eyebrow">LIVE PATTERN</div>
+          <div class="eyebrow" id="patternEyebrow">LIVE PATTERN</div>
           <h3 id="patternTitle">MY PATTERN</h3>
         </div>
         <span id="modeBadge" class="badge">Editable pattern</span>
@@ -220,6 +231,8 @@
 
   <!-- CALCULATOR -->
   <section id="paneCalculator" class="appPane hidden">
+    <div id="wovenCalculatorWrap">
+
     <div class="sectionIntro">
       <div>
         <div class="eyebrow">STEP 2</div>
@@ -323,8 +336,99 @@
         <button type="button" id="goProjectsBtn" class="primary">Next: Save Project</button>
       </div>
     </section>
-  </section>
+  
+    </div>
 
+    <div id="beadCalculatorWrap" class="hidden">
+      <div class="sectionIntro">
+        <div>
+          <div class="eyebrow">STEP 2</div>
+          <h2>Calculate your beads</h2>
+        </div>
+        <span class="sectionHint">Set bead size and bracelet length</span>
+      </div>
+
+      <section class="card calculatorCard">
+        <div class="cardHead">
+          <div>
+            <h3>Bead Calculator</h3>
+            <p>Estimate bead counts and the finished length of your pattern.</p>
+          </div>
+        </div>
+
+        <div class="calcSection">
+          <div class="miniHeading">Bracelet & beads</div>
+          <div class="controls calcGrid">
+            <div class="field">
+              <label>Finished bracelet length (in)</label>
+              <input id="beadFinished" type="number" min="1" max="20" step=".25" value="6.5">
+            </div>
+            <div class="field">
+              <label>Bead size</label>
+              <select id="beadSize">
+                <option value="2.0">11/0 seed bead — ~2.0 mm</option>
+                <option value="2.5">10/0 seed bead — ~2.5 mm</option>
+                <option value="3.0">8/0 seed bead — ~3.0 mm</option>
+                <option value="4.0">6/0 seed bead — ~4.0 mm</option>
+                <option value="custom">Custom size</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Custom bead diameter (mm)</label>
+              <input id="customBeadMM" type="number" min=".5" max="20" step=".1" value="2.0" disabled>
+            </div>
+            <div class="field">
+              <label>Extra beads / waste (%)</label>
+              <input id="beadWaste" type="number" min="0" max="100" value="10">
+            </div>
+          </div>
+        </div>
+
+        <div class="updateBar">
+          <div>
+            <b>Ready to count?</b>
+            <div id="beadCalcStatus" class="updateStatus">Change your bead settings, then update.</div>
+          </div>
+          <button type="button" id="updateBeadsBtn" class="primary bigAction">Update Bead Count</button>
+        </div>
+
+        <div class="resultGrid">
+          <div class="stat"><b id="beadRows">0</b><span>Beads tall / rows</span></div>
+          <div class="stat"><b id="beadCols">0</b><span>Beads long / columns</span></div>
+          <div class="stat"><b id="patternBeads">0</b><span>Pattern-color beads</span></div>
+          <div class="stat"><b id="backgroundBeads">0</b><span>Background beads</span></div>
+        </div>
+
+        <div class="totalGrid">
+          <div class="totalStat">
+            <span>Total beads in graph</span>
+            <b id="totalBeads">0</b>
+            <small>All colors combined</small>
+          </div>
+          <div class="totalStat">
+            <span>Estimated graph length</span>
+            <b id="beadGraphLength">0 in</b>
+            <small>Based on selected bead diameter</small>
+          </div>
+        </div>
+
+        <div class="resultGrid">
+          <div class="stat"><b id="targetColumns">0</b><span>Approx. columns for target length</span></div>
+          <div class="stat"><b id="repeatCount">1×</b><span>Pattern repeats for target length</span></div>
+          <div class="stat"><b id="beadsNeeded">0</b><span>Estimated beads for target length</span></div>
+          <div class="stat"><b id="beadsWithExtra">0</b><span>Beads incl. extra</span></div>
+        </div>
+
+        <div id="beadCalcNote" class="infoLine calcFootnote"></div>
+
+        <div class="actions previewActions">
+          <button type="button" id="beadBackToDesignBtn">Back to Design</button>
+          <button type="button" id="beadGoProjectsBtn" class="primary">Next: Save Project</button>
+        </div>
+      </section>
+    </div>
+
+  </section>
   <!-- PROJECTS -->
   <section id="paneProjects" class="appPane hidden">
     <div class="sectionIntro">
@@ -376,11 +480,12 @@
   On iPhone or iPad: Safari → Share → Add to Home Screen.
 </div>
 
-<script defer src="data.js?v=34"></script>
-<script defer src="core.js?v=34"></script>
-<script defer src="calculator.js?v=34"></script>
-<script defer src="projects.js?v=34"></script>
-<script defer src="export.js?v=34"></script>
-<script defer src="app.js?v=34"></script>
+<script defer src="data.js?v=35"></script>
+<script defer src="core.js?v=35"></script>
+<script defer src="calculator.js?v=35"></script>
+<script defer src="beads.js?v=35"></script>
+<script defer src="projects.js?v=35"></script>
+<script defer src="export.js?v=35"></script>
+<script defer src="app.js?v=35"></script>
 </body>
 </html>
