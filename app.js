@@ -62,6 +62,11 @@ $("nameWidthPlus").addEventListener("click",()=>stepNumber("nameWidth",1));
 $("resizeGraph").addEventListener("click",resizeCustomGraph);
 $("fitCustomBtn").addEventListener("click",()=>{customFitToScreen=true; renderGrid();});
 $("largeSquaresBtn").addEventListener("click",()=>{customFitToScreen=false; renderGrid();});
+$("showGridNumbers").addEventListener("change",()=>{
+  showGridNumbers=$("showGridNumbers").checked;
+  renderGrid();
+  autosaveCurrentProject();
+});
 $("clearBtn").addEventListener("click",()=>mutate("clear"));
 $("fillBtn").addEventListener("click",()=>mutate("fill"));
 $("invertBtn").addEventListener("click",()=>mutate("invert"));
@@ -139,6 +144,8 @@ $("saveBtn").addEventListener("click",saveSVG);
  $("mirrorStamp").checked=false;
  mirrorStampEnabled=false;
  customBorderApplied=0;
+$("showGridNumbers").checked=true;
+showGridNumbers=true;
 
 // Initial render
 refreshProjectList();

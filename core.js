@@ -103,6 +103,7 @@ function renderGrid(){
   g.innerHTML="";
   g.classList.toggle("draw",mode==="draw");
 
+  const rows=m.length;
   const cols=m[0].length;
 
   // Name patterns always fit the screen.
@@ -116,6 +117,32 @@ function renderGrid(){
 
   g.style.setProperty("--cell-size",cellSize+"px");
   g.style.gridTemplateColumns=`repeat(${cols},${cellSize}px)`;
+
+  const numberedWrap=$("gridNumberedWrap");
+  const colNumbers=$("colNumbers");
+  const rowNumbers=$("rowNumbers");
+  if(numberedWrap && colNumbers && rowNumbers){
+    numberedWrap.classList.toggle("gridNumbersHidden",!showGridNumbers);
+    colNumbers.innerHTML="";
+    rowNumbers.innerHTML="";
+    colNumbers.style.setProperty("--cell-size",cellSize+"px");
+    rowNumbers.style.setProperty("--cell-size",cellSize+"px");
+    colNumbers.style.gridTemplateColumns=`repeat(${cols},${cellSize}px)`;
+    rowNumbers.style.gridTemplateRows=`repeat(${rows},${cellSize}px)`;
+
+    for(let c=0;c<cols;c++){
+      const n=document.createElement("div");
+      n.className="colNumber";
+      n.textContent=String(c+1);
+      colNumbers.appendChild(n);
+    }
+    for(let r=0;r<rows;r++){
+      const n=document.createElement("div");
+      n.className="rowNumber";
+      n.textContent=String(r+1);
+      rowNumbers.appendChild(n);
+    }
+  }
 
   m.forEach((row,r)=>row.forEach((v,c)=>{
     const cell=document.createElement("div");

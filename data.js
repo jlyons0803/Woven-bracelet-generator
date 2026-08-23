@@ -152,5 +152,6 @@ const STAMPS={
 let activeStamp=null;
 let mirrorStampEnabled=false;
 let customBorderApplied=0;
+let showGridNumbers=true;
 const BORDER_GAP_ROWS=1;
 let customFitToScreen=true;

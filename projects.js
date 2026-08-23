@@ -45,6 +45,7 @@ function captureProjectState(){
       borderThickness:$("drawBorderThickness").value,
       borderApplied:customBorderApplied,
       mirrorStamp:$("mirrorStamp").checked,
+      showGridNumbers:$("showGridNumbers").checked,
       matrix:clone(drawMatrix)
     },
     calculator:{
@@ -85,6 +86,8 @@ function applyProjectState(state){
     customBorderApplied=Math.max(0,Math.min(3,Number(d.borderApplied)||0));
     $("mirrorStamp").checked=!!d.mirrorStamp;
     mirrorStampEnabled=$("mirrorStamp").checked;
+    $("showGridNumbers").checked=d.showGridNumbers!==false;
+    showGridNumbers=$("showGridNumbers").checked;
     if($("mirrorStampNote")){
       $("mirrorStampNote").textContent=mirrorStampEnabled
         ? "Mirror is ON — place one stamp and its matching copy will appear on the opposite side."
@@ -341,6 +344,8 @@ function newProjectNow(){
     customBorderApplied=0;
     $("mirrorStamp").checked=false;
     mirrorStampEnabled=false;
+    $("showGridNumbers").checked=true;
+    showGridNumbers=true;
     $("threadType").value="floss6";
     $("baseThreadType").value="fineCord";
     $("ppi").value=THREAD_PRESETS.floss6.ppi;
