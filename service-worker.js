@@ -1,7 +1,7 @@
-const CACHE='dandelyons-designs-v44-original-pixel-motifs';
+const CACHE='dandelyons-designs-v45-clear-by-graph';
 const ASSETS=[
-  './','./index.html','./styles.css?v=44','./data.js?v=44','./core.js?v=44',
-  './calculator.js?v=44','./beads.js?v=44','./projects.js?v=44','./export.js?v=44','./app.js?v=44',
+  './','./index.html','./styles.css?v=45','./data.js?v=45','./core.js?v=45',
+  './calculator.js?v=45','./beads.js?v=45','./projects.js?v=45','./export.js?v=45','./app.js?v=45',
   './manifest.webmanifest','./icon-192.png','./icon-512.png','./apple-touch-icon.png'
 ];
 self.addEventListener('install',e=>{self.skipWaiting();e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)))});

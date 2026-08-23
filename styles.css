@@ -807,3 +807,18 @@ input[type=color]{height:46px;padding:4px}
 @media(max-width:620px){
   .stampLibrary{grid-template-columns:repeat(4,minmax(0,1fr))}
 }
+
+.graphActions{
+  align-items:center;
+}
+.dangerSoft{
+  border-color:#e5bcbc;
+  background:#fff7f7;
+  color:#a33f3f;
+}
+@media(hover:hover) and (pointer:fine){
+  .dangerSoft:hover{
+    background:#fff0f0;
+    border-color:#dca5a5;
+  }
+}
