@@ -27,7 +27,6 @@ function captureProjectState(){
     craftMode,
     customFitToScreen,
     activeStamp:null,
-    currentTool,
     nameSettings:{
       name:$("name").value,
       nameRows:$("nameRows").value,
@@ -90,8 +89,6 @@ function applyProjectState(state){
     if(d.cols!=null) $("drawCols").value=d.cols;
     if(d.letterColor) $("drawLetterColor").value=d.letterColor;
     if(d.bgColor) $("drawBgColor").value=d.bgColor;
-    if($("sidePatternColor")) $("sidePatternColor").value=$("drawLetterColor").value;
-    if($("sideBackgroundColor")) $("sideBackgroundColor").value=$("drawBgColor").value;
     if(d.borderThickness!=null) $("drawBorderThickness").value=d.borderThickness;
     customBorderApplied=Math.max(0,Math.min(3,Number(d.borderApplied)||0));
     $("mirrorStamp").checked=!!d.mirrorStamp;
@@ -130,9 +127,6 @@ function applyProjectState(state){
     customFitToScreen=state.customFitToScreen!==false;
     history=[];
     activeStamp=null;
-    currentTool=state.currentTool||"draw";
-    renderToolSelection?.();
-    document.querySelectorAll("[data-stamp]").forEach(b=>b.classList.remove("active"));
     nameMatrix=makeNameMatrix();
     switchMode(state.mode==="draw"?"draw":"name");
   }finally{
@@ -348,7 +342,7 @@ function newProjectNow(){
   $("projectSelect").value="";
   loadingProject=true;
   try{
-    $("name").value="";
+    $("name").value="EMERSYN";
     $("nameRows").value=9;
     $("nameHeight").value=7;
     $("nameWidth").value=5;
@@ -378,12 +372,9 @@ function newProjectNow(){
     $("ppi").value=THREAD_PRESETS.floss6.ppi;
     renderThreadNotes();
     history=[];
-    currentTool="draw";
-    renderToolSelection?.();
-    document.querySelectorAll("[data-stamp]").forEach(b=>b.classList.remove("active"));
     customFitToScreen=true;
     nameMatrix=makeNameMatrix();
-    drawMatrix=blank(Number($("drawRows").value)||9,Number($("drawCols").value)||60);
+    drawMatrix=clone(nameMatrix);
     customBorderApplied=Math.max(0,Math.min(3,Number($("nameBorder").value)||0));
     $("drawBorderThickness").value=customBorderApplied||1;
     $("drawRows").value=drawMatrix.length;
@@ -391,7 +382,7 @@ function newProjectNow(){
     $("drawLetterColor").value=$("nameLetterColor").value;
     $("drawBgColor").value=$("nameBgColor").value;
     switchMode("draw");
-    $("patternTitle").textContent="MY PATTERN";
+    $("patternTitle").textContent=($("name").value.toUpperCase()||"NAME")+" — EDITABLE";
   }finally{
     loadingProject=false;
   }

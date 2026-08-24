@@ -446,7 +446,6 @@ const STAMPS={
 
 };
 let activeStamp=null;
-let currentTool="draw";
 let mirrorStampEnabled=false;
 let customBorderApplied=0;
 let showGridNumbers=true;

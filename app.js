@@ -15,8 +15,8 @@ function setCraftMode(next){
     ? "Name generator + custom editor together"
     : "Use the same grid as a bead pattern";
   $("patternEyebrow").textContent=craftMode==="woven" ? "LIVE PATTERN" : "BEAD PATTERN";
-  $("goCalculatorBtn").textContent=craftMode==="woven" ? "Calculate String" : "Calculate Beads";
-  if($("printBtn")) $("printBtn").textContent=craftMode==="woven" ? "Print Pattern" : "Print Bead Pattern";
+  $("goCalculatorBtn").textContent=craftMode==="woven" ? "Next: Calculate String" : "Next: Bead Count";
+  $("printBtn").textContent=craftMode==="woven" ? "Print Pattern" : "Print Bead Pattern";
 
   if(craftMode==="beaded" && typeof updateBeadCalculator==="function"){
     updateBeadCalculator();
@@ -69,38 +69,6 @@ $("projectsToDesignBtn").addEventListener("click",()=>showAppPane("design"));
 $("beadBackToDesignBtn").addEventListener("click",()=>showAppPane("design"));
 $("beadGoProjectsBtn").addEventListener("click",()=>showAppPane("projects"));
 
-
-function setGraphFullscreen(on){
-  const card=document.querySelector(".previewCard");
-  if(!card) return;
-
-  const enabled=!!on;
-  card.classList.toggle("graphFullscreen",enabled);
-  document.body.classList.toggle("graphFullscreenOpen",enabled);
-
-  const btn=$("fullscreenGraphBtn");
-  if(btn){
-    btn.setAttribute("aria-pressed",enabled?"true":"false");
-  }
-
-  requestAnimationFrame(()=>{
-    renderGrid();
-    if(enabled && $("gridScroll")){
-      $("gridScroll").scrollLeft=0;
-      $("gridScroll").scrollTop=0;
-    }
-  });
-}
-
-$("fullscreenGraphBtn").addEventListener("click",()=>setGraphFullscreen(true));
-$("exitFullscreenGraphBtn").addEventListener("click",()=>setGraphFullscreen(false));
-
-document.addEventListener("keydown",e=>{
-  if(e.key==="Escape" && document.querySelector(".previewCard.graphFullscreen")){
-    setGraphFullscreen(false);
-  }
-});
-
 window.addEventListener("resize",()=>{
   clearTimeout(window.__wovenResizeTimer);
   window.__wovenResizeTimer=setTimeout(()=>renderGrid(),120);
@@ -134,7 +102,11 @@ $("colsMinus").addEventListener("click",()=>stepGraphSize("cols",-1));
 $("colsPlus").addEventListener("click",()=>stepGraphSize("cols",1));
 $("colsPlus10").addEventListener("click",()=>stepGraphSize("cols",10));
 
-
+document.querySelectorAll(".sizePreset").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    applyGraphSize(Number(btn.dataset.rows),Number(btn.dataset.cols));
+  });
+});
 
 ["drawRows","drawCols"].forEach(id=>{
   $(id).addEventListener("input",updateGraphSizeReadout);
@@ -151,95 +123,8 @@ $("showGridNumbers").addEventListener("change",()=>{
 $("clearBtn").addEventListener("click",()=>mutate("clear"));
 $("fillBtn").addEventListener("click",()=>mutate("fill"));
 $("invertBtn").addEventListener("click",()=>mutate("invert"));
-
-
-
-
-
-function syncInlineGraphSizeControls(){
-  if($("graphRowsSelect")) $("graphRowsSelect").value=String(Math.max(3,Math.min(60,drawMatrix.length || Number($("drawRows").value)||9)));
-  if($("graphColsSelect")) $("graphColsSelect").value=String(Math.max(5,Math.min(200,(drawMatrix[0]?.length) || Number($("drawCols").value)||60)));
-  refreshEditPositionOptions();
-}
-
-function refreshEditPositionOptions(){
-  const axis=$("editAxisSelect")?.value || "";
-  const pos=$("editPositionSelect");
-  if(!pos) return;
-  const prior=pos.value;
-  pos.innerHTML='<option value="">Choose number</option>';
-  if(!axis){
-    pos.disabled=true;
-    return;
-  }
-  const max=axis==="row" ? (drawMatrix.length || Number($("drawRows").value)||9)
-                         : ((drawMatrix[0]?.length) || Number($("drawCols").value)||60);
-  for(let i=1;i<=max;i++){
-    const opt=document.createElement("option");
-    opt.value=String(i);
-    opt.textContent=String(i);
-    pos.appendChild(opt);
-  }
-  pos.disabled=false;
-  if(prior && Number(prior)<=max) pos.value=prior;
-}
-
-function applyGraphPresetValue(value){
-  if(!value) return;
-  const [rows,cols]=value.split("x").map(Number);
-  applyGraphSize(rows,cols);
-  syncInlineGraphSizeControls();
-  $("graphPresetSelect").value="";
-}
-
-$("graphPresetSelect").addEventListener("change",e=>applyGraphPresetValue(e.target.value));
-
-$("graphRowsSelect").addEventListener("change",()=>{
-  applyGraphSize(Number($("graphRowsSelect").value), Number($("graphColsSelect").value));
-  syncInlineGraphSizeControls();
-});
-$("graphColsSelect").addEventListener("change",()=>{
-  applyGraphSize(Number($("graphRowsSelect").value), Number($("graphColsSelect").value));
-  syncInlineGraphSizeControls();
-});
-
-$("graphOrientationSelect").addEventListener("change",()=>{
-  const portrait=$("graphOrientationSelect").value==="portrait";
-  const card=document.querySelector(".previewCard");
-  if(card) card.classList.toggle("graphPortraitView",portrait);
-  requestAnimationFrame(()=>renderGrid());
-});
-
-$("editAxisSelect").addEventListener("change",()=>{
-  $("editPositionSelect").value="";
-  refreshEditPositionOptions();
-});
-
-$("insertSelectedBtn").addEventListener("click",()=>{
-  const axis=$("editAxisSelect").value;
-  const pos=$("editPositionSelect").value;
-  if(!axis || !pos){
-    if($("fitNote")) $("fitNote").textContent="Choose a row or column and a number first.";
-    return;
-  }
-  if(axis==="row") insertBlankRowAt(pos);
-  else insertBlankColumnAt(pos);
-  syncInlineGraphSizeControls();
-});
-
-$("deleteSelectedBtn").addEventListener("click",()=>{
-  const axis=$("editAxisSelect").value;
-  const pos=$("editPositionSelect").value;
-  if(!axis || !pos){
-    if($("fitNote")) $("fitNote").textContent="Choose a row or column and a number first.";
-    return;
-  }
-  if(axis==="row") deleteRowAt(pos);
-  else deleteColumnAt(pos);
-  $("editPositionSelect").value="";
-  syncInlineGraphSizeControls();
-});
-
+$("insertRowBtn").addEventListener("click",()=>insertBlankRowAt($("insertRowAt").value));
+$("insertColBtn").addEventListener("click",()=>insertBlankColumnAt($("insertColAt").value));
 $("randomPatternBtn").addEventListener("click",()=>{
   generateRandomPattern($("randomPatternStyle").value);
   autosaveCurrentProject();
@@ -261,69 +146,13 @@ document.querySelectorAll(".stampCategory").forEach(btn=>{
 
 setStampCategory("all");
 
-function renderToolSelection(){
-  document.querySelectorAll(".graphTool").forEach(btn=>{
-    const active=btn.dataset.tool===currentTool;
-    btn.classList.toggle("active",active);
-    if(btn.id==="toolStamp"){
-      btn.classList.toggle("stampWaiting",active && !activeStamp);
-    }
-  });
-}
-
-function setGraphTool(tool){
-  currentTool=tool;
-  renderToolSelection();
-  if($("fitNote")){
-    if(tool==="draw") $("fitNote").textContent="Draw tool selected — tap or drag to add squares.";
-    else if(tool==="erase") $("fitNote").textContent="Erase tool selected — tap or drag to remove squares.";
-    else if(tool==="stamp") $("fitNote").textContent=activeStamp
-      ? `${activeStamp} selected — tap the grid to place it.`
-      : "Stamp tool selected — choose a stamp below, then tap the grid.";
-    else if(tool==="fill") $("fitNote").textContent="Fill tool selected — tap a connected area to fill it.";
-  }
-}
-
-function renderStampButtonPreviews(){
-  document.querySelectorAll("#stampLibrary [data-stamp]").forEach(btn=>{
-    const key=btn.dataset.stamp;
-    const pattern=STAMPS[key];
-    if(!pattern) return;
-    const label=(btn.querySelector(".stampName")?.textContent || btn.title || key).trim();
-    btn.innerHTML="";
-    const preview=document.createElement("span");
-    preview.className="stampPreview";
-    preview.style.setProperty("--sp-rows",pattern.length);
-    preview.style.setProperty("--sp-cols",pattern[0].length);
-    pattern.forEach(row=>{
-      row.split("").forEach(bit=>{
-        const px=document.createElement("span");
-        px.className="stampPixel"+(bit==="1"?" on":"");
-        preview.appendChild(px);
-      });
-    });
-    const name=document.createElement("span");
-    name.className="stampName";
-    name.textContent=label;
-    btn.append(preview,name);
-  });
-}
-
-renderStampButtonPreviews();
-renderToolSelection();
-
-
 document.querySelectorAll("[data-stamp]").forEach(btn=>{
   btn.addEventListener("click",()=>{
     activeStamp=btn.dataset.stamp;
     document.querySelectorAll("[data-stamp]").forEach(b=>b.classList.toggle("active",b===btn));
-    setGraphTool("stamp");
+    if($("fitNote")) $("fitNote").textContent=`${btn.title || btn.dataset.stamp} selected — now tap the grid where you want to place it.`;
   });
 });
-document.querySelectorAll(".graphTool").forEach(btn=>{
-  btn.addEventListener("click",()=>setGraphTool(btn.dataset.tool));
-});
-
 $("mirrorStamp").addEventListener("change",()=>{
   mirrorStampEnabled=$("mirrorStamp").checked;
   if($("mirrorStampNote")){
@@ -336,26 +165,7 @@ $("mirrorStamp").addEventListener("change",()=>{
 $("addBorderBtn").addEventListener("click",addCustomBorder);
 $("removeBorderBtn").addEventListener("click",removeCustomBorder);
 $("drawBorderThickness").addEventListener("change",autosaveCurrentProject);
-["drawLetterColor","drawBgColor"].forEach(id=>$(id).addEventListener("input",()=>{
-  if(id==="drawLetterColor" && $("sidePatternColor")) $("sidePatternColor").value=$("drawLetterColor").value;
-  if(id==="drawBgColor" && $("sideBackgroundColor")) $("sideBackgroundColor").value=$("drawBgColor").value;
-  if(mode==="draw")renderGrid();
-}));
-document.querySelectorAll(".paletteSwatch").forEach(btn=>{
-  btn.addEventListener("click",()=>{
-    const target=$(btn.dataset.target);
-    if(!target)return;
-    target.value=btn.dataset.color;
-    if(target.id==="drawLetterColor") $("sidePatternColor").value=btn.dataset.color;
-    if(target.id==="drawBgColor") $("sideBackgroundColor").value=btn.dataset.color;
-    renderGrid();
-    autosaveCurrentProject();
-  });
-});
-$("sidePatternColor").addEventListener("input",()=>{$("drawLetterColor").value=$("sidePatternColor").value;renderGrid();});
-$("sideBackgroundColor").addEventListener("input",()=>{$("drawBgColor").value=$("sideBackgroundColor").value;renderGrid();});
-$("sidePatternColor").addEventListener("change",autosaveCurrentProject);
-$("sideBackgroundColor").addEventListener("change",autosaveCurrentProject);
+["drawLetterColor","drawBgColor"].forEach(id=>$(id).addEventListener("input",()=>{if(mode==="draw")renderGrid()}));
 
 // Calculator controls
 $("threadType").addEventListener("change",applyWrappingThreadPreset);
@@ -389,8 +199,8 @@ $("projectSelect").addEventListener("change",()=>{
 });
 $("projectName").addEventListener("input",autosaveCurrentProject);
 
-if($("printBtn")) $("printBtn").addEventListener("click",()=>window.print());
-if($("saveBtn")) $("saveBtn").addEventListener("click",saveSVG);
+$("printBtn").addEventListener("click",()=>window.print());
+$("saveBtn").addEventListener("click",saveSVG);
 
 // V28 blank-start behavior:
  // Reopening the app starts completely blank. Saved projects remain available
@@ -416,7 +226,6 @@ showGridNumbers=true;
 setCraftMode("woven");
 
 updateGraphSizeReadout();
-syncInlineGraphSizeControls();
 
 // Initial render
 refreshProjectList();
@@ -426,11 +235,7 @@ drawMatrix=blank(Number($("drawRows").value)||9,Number($("drawCols").value)||60)
 customBorderApplied=0;
 $("drawLetterColor").value=$("nameLetterColor").value;
 $("drawBgColor").value=$("nameBgColor").value;
-if($("sidePatternColor")) $("sidePatternColor").value=$("drawLetterColor").value;
-if($("sideBackgroundColor")) $("sideBackgroundColor").value=$("drawBgColor").value;
 mode="draw";
-currentTool="draw";
-renderToolSelection();
 $("modeBadge").textContent="Editable pattern";
 $("patternTitle").textContent="MY PATTERN";
 renderGrid();
