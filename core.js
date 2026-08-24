@@ -58,6 +58,25 @@ function sendNameToDraw(){
   }
 }
 
+
+function inBounds(matrix,r,c){
+  return r>=0 && c>=0 && r<matrix.length && c<matrix[0].length;
+}
+
+function floodFillAt(r,c){
+  if(mode!=="draw" || !drawMatrix.length || !inBounds(drawMatrix,r,c)) return false;
+  const target=drawMatrix[r][c];
+  const replacement=target ? 0 : 1;
+  const stack=[[r,c]];
+  while(stack.length){
+    const [cr,cc]=stack.pop();
+    if(!inBounds(drawMatrix,cr,cc) || drawMatrix[cr][cc]!==target) continue;
+    drawMatrix[cr][cc]=replacement;
+    stack.push([cr+1,cc],[cr-1,cc],[cr,cc+1],[cr,cc-1]);
+  }
+  return true;
+}
+
 function switchMode(next){
   // V24 uses one unified editor. "Name" is now a way to populate the editable
   // custom grid rather than a separate editing mode.
@@ -108,6 +127,9 @@ function renderGrid(){
   if($("graphSizeReadout") && mode==="draw"){
     $("graphSizeReadout").textContent=`${rows} × ${cols}`;
   }
+  if(typeof syncInlineGraphSizeControls==="function"){
+    syncInlineGraphSizeControls();
+  }
 
   // Name patterns always fit the screen.
   // Custom patterns can either fit the screen or use larger squares for easier editing.
@@ -121,6 +143,17 @@ function renderGrid(){
 
   g.style.setProperty("--cell-size",cellSize+"px");
   g.style.gridTemplateColumns=`repeat(${cols},${cellSize}px)`;
+
+  // V53: let short/wide graphs shrink to their real content height instead of
+  // reserving a tall empty editor area. Taller graphs still get a useful
+  // scrollable editing viewport.
+  const graphCenter=$("gridScroll")?.closest(".graphCenter");
+  if(graphCenter){
+    const graphPixelHeight=(rows*cellSize) + (showGridNumbers ? 28 : 0);
+    const isWideGraph=cols>rows;
+    graphCenter.classList.toggle("wideGraph",isWideGraph);
+    graphCenter.style.setProperty("--graph-content-height",`${graphPixelHeight}px`);
+  }
 
   const numberedWrap=$("gridNumberedWrap");
   const colNumbers=$("colNumbers");
@@ -214,18 +247,29 @@ function renderGrid(){
       cell.addEventListener("pointerdown",e=>{
         e.preventDefault();
 
-        if(activeStamp){
+        if(currentTool==="stamp"){
+          if(!activeStamp){
+            if($("fitNote")) $("fitNote").textContent="Choose a stamp first, then tap the grid where you want to place it.";
+            return;
+          }
           history.push(clone(drawMatrix));
           if(history.length>40)history.shift();
           placeStampAt(r,c,STAMPS[activeStamp]);
-          const placed=activeStamp;
-          activeStamp=null;
-          document.querySelectorAll("[data-stamp]").forEach(b=>b.classList.remove("active"));
           renderGrid();
           if($("fitNote")){
             $("fitNote").textContent=mirrorStampEnabled
-              ? `Added mirrored ${placed} stamps on both sides.`
-              : `Added a ${placed}. You can tap a stamp button again to place another one, or keep drawing normally.`;
+              ? `Added mirrored ${activeStamp} stamps on both sides.`
+              : `Added a ${activeStamp}. Tap again to place more, or switch tools to keep editing.`;
+          }
+          return;
+        }
+
+        if(currentTool==="fill"){
+          history.push(clone(drawMatrix));
+          if(history.length>40)history.shift();
+          if(floodFillAt(r,c)){
+            renderGrid();
+            if($("fitNote")) $("fitNote").textContent="Filled the connected area.";
           }
           return;
         }
@@ -233,14 +277,16 @@ function renderGrid(){
         history.push(clone(drawMatrix));
         if(history.length>40)history.shift();
         dragging=true;
-        drawValue=drawMatrix[r][c]?0:1;
+        drawValue=currentTool==="erase" ? 0 : 1;
         drawMatrix[r][c]=drawValue;
         cell.classList.toggle("on",!!drawValue);
       });
       cell.addEventListener("pointerenter",()=>{
         if(!dragging)return;
-        drawMatrix[r][c]=drawValue;
-        cell.classList.toggle("on",!!drawValue);
+        if(currentTool==="draw" || currentTool==="erase"){
+          drawMatrix[r][c]=drawValue;
+          cell.classList.toggle("on",!!drawValue);
+        }
       });
     }
     g.appendChild(cell);
@@ -371,6 +417,31 @@ function insertBlankColumnAt(position){
   renderGrid();
 }
 
+
+function deleteRowAt(position){
+  if(mode!=="draw" || !drawMatrix.length || drawMatrix.length<=3) return;
+  const rows=drawMatrix.length;
+  const pos=Math.max(1,Math.min(rows,Math.floor(Number(position)||1)));
+  history.push(clone(drawMatrix));
+  if(history.length>40)history.shift();
+  drawMatrix.splice(pos-1,1);
+  $("drawRows").value=drawMatrix.length;
+  customBorderApplied=0;
+  if($("fitNote")) $("fitNote").textContent=`Deleted row ${pos}.`;
+  renderGrid();
+}
+function deleteColumnAt(position){
+  if(mode!=="draw" || !drawMatrix.length || drawMatrix[0].length<=5) return;
+  const cols=drawMatrix[0].length;
+  const pos=Math.max(1,Math.min(cols,Math.floor(Number(position)||1)));
+  history.push(clone(drawMatrix));
+  if(history.length>40)history.shift();
+  drawMatrix.forEach(row=>row.splice(pos-1,1));
+  $("drawCols").value=drawMatrix[0].length;
+  customBorderApplied=0;
+  if($("fitNote")) $("fitNote").textContent=`Deleted column ${pos}.`;
+  renderGrid();
+}
 
 function generateRandomPattern(style="chevron"){
   if(mode!=="draw" || !drawMatrix.length) return;
